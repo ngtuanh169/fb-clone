@@ -1,161 +1,180 @@
-import { Link } from "react-router-dom";
-import { formatTime } from "../../Hooks/formatTime";
+import { useState } from "react";
+import { createContext } from "react";
+import Modal from "../Modal";
 import MainCard from "../MainCard";
 import Button from "../Button";
-import { BiDotsHorizontalRounded } from "react-icons/bi";
-import { MdClose } from "react-icons/md";
-import { AiTwotoneLike, AiOutlineLike, AiFillCaretDown } from "react-icons/ai";
-import { FaRegCommentDots } from "react-icons/fa";
-import { RiShareForwardLine } from "react-icons/ri";
-import img from "../../assets/images/avatar/img1.jpg";
-function Posts({ userId, avatar, name, time }) {
-	return (
-		<>
-			<MainCard>
-				<div className="flex justify-between p-2">
-					<div className="flex">
-						<img
-							className="w-[40px] h-[40px] rounded-full"
-							src={avatar}
-							alt=""
-						/>
-						<div className="flex flex-col ml-2">
-							<Link to={"/"}>
-								<span className=" font-medium hover:underline">
-									{name}
-								</span>
-							</Link>
-							<span className=" text-xs">{formatTime(time)}</span>
-						</div>
-					</div>
-					<div className="flex items-center pr-2">
-						<Button _className="h-[36px] w-[36px] rounded-full mr-4 text-2xl text-gray-500 hover:bg-hover">
-							<BiDotsHorizontalRounded className=" mx-auto" />
-						</Button>
-						<Button _className="h-[36px] w-[36px] rounded-full text-2xl text-gray-500 hover:bg-hover">
-							<MdClose className=" mx-auto" />
-						</Button>
-					</div>
-				</div>
-				<div className="h-full w-full p-2 pt-0">
-					<span className="">
-						Đang có sự cố kết nối xảy ra làm game không thể tạo
-						trận. Bộ phận kỹ thuật đang tiến hành kiểm tra và khắc
-						phục. Các anh hùng xin thử lại sau nhé.
-					</span>
-				</div>
-				<div className="h-full w-full border border-gray-300 ">
-					<img className="w-full" src={img} alt="" />
-				</div>
-				<div className="w-full flex justify-between p-2 border-b border-gray-300">
-					<Button _className={"flex items-center"}>
-						<AiTwotoneLike className=" h-[20px] w-[20px] p-[3px] mr-[3px] rounded-full bg-blue-700 text-white" />
-						<span>11</span>
-					</Button>
-					<Button>
-						<span className=" text-gray-500 hover:underline">
-							20 bình luận
-						</span>
-					</Button>
-				</div>
-				<div className="w-full h-[40px] px-2 py-1 flex border-b border-gray-300">
-					<div className="w-1/3  ">
-						<Button
-							_className={
-								"w-full h-full flex justify-center items-center rounded hover:bg-hover"
-							}
-						>
-							<span className="flex items-center text-base font-semibold">
-								<AiOutlineLike className="mr-1 text-xl " />
-								Thích
-								{/* <AiTwotoneLike  className="mr-1 text-xl text-blue-500"/>Thích */}
-							</span>
-						</Button>
-					</div>
-					<div className="w-1/3  ">
-						<Button
-							_className={
-								"w-full h-full flex justify-center items-center rounded hover:bg-hover"
-							}
-						>
-							<span className="flex items-center text-base font-semibold">
-								<FaRegCommentDots className="mr-1 text-xl " />
-								Bình luận
-							</span>
-						</Button>
-					</div>
-					<div className="w-1/3  ">
-						<Button
-							_className={
-								"w-full h-full flex justify-center items-center rounded hover:bg-hover"
-							}
-						>
-							<span className="flex items-center text-base font-semibold">
-								<RiShareForwardLine className="mr-1 text-xl " />
-								Chia sẻ
-							</span>
-						</Button>
-					</div>
-				</div>
-				<div className="W-full p-2">
-					<div className=" w-full flex justify-between ">
-						<Button>
-							<span className="font-medium text-[15px] text-gray-600 hover:underline">
-								Xem 9 bình luận trước
-							</span>
-						</Button>
-						<Button>
-							<span className="flex items-center font-medium text-[15px] text-gray-600">
-								Phù hợp nhất{" "}
-								<AiFillCaretDown className="ml-1" />
-							</span>
-						</Button>
-					</div>
-				</div>
-				<div className="W-full flex p-2">
-					<div className=" flex">
-						<img
-							className="h-[40px] w-[40px] rounded-full mr-2"
-							src={avatar}
-							alt=""
-						/>
-						<div className="">
-							<div className="flex flex-col p-2 rounded-xl bg-slate-200">
-								<span className=" font-medium text-[14px] ">
-									{name}
-								</span>
-								<span>
-									Cái này lúc còn cùi thi up từ từ đừng nhanh
-									quá nó dễ max
-								</span>
-							</div>
-							<div className="flex px-2">
-								<span className="text-[14px] font-medium mr-3 cursor-pointer hover:underline">
-									Thích
-								</span>
-								<span className="text-[14px] font-medium mr-3 cursor-pointer hover:underline">
-									Bình luận
-								</span>
-								<span className="text-[14px]">5phút</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div className="w-full flex">
-					<img
-						className="w-[40px] h-[40px] rounded-full mr-2 "
-						src={avatar}
-						alt=""
-					/>
-					<input
-						className=" flex-1 rounded-full p-2 px-4 bg-gray-200 outline-none"
-						type="text"
-						placeholder="Viết câu trả lời..."
-					/>
-				</div>
-			</MainCard>
-		</>
-	);
+import PostTime from "./PostsTime";
+import PostsContent from "./PostsContent";
+import PostsTools from "./PostsTools";
+import PostsReact from "./PostReact";
+import PostInput from "./PostsInput";
+import iconLike from "../../assets/images/gifIcon/icon-like.gif";
+import iconLove from "../../assets/images/gifIcon/icon-love.gif";
+import iconHaha from "../../assets/images/gifIcon/icon-haha.gif";
+import iconWow from "../../assets/images/gifIcon/icon-wow.gif";
+import iconSad from "../../assets/images/gifIcon/icon-sad.gif";
+import iconAngry from "../../assets/images/gifIcon/icon-angry.gif";
+
+import like from "../../assets/images/imgIcon/icon-like.png";
+import like1 from "../../assets/images/imgIcon/like.png";
+import love from "../../assets/images/imgIcon/love.png";
+import haha from "../../assets/images/imgIcon/haha.png";
+import wow from "../../assets/images/imgIcon/wow.png";
+import sad from "../../assets/images/imgIcon/sad.png";
+import angry from "../../assets/images/imgIcon/angry.png";
+
+import { MdOutlineClose } from "react-icons/md";
+export const ValueContext = createContext();
+function Posts({
+    userId,
+    avatar,
+    name,
+    time,
+    group = false,
+    groupId = "",
+    groupName = "",
+    adGroup = false,
+    groupMember = false,
+    iconClose = false,
+    pagePhoto = false,
+    pageProfile = false,
+}) {
+    // const iconList = [
+    //     { name: "Thích", icon: iconLike, img: like, img1: like1 },
+    //     { name: "Yêu thích", icon: iconLove, img: love },
+    //     { name: "Haha", icon: iconHaha, img: haha },
+    //     { name: "Wow", icon: iconWow, img: wow },
+    //     { name: "Buồn", icon: iconSad, img: sad },
+    //     { name: "Phẫn nộ", icon: iconAngry, img: angry },
+    // ];
+    const [isFocus, setIsFocus] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [textColor, setTextColor] = useState("");
+    const [reactIcon, setReactIcon] = useState("");
+    let Comp = MainCard;
+    if (pagePhoto) {
+        Comp = "div";
+    }
+    const valueContext = {
+        userId,
+        avatar,
+        name,
+        time,
+        group,
+        groupId,
+        groupName,
+        adGroup,
+        groupMember,
+        iconClose,
+        pagePhoto,
+        pageProfile,
+        showModal,
+        setShowModal,
+        // iconList,
+        reactIcon,
+        setReactIcon,
+        textColor,
+        setTextColor,
+    };
+    return (
+        <ValueContext.Provider value={valueContext}>
+            {pagePhoto ? (
+                <div className="w-full h-screen ">
+                    <div className="px-2 pt-2">
+                        <PostTime />
+                    </div>
+                    <PostsContent />
+                    <div className="px-2 ">
+                        <PostsTools setIsFocus={setIsFocus} />
+                    </div>
+                    <div className="px-2 pt-2">
+                        <PostsReact />
+                    </div>
+                    <div className="px-2 py-2">
+                        <PostInput
+                            avatar={avatar}
+                            isFocus={isFocus}
+                            setIsFocus={setIsFocus}
+                        />
+                    </div>
+                </div>
+            ) : (
+                <MainCard>
+                    <div className="px-2 pt-2">
+                        <PostTime />
+                    </div>
+                    <PostsContent />
+                    <div className="px-2 ">
+                        <PostsTools setIsFocus={setIsFocus} />
+                    </div>
+
+                    {pageProfile && (
+                        <>
+                            <div className="px-2 pt-2">
+                                <PostsReact />
+                            </div>
+                            <div className="px-2 py-2">
+                                <PostInput
+                                    avatar={avatar}
+                                    isFocus={isFocus}
+                                    setIsFocus={setIsFocus}
+                                />
+                            </div>
+                        </>
+                    )}
+                </MainCard>
+            )}
+            {showModal && !pageProfile && (
+                <Modal closeModal={() => setShowModal(false)}>
+                    <div
+                        className=" w-[370px] sm:w-[500px] md:w-[700px] m-auto rounded-lg bg-white  shadow-lg shadow-gray-300 overflow-hidden"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex flex-col w-full h-[680px] max-h-[80vh] md:max-h-[95vh]">
+                            <div
+                                style={{ boxShadow: "0 .5px 0 #ccc" }}
+                                className=" relative flex items-center justify-center w-full h-[60px] border-b "
+                            >
+                                <span className=" font-bold text-[20px]">{`Bài viết của ${name}`}</span>
+                                <div className=" absolute top-0 right-2 flex items-center h-full">
+                                    <Button
+                                        _className={
+                                            "flex items-center justify-center h-9 w-9 bg-gray-200 rounded-full hover:bg-gray-300"
+                                        }
+                                        onClick={() => setShowModal(false)}
+                                    >
+                                        <MdOutlineClose className="text-[20px]" />
+                                    </Button>
+                                </div>
+                            </div>
+                            <div
+                                className="w-full flex flex-col flex-1 
+                            scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-full"
+                            >
+                                <div className="px-2 pt-2">
+                                    <PostTime />
+                                </div>
+                                <PostsContent />
+                                <div className="px-2 ">
+                                    <PostsTools setIsFocus={setIsFocus} />
+                                </div>
+                                <div className="px-2 pt-2">
+                                    <PostsReact />
+                                </div>
+                            </div>
+                            <div className=" w-full px-2 py-2 border-t">
+                                <PostInput
+                                    avatar={avatar}
+                                    isFocus={isFocus}
+                                    setIsFocus={setIsFocus}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </Modal>
+            )}
+        </ValueContext.Provider>
+    );
 }
 
 export default Posts;
