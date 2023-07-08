@@ -92,6 +92,10 @@ module.exports = {
                         transform: "scale(1) rotate(0)",
                     },
                 },
+                smaller: {
+                    from: { transform: "scale(1)" },
+                    to: { transform: "scale(0)" },
+                },
             },
             transitionProperty: {
                 height: "height",
@@ -101,6 +105,8 @@ module.exports = {
                 openNewNoti: "openNewNoti 0.2s ease-out",
                 closeNewNoti: "closeNewNoti 0.2s ease-out",
                 postsIcon: "postsIcon .5s linear ",
+                postsIcon: "postsIcon .5s linear ",
+                smaller: "smaller .3s linear",
             },
         },
     },

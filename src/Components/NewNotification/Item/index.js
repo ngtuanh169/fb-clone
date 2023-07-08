@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import MainCard from "../../MainCard";
 import Button from "../../Button";
 import CommentPost from "../../Modal/Notification/NotifyItem/CommentPost";
@@ -22,18 +22,32 @@ function Item({ data, notiList = [], setNotiList = () => {} }) {
             Comp = RequestJoinGroup;
             break;
     }
+    const divRef = useRef();
+
     useEffect(() => {
         const timeId = setTimeout(() => {
             removeNoti(data.id);
         }, 3000);
         return () => clearTimeout(timeId);
     });
+
+    useEffect(() => {
+        const timeId = setTimeout(() => {
+            addClassRemove();
+        }, 2900);
+        return () => clearTimeout(timeId);
+    });
+
+    const addClassRemove = () => {
+        divRef.current && divRef.current.classList.add("animate-closeNewNoti");
+    };
+
     const removeNoti = (id) => {
         const newArray = notiList.filter((item) => item.id !== id);
         setNotiList([...newArray]);
     };
     return (
-        <div className="w-max h-max ">
+        <div ref={divRef} className="w-max h-max ">
             <div
                 style={{ boxShadow: "0 1px 3px 2px #ccc" }}
                 className=" w-[328px] mt-2 bg-white animate-openNewNoti rounded-lg"

@@ -95,7 +95,7 @@ function NewNotification({ chidren }) {
                 >
                     likePost
                 </Button>
-                {/* <Button
+                <Button
                     _className={
                         "bg-green-500 text-white font-medium p-2 mr-2 rounded-md"
                     }
@@ -126,17 +126,21 @@ function NewNotification({ chidren }) {
                     onClick={() => addNoti(dataRequestJoinGroup)}
                 >
                     joinGroup
-                </Button> */}
+                </Button>
             </div>
             {notiList.length > 0 &&
-                notiList.map((item) => (
-                    <Item
-                        key={item.idNoti}
-                        data={item}
-                        notiList={notiList}
-                        setNotiList={setNotiList}
-                    />
-                ))}
+                notiList.map((item, index) => {
+                    if (index === 0) {
+                        return (
+                            <Item
+                                key={item.idNoti}
+                                data={item}
+                                notiList={notiList}
+                                setNotiList={setNotiList}
+                            />
+                        );
+                    }
+                })}
         </div>
     );
 }
