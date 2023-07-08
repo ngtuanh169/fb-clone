@@ -7,7 +7,7 @@ function PostsId({ postsId, title = "" }) {
             <div className="mb-4">
                 <span className=" font-medium">{title}</span>
             </div>
-            <div className="w-[600px]">
+            <div className="w-full max-w-[600px]">
                 <Posts
                     userId={1}
                     groupId="2"

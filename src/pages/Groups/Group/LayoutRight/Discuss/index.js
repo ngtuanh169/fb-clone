@@ -39,12 +39,12 @@ function Discuss() {
                     <PinnedPosts />
                 </div>
                 {postsNoti && (
-                    <div className="">
+                    <div className="w-full">
                         <PostsId postsId={postsNoti} title={"Từ thông báo"} />
                     </div>
                 )}
                 {newPostsSee && (
-                    <div className="">
+                    <div className="w-full">
                         <PostsId postsId={newPostsSee} title={"Mới xem"} />
                     </div>
                 )}

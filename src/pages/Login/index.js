@@ -23,7 +23,7 @@ function Login() {
     );
     return (
         <div className="flex items-center justify-center w-full h-screen">
-            <div className=" w-[400px]  bg-white p-4 rounded-lg drop-shadow-md">
+            <div className=" w-full max-w-[450px]  bg-white p-4 rounded-lg drop-shadow-md">
                 <div className="text-center mb-4">
                     <span className=" text-blue-500 text-[20px] font-semibold">
                         facebook

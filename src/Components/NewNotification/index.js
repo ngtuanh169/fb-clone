@@ -78,7 +78,7 @@ function NewNotification({ chidren }) {
 
     return (
         <div className=" fixed bottom-3 left-3 flex flex-col justify-end z-50">
-            {/* <div className="flex">
+            <div className="flex">
                 <Button
                     _className={
                         "bg-blue-500 text-white font-medium p-2 rounded-md mr-2"
@@ -95,7 +95,7 @@ function NewNotification({ chidren }) {
                 >
                     likePost
                 </Button>
-                <Button
+                {/* <Button
                     _className={
                         "bg-green-500 text-white font-medium p-2 mr-2 rounded-md"
                     }
@@ -126,7 +126,7 @@ function NewNotification({ chidren }) {
                     onClick={() => addNoti(dataRequestJoinGroup)}
                 >
                     joinGroup
-                </Button>
+                </Button> */}
             </div>
             {notiList.length > 0 &&
                 notiList.map((item) => (
@@ -136,7 +136,7 @@ function NewNotification({ chidren }) {
                         notiList={notiList}
                         setNotiList={setNotiList}
                     />
-                ))} */}
+                ))}
         </div>
     );
 }

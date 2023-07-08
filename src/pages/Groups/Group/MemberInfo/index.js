@@ -1,14 +1,16 @@
 import LayoutTop from "./LayoutTop";
 import LayoutBottom from "./LayoutBottom";
 import avt from "../../../../assets/images/avatar/avatar.jpg";
+import banner from "../../../../assets/images/banner/user_bn.png";
+
 function MemberInfo() {
     return (
-        <div className="">
+        <div className="flex flex-col">
             <LayoutTop
                 id={1}
                 name={"Nguyễn Tú Anh"}
                 avt={avt}
-                background={avt}
+                background={banner}
             />
             <LayoutBottom />
         </div>

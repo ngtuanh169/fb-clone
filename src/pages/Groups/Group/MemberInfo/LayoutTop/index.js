@@ -11,29 +11,28 @@ function LayoutTop({ id, name, avt, background }) {
     const [showModal, setShowModal] = useState(false);
     useClickOutSide(modalRef, () => setShowModal(false));
     return (
-        <div className="flex flex-col items-center w-full bg-gradient-to-b from-slate-400 via-white to-white mb-4">
-            <div className=" w-max ">
+        <div className="flex flex-col justify-center items-center w-full bg-gradient-to-b from-slate-400 via-white to-white mb-4">
+            <div className="">
                 <img
-                    className="w-[1100px] h-[350px] object-cover rounded-b-md"
+                    className="w-full lg:w-[1100px] max-h-[400px] object-cover rounded-b-md"
                     src={background}
                     alt=""
                 />
             </div>
-            <div className="flex items-center justify-between w-[1000px] h-[84px] mx-auto mb-4">
-                <div className="  flex min-w-[168px] h-full ">
-                    <div className="relative w-[168px] h-[168px] mr-4">
+            <div className="flex flex-col lg:flex-row items-center justify-between w-full lg:w-[1000px] h-auto lg:h-[84px] mx-auto mb-4">
+                <div className="  flex flex-col items-center lg:flex-row min-w-[168px] h-full ">
+                    <div className="relative w-[168px] h-[84px] lg:h-[168px] lg:mr-4">
                         <img
-                            className="absolute top-[-84px] left-0 w-full h-full rounded-full border-4 border-white"
+                            className="absolute top-[-84px] left-0 w-[168px] h-[168px] rounded-full border-4 border-white"
                             src={avt}
                             alt=""
                         />
                     </div>
-                    <div className="flex items-center h-full">
+                    <div className="flex-1 flex items-center h-full">
                         <span className=" text-[32px] font-bold">{name}</span>
                     </div>
                 </div>
-
-                <div className=" flex float-right">
+                <div className=" flex float-right mt-2 lg:mt-0">
                     {+userId === 1 ? (
                         <Button
                             _className={
@@ -57,7 +56,7 @@ function LayoutTop({ id, name, avt, background }) {
                             </Button>
                             <Button
                                 _className={
-                                    "flex items-center font-semibold p-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                                    "flex items-center font-semibold p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                                 }
                             >
                                 <FaUserPlus className="text-[20px]" />
@@ -67,13 +66,13 @@ function LayoutTop({ id, name, avt, background }) {
                     )}
                 </div>
             </div>
-            <div className="flex items-center justify-between w-[1000px] h-[60px] border-t border-gray-300">
+            <div className="relative flex items-center justify-between w-full lg:w-[1000px] h-[60px] border-t border-gray-300">
                 <div className="flex justify-center items-center h-full w-[167px] border-b-[3px] border-blue-500">
                     <span className="text-blue-500 font-medium">
                         Bài viết trong nhóm
                     </span>
                 </div>
-                <div ref={modalRef} className=" relative flex justify-center">
+                <div ref={modalRef} className=" flex justify-center">
                     <Button
                         _className={
                             "py-3 px-4 mr-4 bg-gray-200 rounded-md hover:bg-gray-300"
@@ -87,7 +86,7 @@ function LayoutTop({ id, name, avt, background }) {
                             style={{
                                 boxShadow: "rgb(142, 141, 141) 0px 1px 10px",
                             }}
-                            className=" absolute top-[110%] w-[330px] flex flex-col p-2 bg-white rounded-md"
+                            className=" absolute top-[110%] right-0 w-[330px] flex flex-col p-2 bg-white rounded-md"
                         >
                             {+userId === 1 ? (
                                 <Button

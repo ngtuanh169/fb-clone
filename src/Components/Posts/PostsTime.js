@@ -39,7 +39,7 @@ function PostTime({ status = 1 }) {
                                 <BsFillCaretRightFill className="mx-1" />
                                 <Link
                                     to={`/group/${context.groupId}`}
-                                    className="text-[15px] font-semibold hover:underline"
+                                    className="flex-1 text-[15px] font-semibold line-clamp-1 hover:underline"
                                 >
                                     {context.groupName}
                                 </Link>
