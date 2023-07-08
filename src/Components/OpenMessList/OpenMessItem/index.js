@@ -24,7 +24,7 @@ function OpenMessItem({ id, avt, name, active = false }) {
     return (
         <div
             ref={divRef}
-            style={{ boxShadow: "0 0 3px 0 #6f6c6c" }}
+            style={{ boxShadow: "0 1px 3px 2px #ccc" }}
             className="flex flex-col w-[330px] h-[450px]  ml-3 bg-white  rounded-t-lg  "
             onClick={() => setIsFocus(true)}
         >

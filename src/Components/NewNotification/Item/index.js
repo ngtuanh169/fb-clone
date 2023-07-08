@@ -22,14 +22,23 @@ function Item({ data, notiList = [], setNotiList = () => {} }) {
             Comp = RequestJoinGroup;
             break;
     }
-    useEffect(() => {}, []);
+    useEffect(() => {
+        const timeId = setTimeout(() => {
+            removeNoti(data.id);
+        }, 3000);
+        return () => clearTimeout(timeId);
+    });
     const removeNoti = (id) => {
         const newArray = notiList.filter((item) => item.id !== id);
         setNotiList([...newArray]);
     };
     return (
-        <div className="w-[328px] mt-2 animate-openNewNoti">
-            <MainCard>
+        <div className="w-max h-max ">
+            <div
+                style={{ boxShadow: "0 1px 3px 2px #ccc" }}
+                className=" w-[328px] mt-2 bg-white animate-openNewNoti rounded-lg"
+            >
+                {/* <MainCard> */}
                 <div className="flex flex-col w-full p-2 ">
                     <div className="flex justify-between w-ful px-2">
                         <div className="">
@@ -48,7 +57,8 @@ function Item({ data, notiList = [], setNotiList = () => {} }) {
                     </div>
                     <Comp data={data} newNoti={true} />
                 </div>
-            </MainCard>
+                {/* </MainCard> */}
+            </div>
         </div>
     );
 }
