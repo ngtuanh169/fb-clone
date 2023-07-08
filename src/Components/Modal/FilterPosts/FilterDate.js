@@ -23,7 +23,7 @@ function FilterDate({
                 }
                 onClick={() => setOpenListDate(!openListDate)}
             >
-                <span className=" mr-2 font-semibold">
+                <span className=" mr-2 font-semibold ">
                     {filter[nameFilter] === 0
                         ? text
                         : `${text} ${filter[nameFilter]}`}
