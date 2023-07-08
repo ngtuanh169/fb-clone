@@ -83,9 +83,9 @@ function PostTime({ status = 1 }) {
                 </div>
             </div>
             <div className="flex items-center">
-                <Button _className="h-[36px] w-[36px] rounded-full text-[20px] text-gray-500 cursor-default ">
+                {/* <Button _className="h-[36px] w-[36px] rounded-full text-[20px] text-gray-500 cursor-default ">
                     <BiDotsHorizontalRounded className=" mx-auto" />
-                </Button>
+                </Button> */}
                 {/* {!context.iconClose && !context.showModal && (
                     <Button _className=" h-[36px] w-[36px] rounded-full text-2xl text-gray-500 hover:bg-hover">
                         <MdClose className=" mx-auto" />
