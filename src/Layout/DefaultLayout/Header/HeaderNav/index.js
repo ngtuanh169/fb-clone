@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { ScreenSize } from "../../../../App";
 import LayoutLeft from "../../../../pages/Home/LayoutLeft";
 import NavItem from "./NavItem";
@@ -11,6 +11,13 @@ import { FaUserFriends } from "react-icons/fa";
 function HeaderNav() {
     const context = useContext(ScreenSize);
     const [showLefNav, setShowNavLef] = useState(false);
+    useEffect(() => {
+        if (showLefNav) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "visible";
+        }
+    }, [showLefNav]);
     return (
         <div className=" flex-1 flex justify-start ml-2 md:ml-0 md:justify-center ">
             <ul className="flex justify-between md:w-[340px] lg:w-[600px]">
@@ -58,10 +65,12 @@ function HeaderNav() {
                 )}
                 {showLefNav && (
                     <div
-                        className=" fixed top-[56px] left-0 w-full h-screen px-2 bg-[#f0f2f5] scrollbar-thin"
+                        className=" fixed top-[56px] left-0 w-full h-screen px-2 bg-[#f0f2f5] scrollbar-thin "
                         onClick={() => setShowNavLef(false)}
                     >
-                        <LayoutLeft />
+                        <div className="h-max w-full mb-[50px] ">
+                            <LayoutLeft />
+                        </div>
                     </div>
                 )}
             </ul>

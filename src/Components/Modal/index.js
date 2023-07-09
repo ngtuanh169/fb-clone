@@ -1,4 +1,9 @@
+import { useEffect } from "react";
 function Modal({ children, closeModal, bgModal = true }) {
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => (document.body.style.overflow = "visible");
+    }, []);
     return (
         <>
             <div

@@ -1,39 +1,71 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Link } from "react-router-dom";
+import { ScreenSize } from "../../../../App";
 import ProfileNav from "../ProfileNav";
 import Button from "../../../../Components/Button";
-import ChangeAvatar from "../../../../Components/Modal/ChangeAvatar";
+import ChangeProfilePicture from "../../../../Components/Modal/ChangeProfilePicture";
 import { FaPen } from "react-icons/fa";
 import { AiFillPlusCircle, AiFillCamera } from "react-icons/ai";
 import banner from "../../../../assets/images/banner/user_bn.png";
 import avt from "../../../../assets/images/avatar/avatar.jpg";
 function ProdileHeader() {
-    const [showModal, setShowModal] = useState(false);
+    const [showModalAvatar, setShowModalAvatar] = useState(false);
+    const [showModalBanner, setShowModalBanner] = useState(false);
+    const context = useContext(ScreenSize);
     return (
         <>
-            {showModal && (
-                <ChangeAvatar closeModal={() => setShowModal(false)} />
+            {showModalAvatar && (
+                <ChangeProfilePicture
+                    title="Cập nhập ảnh đại diện"
+                    closeModal={() => setShowModalAvatar(false)}
+                />
+            )}
+            {showModalBanner && (
+                <ChangeProfilePicture
+                    title="Cập nhập ảnh bìa"
+                    closeModal={() => setShowModalBanner(false)}
+                />
             )}
             <div className="w-full flex flex-col mb-4 bg-gradient-to-b from-slate-400 via-white to-white">
                 <div className="w-full lg:w-[1100px] my-0 mx-auto">
-                    <div className="w-full rounded-b-lg overflow-hidden">
-                        <img
-                            className="w-full max-h-[400px] object-cover"
-                            src={banner}
-                            alt=""
-                        />
+                    <div className=" relative w-full rounded-b-lg overflow-hidden">
+                        <Link to={"/photo/1"} className="w-full">
+                            <img
+                                className="w-full max-h-[400px] object-cover"
+                                src={banner}
+                                alt=""
+                            />
+                        </Link>
+                        <div className=" absolute bottom-3 right-3 z-10">
+                            <Button
+                                _className={
+                                    "flex items-center p-2 bg-gray-300 sm:bg-white rounded-full sm:rounded-md "
+                                }
+                                onClick={() => setShowModalBanner(true)}
+                            >
+                                <AiFillCamera className="text-[22px]" />
+                                {context.width >= 640 && (
+                                    <span className="ml-1 font-medium">
+                                        Thay đổi ảnh bìa
+                                    </span>
+                                )}
+                            </Button>
+                        </div>
                     </div>
                     <div className="flex flex-col lg:flex-row w-full lg:w-[1000px] pb-5 lg:py-5 mx-auto border-b">
                         <div className=" relative w-full lg:w-1/5 h-[84px] lg:h-auto  ">
                             <div className=" absolute bottom-0 flex justify-center w-full lg:block">
                                 <div className=" relative">
-                                    <img
-                                        className="w-[168px] h-[168px] rounded-full border-[4px] border-white  "
-                                        src={avt}
-                                        alt=""
-                                    />
+                                    <Link to={"/photo/1"}>
+                                        <img
+                                            className="w-[168px] h-[168px] rounded-full border-[4px] border-white  "
+                                            src={avt}
+                                            alt=""
+                                        />
+                                    </Link>
                                     <Button
                                         _className=" absolute bottom-[5px] right-[10px] flex justify-center items-center w-9 h-9 rounded-full bg-gray-200"
-                                        onClick={() => setShowModal(true)}
+                                        onClick={() => setShowModalAvatar(true)}
                                     >
                                         <AiFillCamera className="w-5 h-5" />
                                     </Button>

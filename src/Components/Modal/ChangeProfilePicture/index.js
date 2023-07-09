@@ -1,17 +1,21 @@
 import MainCard from "../../MainCard";
-import Modal from "../";
+import Modal from "..";
 import Button from "../../Button";
 import { IoMdClose } from "react-icons/io";
-function ChangeAvatar({ closeModal = () => {} }) {
+function ChangeProfilePicture({
+    title = "",
+    handleChange = () => {},
+    closeModal = () => {},
+}) {
     return (
         <Modal closeModal={closeModal}>
-            <div className=" w-[700px] h-[300px] m-auto">
+            <div className=" w-full mx-2 md:mx-auto md:w-[700px] h-[300px] m-auto">
                 <MainCard>
                     <div className="flex flex-col w-full p-2">
                         <div className="pb-2 border-b">
                             <div className=" relative text-center p-2">
                                 <span className=" text-[20px] font-semibold">
-                                    Cập nhập ảnh đại diện
+                                    {title}
                                 </span>
                                 <Button
                                     _className={" absolute top-[5px] right-0"}
@@ -62,6 +66,7 @@ function ChangeAvatar({ closeModal = () => {} }) {
                                 _className={
                                     "w-[50px] py-2 text-center rounded-md hover:bg-gray-300"
                                 }
+                                onClick={closeModal}
                             >
                                 <span className=" font-medium">Hủy</span>
                             </Button>
@@ -69,6 +74,7 @@ function ChangeAvatar({ closeModal = () => {} }) {
                                 _className={
                                     " w-[100px] py-2 ml-2 text-center bg-blue-600 rounded-md hover:bg-blue-700"
                                 }
+                                onClick={handleChange}
                             >
                                 <span className=" text-white font-medium">
                                     Lưu
@@ -82,4 +88,4 @@ function ChangeAvatar({ closeModal = () => {} }) {
     );
 }
 
-export default ChangeAvatar;
+export default ChangeProfilePicture;

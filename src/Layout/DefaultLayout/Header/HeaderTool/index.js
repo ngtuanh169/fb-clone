@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 import { ScreenSize } from "../../../../App";
 import { useClickOutSide } from "../../../../Hooks/useClickOutSide";
 import ToolItem from "./ToolItem";
@@ -22,6 +22,13 @@ function HeaderTool() {
     useClickOutSide(modalRef, () => setShowMess(false));
     useClickOutSide(modalNotifyRef, () => setShowModalNotify(false));
     useClickOutSide(modalUserRef, () => setShowModalUser(false));
+    useEffect(() => {
+        if (showModalNotify) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "visible";
+        }
+    }, [showModalNotify]);
     return (
         <div className=" md:w-[180px] lg:w-[350px] relative px-4">
             <ul className="flex justify-end h-full">
