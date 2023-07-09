@@ -1,4 +1,5 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
+import { useClickOutSide } from "../../../../Hooks/useClickOutSide";
 import { ScreenSize } from "../../../../App";
 import LayoutLeft from "../../../../pages/Home/LayoutLeft";
 import NavItem from "./NavItem";
@@ -10,7 +11,9 @@ import { BsList } from "react-icons/bs";
 import { FaUserFriends } from "react-icons/fa";
 function HeaderNav() {
     const context = useContext(ScreenSize);
+    const divRef = useRef();
     const [showLefNav, setShowNavLef] = useState(false);
+    useClickOutSide(divRef, () => setShowNavLef(false));
     useEffect(() => {
         if (showLefNav) {
             document.body.style.overflow = "hidden";
@@ -53,7 +56,10 @@ function HeaderNav() {
                     </div>
                 )}
                 {context.width < 768 && (
-                    <div className="flex items-centerh-full w-[56px]">
+                    <div
+                        ref={divRef}
+                        className="flex items-centerh-full w-[56px]"
+                    >
                         <NavItem>
                             <BsList
                                 style={{ color: showLefNav ? "blue" : "" }}
@@ -61,16 +67,16 @@ function HeaderNav() {
                                 onClick={() => setShowNavLef(!showLefNav)}
                             />
                         </NavItem>
-                    </div>
-                )}
-                {showLefNav && (
-                    <div
-                        className=" fixed top-[56px] left-0 w-full h-screen px-2 bg-[#f0f2f5] scrollbar-thin "
-                        onClick={() => setShowNavLef(false)}
-                    >
-                        <div className="h-max w-full mb-[50px] ">
-                            <LayoutLeft />
-                        </div>
+                        {showLefNav && (
+                            <div
+                                className=" fixed top-[56px] left-0 w-full h-screen px-2 bg-[#f0f2f5] scrollbar-thin "
+                                onClick={() => setShowNavLef(false)}
+                            >
+                                <div className="h-max w-full mb-[50px] ">
+                                    <LayoutLeft />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </ul>

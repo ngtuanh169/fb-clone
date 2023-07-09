@@ -15,7 +15,7 @@ function ProfileFriends() {
     return (
         <div className="">
             <ProfileHeader />
-            <div className="w-[1000px] mx-auto">
+            <div className="w-full lg:w-[1000px] mx-auto">
                 <MainCard>
                     <div className="flex flex-col p-2">
                         <FriendsListTool />

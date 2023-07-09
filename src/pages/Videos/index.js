@@ -13,7 +13,7 @@ function Videos() {
                         </div>
                     </SubLayoutLeft>
                 </div>
-                <div className="flex-1 pt-5 px-2 sm:px-0 ">
+                <div className="flex-1 pt-5  ">
                     <div className="w-full sm:w-[550px] lg:w-[820px] mx-auto">
                         <Posts
                             userId={1}
