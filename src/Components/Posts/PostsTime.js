@@ -27,7 +27,7 @@ function PostTime({ status = 1 }) {
                                     ? context.groupMember
                                         ? `/group/${context.groupId}/user/${context.userId}`
                                         : `/group/:groupId/post/2`
-                                    : "/profile"
+                                    : "/profile/1"
                             }
                         >
                             <span className="text-[15px] font-semibold hover:underline">

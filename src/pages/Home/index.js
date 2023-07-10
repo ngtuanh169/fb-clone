@@ -5,7 +5,6 @@ import LayoutContent from "./LayoutContent";
 import LayoutRight from "./LayoutRight";
 function Home() {
     const context = useContext(ScreenSize);
-    console.log(context.width);
     return (
         <div className="flex justify-bettween w-full ">
             {context.width >= 1150 && (

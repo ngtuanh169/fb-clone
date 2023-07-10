@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Videos from "../pages/Videos";
 import Photo from "../pages/Photo";
 import Marketplace from "../pages/Marketplace";
+import Stories from "../pages/Stories";
 import Groups from "../pages/Groups";
 import Group from "../pages/Groups/Group";
 import Friends from "../pages/Friends";
@@ -28,6 +29,7 @@ const privateRoutes = [
     { path: "/videos", component: Videos },
     { path: "/photo/:id", component: Photo, layout: null },
     { path: "/marketplace", component: Marketplace },
+    { path: "/stories/:id", component: Stories },
     { path: "/groups", component: Groups },
     { path: "/group/:groupId", component: Group },
     { path: "/group/:groupId/user/:userId", component: Group },

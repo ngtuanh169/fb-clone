@@ -1,12 +1,45 @@
+import { useEffect, useState } from "react";
+import useForm from "../../../Hooks/useForm";
 import MainCard from "../../MainCard";
 import Modal from "..";
 import Button from "../../Button";
 import { IoMdClose } from "react-icons/io";
 function ChangeProfilePicture({
     title = "",
+    video = false,
     handleChange = () => {},
     closeModal = () => {},
 }) {
+    const validates = [
+        { name: "file", rules: { isFlies: video ? "video" : "picture" } },
+        { name: "des", rules: { isRequired: true } },
+    ];
+    const [formValue, setFormValue] = useState({
+        file: "",
+        des: "",
+        fileUrl: "",
+    });
+    const changeFile = (file) => {
+        file && setFormValue({ ...formValue, file });
+    };
+    useEffect(() => {
+        if (formValue.file[0]) {
+            console.log(formValue.fileUrl);
+            formValue.fileUrl && URL.revokeObjectURL(formValue.fileUrl);
+            const url = URL.createObjectURL(formValue.file[0]);
+            setFormValue({ ...formValue, fileUrl: url });
+        }
+        return () =>
+            formValue.fileUrl && URL.revokeObjectURL(formValue.fileUrl);
+    }, [formValue.file]);
+
+    const handleSubmit = () => {
+        console.log("thanh cong");
+    };
+    const { invalid, errors, removeError, formSubmit } = useForm(
+        validates,
+        handleSubmit
+    );
     return (
         <Modal closeModal={closeModal}>
             <div className=" w-full mx-2 md:mx-auto md:w-[700px] h-[300px] m-auto">
@@ -31,16 +64,44 @@ function ChangeProfilePicture({
                             <div className="p-2">
                                 <div className="flex flex-col">
                                     <label
-                                        htmlFor="photo"
+                                        htmlFor="file"
                                         className=" font-medium"
                                     >
-                                        Chọn ảnh
+                                        {` Chọn ${video ? "video" : "ảnh"}`}
                                     </label>
                                     <input
                                         className=" border p-2 rounded-md"
                                         type="file"
-                                        id="photo"
+                                        id="file"
+                                        name="file"
+                                        onChange={(e) => {
+                                            changeFile(e.target.files);
+                                            removeError("file");
+                                        }}
+                                        onBlur={(e) =>
+                                            invalid("file", e.target.files)
+                                        }
                                     />
+                                    {errors.file && (
+                                        <p className="text-[12px] text-red-500">
+                                            {errors.file}
+                                        </p>
+                                    )}
+                                    {formValue.fileUrl && !errors.file && (
+                                        <div className="w-[100px] h-[100px] mx-auto py-2 ">
+                                            {video ? (
+                                                <video
+                                                    className="w-full h-full object-cover"
+                                                    src={formValue.fileUrl}
+                                                />
+                                            ) : (
+                                                <img
+                                                    className="w-full h-full object-cover"
+                                                    src={formValue.fileUrl}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="p-2">
@@ -53,11 +114,27 @@ function ChangeProfilePicture({
                                     </label>
                                     <textarea
                                         className="w-full p-2 border outline-none rounded-md focus:border-blue-500"
-                                        name=""
+                                        name="des"
                                         id="des"
                                         rows="4"
                                         placeholder="Nội dung bài đăng..."
+                                        value={formValue.des}
+                                        onChange={(e) => {
+                                            setFormValue({
+                                                ...formValue,
+                                                des: e.target.value,
+                                            });
+                                            removeError("des");
+                                        }}
+                                        onBlur={(e) =>
+                                            invalid("des", e.target.value)
+                                        }
                                     ></textarea>
+                                    {errors.des && (
+                                        <p className="text-[12px] text-red-500">
+                                            {errors.des}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -74,7 +151,7 @@ function ChangeProfilePicture({
                                 _className={
                                     " w-[100px] py-2 ml-2 text-center bg-blue-600 rounded-md hover:bg-blue-700"
                                 }
-                                onClick={handleChange}
+                                onClick={() => formSubmit(formValue)}
                             >
                                 <span className=" text-white font-medium">
                                     Lưu

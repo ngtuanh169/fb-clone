@@ -78,7 +78,7 @@ function NewNotification({ chidren }) {
 
     return (
         <div className=" fixed bottom-3 left-3 flex flex-col justify-end z-50">
-            <div className="flex">
+            {/* <div className="flex">
                 <Button
                     _className={
                         "bg-blue-500 text-white font-medium p-2 rounded-md mr-2"
@@ -127,7 +127,7 @@ function NewNotification({ chidren }) {
                 >
                     joinGroup
                 </Button>
-            </div>
+            </div> */}
             {notiList.length > 0 &&
                 notiList.map((item, index) => {
                     if (index === 0) {

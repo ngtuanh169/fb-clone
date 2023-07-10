@@ -11,12 +11,26 @@ function useForm(validates, callback) {
                 ? undefined
                 : "Bạn nhập mật khẩu không trùng khớp";
         },
-        isFlies: (value) => {
-            const types = ["image/png", "image/jpg", "image/jpeg", "video/mp4"];
+        isFlies: (value, type) => {
+            let types = ["video/mp4", "image/png", "image/jpg", "image/jpeg"];
+
+            if (type === "video") {
+                types = ["video/mp4"];
+            }
+            if (type === "picture") {
+                types = ["image/png", "image/jpg", "image/jpeg"];
+            }
+            if (Object.keys(value).length === 0) {
+                return `Bạn vui lòng nhập đúng file (${types.join(", ")} )`;
+            }
             for (const key in value) {
-                const check = types.includes(value[key].type);
-                if (!check) {
-                    return `Bạn vui lòng nhập đúng file (${types.join(", ")} )`;
+                if (+key % 1 === 0) {
+                    const check = types.includes(value[key].type);
+                    if (!check) {
+                        return `Bạn vui lòng nhập đúng file (${types.join(
+                            ", "
+                        )} )`;
+                    }
                 }
             }
         },
@@ -54,7 +68,7 @@ function useForm(validates, callback) {
             setSubmit(false);
         }
     }, [submit]);
-    console.log(submit);
+    // console.log(submit);
     const invalid = (name, value) => {
         const validate = validates.filter((item) => item.name === name);
         if (validate.length > 0) {

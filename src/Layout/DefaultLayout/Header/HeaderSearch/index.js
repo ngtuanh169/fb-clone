@@ -18,7 +18,6 @@ function HeaderSearch() {
         isFocus && inputRef.current.focus();
         isFocus && text && setShowModal(true);
     }, [isFocus, text]);
-    console.log(text);
     return (
         <div
             className={` relative h-full w-[112px] lg:w-[350px] ${
