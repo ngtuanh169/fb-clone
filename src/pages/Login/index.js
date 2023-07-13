@@ -1,5 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import useForm from "../../Hooks/useForm";
+import authApi from "../../api/authApi";
+import { addUser } from "../../redux/actions/user";
 import Button from "../../Components/Button";
 import { ImEye, ImEyeBlocked } from "react-icons/im";
 import { BiUserPlus } from "react-icons/bi";
@@ -8,14 +12,30 @@ function Login() {
         { name: "email", rules: { isRequired: true, isEmail: true } },
         { name: "password", rules: { isRequired: true } },
     ];
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [formValues, setFormValues] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
 
     const changeFormValues = (name, value) => {
         setFormValues({ ...formValues, [name]: value });
     };
-    const handleSubmit = () => {
-        console.log(formValues);
+    const handleSubmit = async () => {
+        try {
+            const params = new FormData();
+            for (const key in formValues) {
+                params.append(key, formValues[key]);
+            }
+            const res = await authApi.login(params);
+            if (+res[0].status === 200) {
+                localStorage.setItem("accessToken", res[0].accessToken);
+                localStorage.setItem("refreshToken", res[0].refreshToken);
+                dispatch(addUser(res[0].userInfo[0]));
+                navigate("/");
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
     const { invalid, errors, removeError, formSubmit } = useForm(
         validates,

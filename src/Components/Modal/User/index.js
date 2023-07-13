@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteUser } from "../../../redux/actions/user";
 import Item from "./Item";
 import SettingsAndPrivacy from "./SettingsAndPrivacy";
 import HelpAndSupport from "./HelpAndSupport";
@@ -9,6 +11,7 @@ import { BsQuestionCircleFill } from "react-icons/bs";
 import { FaMoon } from "react-icons/fa";
 import avt from "../../../assets/images/avatar/avatar.jpg";
 function User({ click = () => {} }) {
+    const dispatch = useDispatch();
     const DivLeftRef = useRef();
     const DivRightRef = useRef();
     const [list, setList] = useState({ Comp: undefined });
@@ -101,7 +104,16 @@ function User({ click = () => {} }) {
                         <Item text="Đóng góp ý kiến">
                             <i className=" bg-urlIcons2 bg-szIcons2 w-5 h-5 bg-exclamationMarkIcon bg-no-repeat inline-block"></i>
                         </Item>
-                        <Item to={"/login"} text={"Đăng xuất"} onClick={click}>
+                        <Item
+                            to={"/login"}
+                            text={"Đăng xuất"}
+                            onClick={() => {
+                                localStorage.removeItem("accessToken");
+                                localStorage.removeItem("refreshToken");
+                                dispatch(deleteUser());
+                                click();
+                            }}
+                        >
                             <FiLogOut />
                         </Item>
                         <div className="px-2 pt-1">

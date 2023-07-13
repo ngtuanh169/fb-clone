@@ -1,10 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import useForm from "../../Hooks/useForm";
+import { addUser } from "../../redux/actions/user";
+import authApi from "../../api/authApi";
 import Button from "../../Components/Button";
 import { ImEye, ImEyeBlocked } from "react-icons/im";
 import { FiLogIn } from "react-icons/fi";
 
 function Register() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [formValues, setFormValues] = useState({
         fName: "",
         lName: "",
@@ -15,6 +21,7 @@ function Register() {
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const validates = [
         {
@@ -45,8 +52,22 @@ function Register() {
     const changeFormValues = (name, value) => {
         setFormValues({ ...formValues, [name]: value });
     };
-    const handleSubmit = () => {
-        console.log(formValues);
+    const handleSubmit = async () => {
+        try {
+            const params = new FormData();
+            for (const key in formValues) {
+                key !== "confirm" && params.append(key, formValues[key]);
+            }
+            setIsLoading(true);
+            const res = await authApi.register(params);
+            setIsLoading(false);
+            // if(res[0].status==='success'){
+            //     dispatch(addUser(res[0].data))
+            //     navigate('/')
+            // }
+        } catch (error) {
+            console.log(error);
+        }
     };
     const { errors, invalid, removeError, formSubmit } = useForm(
         validates,
@@ -68,7 +89,7 @@ function Register() {
                                 type="text"
                                 placeholder="Họ"
                                 name="fName"
-                                value={formValues.fname}
+                                value={formValues.fName}
                                 onChange={(e) => {
                                     changeFormValues("fName", e.target.value);
                                     removeError("fName");
@@ -85,7 +106,7 @@ function Register() {
                                 type="text"
                                 placeholder="Tên"
                                 name="lName"
-                                value={formValues.lname}
+                                value={formValues.lName}
                                 onChange={(e) => {
                                     changeFormValues("lName", e.target.value);
                                     removeError("lName");
@@ -193,28 +214,28 @@ function Register() {
                             <div
                                 className="px-4 py-2 rounded-md border mr-4"
                                 onClick={() => {
-                                    changeFormValues("sx", 0);
+                                    changeFormValues("sx", "nam");
                                     removeError("sx");
                                 }}
                             >
                                 <label className=" mr-6">Nam</label>
                                 <input
                                     type="radio"
-                                    checked={formValues.sx === 0}
+                                    checked={formValues.sx === "nam"}
                                     readOnly
                                 />
                             </div>
                             <div
                                 className="px-4 py-2 rounded-md border"
                                 onClick={() => {
-                                    changeFormValues("sx", 1);
+                                    changeFormValues("sx", "nữ");
                                     removeError("sx");
                                 }}
                             >
                                 <label className=" mr-6">Nữ</label>
                                 <input
                                     type="radio"
-                                    checked={formValues.sx === 1}
+                                    checked={formValues.sx === "nữ"}
                                     readOnly
                                 />
                             </div>

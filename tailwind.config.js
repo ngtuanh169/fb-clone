@@ -96,6 +96,11 @@ module.exports = {
                     from: { transform: "scale(1)" },
                     to: { transform: "scale(0)" },
                 },
+                loading: {
+                    "0%": { backgroundColor: "transparent" },
+                    "30%": { backgroundColor: "transparent" },
+                    "100%": { backgroundColor: "#333" },
+                },
             },
             transitionProperty: {
                 height: "height",
@@ -107,6 +112,7 @@ module.exports = {
                 postsIcon: "postsIcon .5s linear ",
                 postsIcon: "postsIcon .5s linear ",
                 smaller: "smaller .3s linear",
+                loading: "loading 3s linear infinite",
             },
         },
     },
