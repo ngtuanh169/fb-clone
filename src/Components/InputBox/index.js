@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
+import { useSelector } from "react-redux";
+import { formatAvatar } from "../../Hooks/useFormat";
 import { ScreenSize } from "../../App";
 import MainCard from "../MainCard";
 import ToolItem from "./ToolItem";
 import SendPosts from "../Modal/SendPosts";
 import avatar from "../../assets/images/avatar/avatar.jpg";
 function InputBox() {
+    const user = useSelector((state) => state.user);
     const context = useContext(ScreenSize);
     const [openSenPosts, setOpenSenPosts] = useState(false);
     const [addImg, setAddImg] = useState(false);
@@ -31,7 +34,7 @@ function InputBox() {
                         >
                             <img
                                 className="h-full w-full object-cover object-center"
-                                src={avatar}
+                                src={formatAvatar(user.avatar, user.sx)}
                                 alt=""
                             />
                         </Link>

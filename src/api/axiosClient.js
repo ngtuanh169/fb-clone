@@ -15,10 +15,10 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(async (config) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
-        config.headers["access_token"] = accessToken;
+        config.headers["Access_token"] = accessToken;
     }
     if (config.url === "/auth/refreshToken.php") {
-        config.headers["refresh_token"] = localStorage.getItem("refreshToken");
+        config.headers["Refresh_token"] = localStorage.getItem("refreshToken");
     }
     return config;
 });
@@ -38,6 +38,15 @@ axiosClient.interceptors.response.use(
             const res = await authApi.refreshToken();
             localStorage.setItem("accessToken", res);
             return axiosClient(error.config);
+        }
+        if (
+            error.response.status === 403 ||
+            (error.response.status === 401 &&
+                error.config.url === "/auth/refreshToken.php")
+        ) {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            window.location.href = "/login";
         }
         throw error;
     }

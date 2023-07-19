@@ -1,4 +1,5 @@
 import { useContext, useState, useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useClickOutSide } from "../../../../Hooks/useClickOutSide";
 import { ScreenSize } from "../../../../App";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -6,12 +7,13 @@ import { BsFillCaretDownFill, BsCheck2 } from "react-icons/bs";
 import Button from "../../../../Components/Button";
 function ProfileNav() {
     const currentUrl = window.location.pathname;
+    const { userId } = useParams();
     const nav = [
-        { id: 1, pathName: "/profile/1", name: "Bài viết" },
-        { id: 2, pathName: "/profile/1/info", name: "Giới thiệu" },
-        { id: 3, pathName: "/profile/1/friends", name: "Bạn bè" },
-        { id: 4, pathName: "/profile/1/photos", name: "Ảnh" },
-        { id: 5, pathName: "/profile/1/videos", name: "Video" },
+        { id: 1, pathName: `/profile/${userId}`, name: "Bài viết" },
+        { id: 2, pathName: `/profile/${userId}/info`, name: "Giới thiệu" },
+        { id: 3, pathName: `/profile/${userId}/friends`, name: "Bạn bè" },
+        { id: 4, pathName: `/profile/${userId}/photos`, name: "Ảnh" },
+        { id: 5, pathName: `/profile/${userId}/videos`, name: "Video" },
     ];
     const context = useContext(ScreenSize);
     const divRef = useRef();

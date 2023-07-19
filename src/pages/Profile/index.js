@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { ScreenSize } from "../../App";
 import Posts from "../../Components/Posts";
 import ProdileHeader from "./Component/ProfileHeader";
@@ -10,7 +11,8 @@ import InputBox from "../../Components/InputBox";
 import Filter from "./Component/Filter";
 import avatar from "../../assets/images/avatar/avatar.jpg";
 function Profile() {
-    const { postsId } = useParams();
+    const { postsId, userId } = useParams();
+    const user = useSelector((state) => state.user);
     const context = useContext(ScreenSize);
     return (
         <div className="">
@@ -42,7 +44,7 @@ function Profile() {
                             </div>
                         </div>
                         <div className=" w-full  lg:flex-1 lg:ml-4 ">
-                            <InputBox />
+                            {userId === user.userId && <InputBox />}
                             <Filter />
                             <Posts
                                 userId={1}

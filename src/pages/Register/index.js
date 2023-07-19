@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { addStatusMess } from "../../redux/actions/statusMessage";
 import useForm from "../../Hooks/useForm";
 import { addUser } from "../../redux/actions/user";
 import authApi from "../../api/authApi";
@@ -60,11 +61,15 @@ function Register() {
             }
             setIsLoading(true);
             const res = await authApi.register(params);
+            console.log(res[0]);
+            dispatch(
+                addStatusMess({ status: res[0].status, mess: res[0].message })
+            );
             setIsLoading(false);
-            // if(res[0].status==='success'){
-            //     dispatch(addUser(res[0].data))
-            //     navigate('/')
-            // }
+            if (res[0].status === "success") {
+                dispatch(addUser(res[0].userInfo[0]));
+                navigate("/");
+            }
         } catch (error) {
             console.log(error);
         }

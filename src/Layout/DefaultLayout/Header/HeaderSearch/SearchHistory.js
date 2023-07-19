@@ -67,9 +67,11 @@ function SearchHistory({ text = "", closeModal = () => {} }) {
             <div className="w-full">
                 {dataList.length > 0 &&
                     dataList.map((item) => (
-                        <div className=" relative rounded-md overflow-hidden hover:bg-gray-200">
+                        <div
+                            key={item.id}
+                            className=" relative rounded-md overflow-hidden hover:bg-gray-200"
+                        >
                             <Link
-                                key={item.id}
                                 to={
                                     item.userId
                                         ? `/profile/${item.userId}`

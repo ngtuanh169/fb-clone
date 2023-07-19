@@ -1,7 +1,10 @@
+import { useSelector } from "react-redux";
+import { formatAvatar } from "../../../../../Hooks/useFormat";
 import Video from "../../../../../Components/Video";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import avt from "../../../../../assets/images/avatar/avatar.jpg";
 function StoryCard({ avatar, name, video, width, addStory = false }) {
+    const user = useSelector((state) => state.user);
     return (
         <div
             className={`group h-full py-3 pl-3`}
@@ -35,7 +38,7 @@ function StoryCard({ avatar, name, video, width, addStory = false }) {
                                     ? ""
                                     : "group-hover:scale-105 group-hover:opacity-90"
                             }`}
-                            src={avt}
+                            src={formatAvatar(user.avatar, user.sx)}
                             alt=""
                         />
                     )}

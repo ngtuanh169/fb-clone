@@ -1,4 +1,4 @@
-function Loading({ number }) {
+function Loading({ number, sizeSpan }) {
     return (
         <div className=" relative w-full h-full">
             {Array(number)
@@ -19,7 +19,11 @@ function Loading({ number }) {
                                     animationDuration: `${0.07 * number}s`,
                                     animationDelay: `${0.07 * index}s`,
                                 }}
-                                className={`w-3 h-3 rounded-full  animate-loading `}
+                                className={`${
+                                    sizeSpan
+                                        ? `w-${sizeSpan} h-${sizeSpan}`
+                                        : "h-3 w-3"
+                                } rounded-full  animate-loading `}
                             ></span>
                         </span>
                     </div>

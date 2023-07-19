@@ -8,13 +8,13 @@ function LayoutContent() {
             <Stories />
             <InputBox />
             <Posts
-                userId={1}
+                userId={12}
                 avatar={avatar}
                 name={"Nguyễn Tú Anh"}
                 time={1671894600425}
             />
             <Posts
-                userId={2}
+                userId={12}
                 avatar={avatar}
                 name={"Nguyễn Tú Anh"}
                 time={1671894600425}
@@ -23,13 +23,13 @@ function LayoutContent() {
                 groupName="Ninja School Online"
             />
             <Posts
-                userId={2}
+                userId={12}
                 avatar={avatar}
                 name={"Nguyễn Văn Tùng"}
-                time={1671894600425}
+                time={1671894600415}
             />
             <Posts
-                userId={2}
+                userId={12}
                 avatar={avatar}
                 name={"Nguyễn Thị Hoan"}
                 time={1671894600425}

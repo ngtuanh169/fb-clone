@@ -1,21 +1,20 @@
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { formatAvatar } from "../../../Hooks/useFormat";
 import Navtem from "./NavItem";
-import { FaUserFriends } from "react-icons/fa";
-import { MdGroups, MdOndemandVideo } from "react-icons/md";
-import { SiHomeassistantcommunitystore } from "react-icons/si";
-import { IoMdTime } from "react-icons/io";
-import { BiArrowToBottom } from "react-icons/bi";
 import avatar from "../../../assets/images/avatar/avatar.jpg";
-
 function LayoutLeft() {
+    const user = useSelector((state) => state.user);
     return (
         <div className="w-full h-full">
             <div className=" pb-2 border-b border-gray-300">
                 <ul className=" ">
-                    <Navtem to={"/profile/1"} text={"Nguyễn Tú Anh"}>
+                    <Navtem
+                        to={`/profile/${user.userId}`}
+                        text={`${user.fName} ${user.lName}`}
+                    >
                         <img
                             className=" rounded-full"
-                            src={avatar}
+                            src={formatAvatar(user.avatar, user.sx)}
                             alt="avatar"
                         />
                     </Navtem>

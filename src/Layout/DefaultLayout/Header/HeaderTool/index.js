@@ -1,5 +1,7 @@
 import { useState, useRef, useContext, useEffect } from "react";
 import { ScreenSize } from "../../../../App";
+import { useSelector } from "react-redux";
+import { formatAvatar } from "../../../../Hooks/useFormat";
 import { useClickOutSide } from "../../../../Hooks/useClickOutSide";
 import ToolItem from "./ToolItem";
 import Messenger from "../../../../Components/Modal/Messenger";
@@ -9,8 +11,8 @@ import { CgMenuGridO } from "react-icons/cg";
 import { BsMessenger, BsBellFill } from "react-icons/bs";
 import avatar from "../../../../assets/images/avatar/avatar.jpg";
 function HeaderTool() {
+    const user = useSelector((state) => state.user);
     const context = useContext(ScreenSize);
-
     const modalRef = useRef();
     const modalNotifyRef = useRef();
     const modalUserRef = useRef();
@@ -89,7 +91,7 @@ function HeaderTool() {
                     >
                         <img
                             className="h-full w-full object-cover object-center hover:opacity-90"
-                            src={avatar}
+                            src={formatAvatar(user.avatar, user.sx)}
                             alt="avatar"
                             onClick={() => setShowModalUser(!showModalUser)}
                         />

@@ -1,28 +1,38 @@
+import { formatAvatar } from "../../../Hooks/useFormat";
+import Loading from "../../Loading";
 import avt from "../../../assets/images/avatar/avatar.jpg";
-function InfoUser() {
+function InfoUser({ data = {} }) {
     return (
         <div className="flex flex-col items-center w-full mt-5 mb-1">
-            <div className="">
-                <img
-                    className=" h-[60px] w-[60px] rounded-full boder"
-                    src={avt}
-                    alt=""
-                />
-            </div>
-            <div className="">
-                <span className=" font-medium">Nguyen Tu Anh</span>
-            </div>
-            <div className="">
-                <span className="text-[13px]">Facebook</span>
-            </div>
-            <div className="">
-                <span className="text-[13px]">
-                    Các bạn là bạn bè trên Facebook
-                </span>
-            </div>
-            <div className="">
-                <span className="text-[13px]">Sống tại Hà Nội</span>
-            </div>
+            {data.othersName ? (
+                <>
+                    <div className="">
+                        <img
+                            className=" h-[60px] w-[60px] rounded-full boder"
+                            src={formatAvatar(data.othersAvt, data.othersSx)}
+                            alt=""
+                        />
+                    </div>
+                    <div className="">
+                        <span className=" font-medium">{data.othersName}</span>
+                    </div>
+                    <div className="">
+                        <span className="text-[13px]">Facebook</span>
+                    </div>
+                    <div className="">
+                        <span className="text-[13px]">
+                            Các bạn là bạn bè trên Facebook
+                        </span>
+                    </div>
+                    <div className="">
+                        <span className="text-[13px]">Sống tại Hà Nội</span>
+                    </div>
+                </>
+            ) : (
+                <div className="w-[30px] h-[30px]">
+                    <Loading number={10} sizeSpan={1} />
+                </div>
+            )}
         </div>
     );
 }

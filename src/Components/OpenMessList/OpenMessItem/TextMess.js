@@ -3,30 +3,6 @@ import TextMessItem from "./TextMessItem";
 import img from "../../../assets/images/avatar/avatar.jpg";
 function TextMess({ id }) {
     const textMessList = [
-        // {
-        //     userId: 1,
-        //     avt: img,
-        //     text: "Đang có sự cố kết nối xảy",
-        //     time: 1683624513787,
-        // },
-        // {
-        //     userId: 2,
-        //     avt: img,
-        //     text: "Đang có sự cố kết nối xảy",
-        //     time: 1683624513787,
-        // },
-        // {
-        //     userId: 2,
-        //     avt: img,
-        //     text: "Đang có sự cố kết nối xảy",
-        //     time: 1683624513787,
-        // },
-        // {
-        //     userId: 1,
-        //     avt: img,
-        //     text: "Đang có sự cố kết nối xảy",
-        //     time: 1683624513787,
-        // },
         {
             userId: 1,
             avt: img,

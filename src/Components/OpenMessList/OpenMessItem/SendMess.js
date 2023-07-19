@@ -1,16 +1,30 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import messageApi from "../../../api/messageApi";
 import Button from "../../Button";
 import { MdInsertEmoticon } from "react-icons/md";
 import { IoMdClose, IoIosSend } from "react-icons/io";
 import { BsImage } from "react-icons/bs";
-import { BiSend } from "react-icons/bi";
 import { AiFillPlusCircle, AiTwotoneLike } from "react-icons/ai";
-function SendMess({ onFocus, active }) {
+function SendMess({ onFocus, active, data = {} }) {
     const test =
         "https://vnanet.vn/Data/Articles/2022/07/27/6245403/vna_potal_lai_chau_nang_cao_chat_luong_vung_nguyen_lieu_che_stand.jpg";
+    const user = useSelector((state) => state.user);
     const inputRef = useRef();
     const [showFull, setShowFull] = useState(false);
     const [formVlaues, setFormVlaues] = useState({ image: [], text: "" });
+
+    useEffect(() => {
+        active && inputRef.current.focus();
+    }, [active]);
+    useEffect(() => {
+        if (formVlaues.text || formVlaues.image.length > 0) {
+            setShowFull(true);
+        } else {
+            setShowFull(false);
+        }
+    }, [formVlaues]);
+
     const changeValues = (name, value) => {
         if (name === "image") {
             setFormVlaues({
@@ -25,16 +39,19 @@ function SendMess({ onFocus, active }) {
         const newArray = formVlaues.image.filter((item, index) => index !== id);
         setFormVlaues({ ...formVlaues, image: newArray });
     };
-    useEffect(() => {
-        active && inputRef.current.focus();
-    }, [active]);
-    useEffect(() => {
-        if (formVlaues.text || formVlaues.image.length > 0) {
-            setShowFull(true);
-        } else {
-            setShowFull(false);
+    const handleSubmit = async () => {
+        try {
+            const params = new FormData();
+            params.append("message", formVlaues.text);
+            params.append("senderId", user.userId);
+            params.append("receiverId", data.othersId);
+            params.append("conversationsId", data.conversationsId);
+            const res = await messageApi.addMessage(params);
+            console.log(res);
+        } catch (error) {
+            console.log(error);
         }
-    }, [formVlaues]);
+    };
     return (
         <div className="flex items-end w-full px-2 py-4 bg-white ">
             <div
@@ -133,14 +150,9 @@ function SendMess({ onFocus, active }) {
                             _className={
                                 "flex items-center justify-center h-[30px] w-[30px] rounded-full hover:bg-gray-200"
                             }
+                            onClick={() => formVlaues.text && handleSubmit()}
                         >
-                            <span
-                                className={`flex items-center ${
-                                    active ? "text-blue-600" : "text-slate-400"
-                                }`}
-                            >
-                                <IoIosSend className=" rotate-45 text-[22px] text-blue-500" />
-                            </span>
+                            <IoIosSend className=" rotate-45 text-[22px] text-blue-500" />
                         </Button>
                     ) : (
                         <Button

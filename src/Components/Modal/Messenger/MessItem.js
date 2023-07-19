@@ -1,34 +1,51 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addMess } from "../../../redux/actions/openMessList";
-import { formatTime } from "../../../Hooks/useFormat";
-function MessItem({ id, avatar, name, text, time, closeModal = () => {} }) {
+import { formatTimestamp, formatAvatar } from "../../../Hooks/useFormat";
+
+function MessItem({ data = {}, closeModal = () => {} }) {
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.user);
     return (
         <div
             className="w-full p-2 rounded-md cursor-pointer hover:bg-hover "
             onClick={(e) => {
                 closeModal();
-                dispatch(addMess(id, avatar, name));
+                dispatch(
+                    addMess({
+                        conversationsId: data.conversationsId,
+                        userId: user.userId,
+                        othersId: data.othersId,
+                        othersAvt: data.conversationsIdavatar,
+                        othersName: `${data.fName} ${data.lName}`,
+                        othersSx: data.sx,
+                    })
+                );
             }}
         >
             <div className="flex h-full w-full ">
                 <div className="">
                     <img
                         className="w-[50px] h-[50px] rounded-full"
-                        src={avatar}
+                        src={formatAvatar(data.avatar, data.sx)}
                         alt=""
                     />
                 </div>
                 <div className="flex-1 ml-3">
                     <span className=" flex w-full text-[15px] font-semibold">
-                        {name}
+                        {`${data.fName} ${data.lName}`}
                     </span>
                     <div className="w-full flex ">
-                        <span className=" line-clamp-1 flex-1 text-xs text-gray-500">
-                            {text}
+                        <span
+                            className={`line-clamp-1 flex-1 text-xs  ${
+                                +data.watched === 0
+                                    ? " font-semibold"
+                                    : "text-gray-500"
+                            }`}
+                        >
+                            {data.lastMess}
                         </span>
                         <span className="flex text-xs">
-                            - {formatTime(time)}
+                            - {formatTimestamp(data.updatedAt)}
                         </span>
                     </div>
                 </div>

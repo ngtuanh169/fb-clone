@@ -1,46 +1,73 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import userApi from "../../../../api/userApi";
 import Button from "../../../../Components/Button";
-import avt from "../../../../assets/images/avatar/avatar.jpg";
+import SkeletonLoading from "../../../../Components/SkeletonLoading";
+import { formatAvatar } from "../../../../Hooks/useFormat";
 import { TbSearch } from "react-icons/tb";
 function UserSearch({ text = "", closeModal = () => {} }) {
-    const dataList = [{ id: 1, text }];
+    const [dataList, setDataList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    useEffect(() => {
+        const timeId = setTimeout(async () => {
+            try {
+                setIsLoading(true);
+                const res = await userApi.searchUser({ text, limit: 6 });
+                console.log(res);
+                setDataList(res);
+                setIsLoading(false);
+            } catch (error) {
+                console.log(error);
+            }
+        }, 1500);
+        return () => clearTimeout(timeId);
+    }, [text]);
     return (
         <div className="w-full flex flex-col pt-1 pb-2 px-2">
-            {/* <div className="flex justify-between items-center px-1 ">
-                <span className=" font-semibold">Kết quả tìm kiếm</span>
-                <Link
-                    to={`/search/people/${text}`}
-                    className=" text-blue-500 py-1 px-2 rounded-md hover:bg-hover"
-                >
-                    <span onClick={closeModal}>Xem tất cả</span>
-                </Link>
-            </div> */}
             <div className="flex flex-col w-full">
-                {Array(6)
-                    .fill(0)
-                    .map((item, index) => (
-                        <Link key={index} to={"/profile/1"}>
-                            <div
-                                className="w-full flex items-center p-2 rounded-md hover:bg-hover"
-                                onClick={closeModal}
-                            >
-                                <img
-                                    key={index}
-                                    className="w-[40px] h-[40px] rounded-full mr-2"
-                                    src={avt}
-                                    alt=""
-                                />
-                                <div className="flex flex-col">
-                                    <span className=" font-medium">
-                                        Nguyen Tu Anh
-                                    </span>
-                                    <span className=" text-[13px] text-gray-500">
-                                        Bạn bè
-                                    </span>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
+                {isLoading
+                    ? Array(6)
+                          .fill(0)
+                          .map((item, index) => (
+                              <div
+                                  key={index}
+                                  className="w-full flex items-center p-2 rounded-md hover:bg-hover"
+                              >
+                                  <div
+                                      key={index}
+                                      className="w-[40px] h-[40px] rounded-full mr-2 overflow-hidden"
+                                  >
+                                      <SkeletonLoading />
+                                  </div>
+                                  <div className=" flex-1 h-10 rounded-md overflow-hidden">
+                                      <SkeletonLoading />
+                                  </div>
+                              </div>
+                          ))
+                    : dataList.length > 0 &&
+                      dataList.map((item, index) => (
+                          <Link key={index} to={`/profile/${item.userId}`}>
+                              <div
+                                  className="w-full flex items-center p-2 rounded-md hover:bg-hover"
+                                  onClick={closeModal}
+                              >
+                                  <img
+                                      key={index}
+                                      className="w-[40px] h-[40px] rounded-full mr-2"
+                                      src={formatAvatar(item.avatar, item.sx)}
+                                      alt=""
+                                  />
+                                  <div className="flex flex-col">
+                                      <span className=" font-medium">
+                                          {`${item.fname} ${item.lname}`}
+                                      </span>
+                                      <span className=" text-[13px] text-gray-500">
+                                          Bạn bè
+                                      </span>
+                                  </div>
+                              </div>
+                          </Link>
+                      ))}
                 <Link to={`/search/people/${text}`}>
                     <div
                         className="w-full flex items-center p-2 rounded-md hover:bg-hover"

@@ -1,8 +1,24 @@
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import conversationsApi from "../../../api/conversationsApi";
 import MessItem from "./MessItem";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { BsChevronRight } from "react-icons/bs";
 import avatar from "../../../assets/images/avatar/avatar.jpg";
 function MessList({ closeModal = () => {}, showMessWaiting = () => {} }) {
+    const user = useSelector((state) => state.user);
+    const [conversations, setConversations] = useState([]);
+    useEffect(() => {
+        const getConversations = async () => {
+            try {
+                const res = await conversationsApi.get({ userId: user.userId });
+                setConversations(res);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getConversations();
+    }, []);
     return (
         <div className="my-2 px-2 w-full h-[400px] scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-full">
             <div
@@ -31,18 +47,11 @@ function MessList({ closeModal = () => {}, showMessWaiting = () => {} }) {
                     </div>
                 </div>
             </div>
-            {Array(10)
-                .fill(0)
-                .map((item, index) => (
+            {conversations.length > 0 &&
+                conversations.map((item) => (
                     <MessItem
-                        key={index}
-                        id={index}
-                        avatar={avatar}
-                        name={"Nguyễn Tú Anh"}
-                        text={
-                            "Dịch vụ của Google, được cung cấp miễn phí, dịch nhanh các từ, cụm từ và trang web giữa tiếng Anh và hơn 100 ngôn ngữ khác."
-                        }
-                        time={1676558206712}
+                        key={item.conversationsId}
+                        data={item}
                         closeModal={closeModal}
                     />
                 ))}

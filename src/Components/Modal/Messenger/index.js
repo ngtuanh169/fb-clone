@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import MessTool from "./MessTool";
 import MessList from "./MessList";
 import MessWaiting from "./MessWaiting";
 function Messenger({ closeModal = () => {} }) {
     const [showMessWaiting, setShowMessWaiting] = useState(false);
+
     return (
         <div
             className="flex flex-col w-[350px] bg-white  rounded-md shadow-lg cursor-default overflow-hidden"

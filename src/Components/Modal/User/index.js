@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteUser } from "../../../redux/actions/user";
+import { removeAll } from "../../../redux/actions/openMessList";
+import { formatAvatar } from "../../../Hooks/useFormat";
 import Item from "./Item";
 import SettingsAndPrivacy from "./SettingsAndPrivacy";
 import HelpAndSupport from "./HelpAndSupport";
@@ -12,6 +14,7 @@ import { FaMoon } from "react-icons/fa";
 import avt from "../../../assets/images/avatar/avatar.jpg";
 function User({ click = () => {} }) {
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.user);
     const DivLeftRef = useRef();
     const DivRightRef = useRef();
     const [list, setList] = useState({ Comp: undefined });
@@ -53,16 +56,16 @@ function User({ click = () => {} }) {
                             <div className=" w-full py-1  ">
                                 <Link
                                     className="flex items-center p-2 rounded-md hover:bg-gray-200"
-                                    to={"/profile/1"}
+                                    to={`/profile/${user.userId}`}
                                     onClick={click}
                                 >
                                     <img
                                         className="w-9 h-9 rounded-full"
-                                        src={avt}
+                                        src={formatAvatar(user.avatar, user.sx)}
                                         alt=""
                                     />
                                     <span className="text-[17px] ml-3 font-semibold">
-                                        Nguyễn Tú Anh
+                                        {`${user.fName} ${user.lName}`}
                                     </span>
                                 </Link>
                             </div>
@@ -111,6 +114,7 @@ function User({ click = () => {} }) {
                                 localStorage.removeItem("accessToken");
                                 localStorage.removeItem("refreshToken");
                                 dispatch(deleteUser());
+                                dispatch(removeAll());
                                 click();
                             }}
                         >

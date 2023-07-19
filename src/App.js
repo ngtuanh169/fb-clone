@@ -6,6 +6,7 @@ import { publicRoutes, privateRoutes } from "./routes";
 import { addUser } from "./redux/actions/user";
 import authApi from "./api/authApi";
 import NewNotification from "./Components/NewNotification";
+import StatusMessage from "./Components/StatusMessage";
 import ScrollTop from "./Components/ScrollTop";
 import CheckLogin from "./Components/CheckLogin";
 export const ScreenSize = createContext();
@@ -47,6 +48,7 @@ function App() {
     return (
         <ScreenSize.Provider value={windowSize}>
             <ScrollTop />
+            <StatusMessage />
             {checkLogin && <CheckLogin />}
             {!checkLogin && (
                 <Routes>

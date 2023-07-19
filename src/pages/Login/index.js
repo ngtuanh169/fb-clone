@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import useForm from "../../Hooks/useForm";
 import authApi from "../../api/authApi";
 import { addUser } from "../../redux/actions/user";
+import { addStatusMess } from "../../redux/actions/statusMessage";
 import Button from "../../Components/Button";
 import { ImEye, ImEyeBlocked } from "react-icons/im";
 import { BiUserPlus } from "react-icons/bi";
@@ -27,7 +28,10 @@ function Login() {
                 params.append(key, formValues[key]);
             }
             const res = await authApi.login(params);
-            if (+res[0].status === 200) {
+            dispatch(
+                addStatusMess({ status: res[0].status, mess: res[0].message })
+            );
+            if (res[0].status === "success") {
                 localStorage.setItem("accessToken", res[0].accessToken);
                 localStorage.setItem("refreshToken", res[0].refreshToken);
                 dispatch(addUser(res[0].userInfo[0]));

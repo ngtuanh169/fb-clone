@@ -97,9 +97,27 @@ module.exports = {
                     to: { transform: "scale(0)" },
                 },
                 loading: {
-                    "0%": { backgroundColor: "transparent" },
-                    "30%": { backgroundColor: "transparent" },
-                    "100%": { backgroundColor: "#333" },
+                    "0%": { backgroundColor: "#676565" },
+                    "70%": { backgroundColor: "transparent" },
+                    "100%": { backgroundColor: "transparent" },
+                },
+                statusMess: {
+                    from: { width: "100%" },
+                    to: { width: "0%" },
+                },
+                openStatusMess: {
+                    from: { transform: "translateX(-350px)" },
+                    to: { transform: "translateX(0)" },
+                },
+                closeStatusMess: {
+                    "0%": { transform: "translateX(0)" },
+                    "20%": { transform: "translateX(30px)" },
+                    "100%": { transform: "translateX(-350px)" },
+                },
+                SkeletonLoading: {
+                    "0%": { left: "-50%" },
+                    "50%": { left: "100%" },
+                    "100%": { left: "-50%" },
                 },
             },
             transitionProperty: {
@@ -113,6 +131,10 @@ module.exports = {
                 postsIcon: "postsIcon .5s linear ",
                 smaller: "smaller .3s linear",
                 loading: "loading 3s linear infinite",
+                statusMess: "statusMess 3s linear forwards ",
+                openStatusMess: "openStatusMess 0.3s linear forwards ",
+                closeStatusMess: "closeStatusMess 0.3s linear forwards ",
+                SkeletonLoading: "SkeletonLoading 3s linear infinite ",
             },
         },
     },

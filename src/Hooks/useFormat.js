@@ -1,3 +1,6 @@
+import avt1 from "../assets/images/avatar/avatar_nam.jpg";
+import avt2 from "../assets/images/avatar/avatar_nu.jpg";
+import banner from "../assets/images/banner/banner.png";
 export const formatNumber = (number) => {
     const _number = +number;
     return _number
@@ -92,4 +95,47 @@ export const formatFullDate = (time) => {
     const fullYear = ojDateTime.getFullYear();
 
     return `${day} tháng ${month} năm ${fullYear}`;
+};
+export const formatTimestamp = (time) => {
+    if (!time) {
+        return undefined;
+    }
+    const timestamp = time.trim();
+    const DateObj = new Date(timestamp);
+    const fullTime = DateObj.getTime();
+    const timeNow = new Date().getTime();
+    const seconds = Math.floor((timeNow - fullTime) / 1000);
+    const day = DateObj.getDate();
+    const month = DateObj.getMonth();
+    const year = DateObj.getFullYear();
+    if (seconds < 60) {
+        return seconds < 10 ? "vừa xong" : `${seconds} giây trước`;
+    }
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) {
+        return `${minutes} phút trước`;
+    }
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) {
+        return `${hours} giờ trước`;
+    }
+    const days = Math.floor(hours / 24);
+    if (days < 30) {
+        return `${days} ngày trước`;
+    }
+    return ` ngày ${day}/${month}/${year}`;
+};
+export const formatAvatar = (avt, sx) => {
+    if (!avt) {
+        return +sx === 1 ? avt1 : avt2;
+    }
+
+    return avt;
+};
+export const formatBanner = (img) => {
+    if (!img) {
+        return banner;
+    }
+
+    return img;
 };

@@ -18,8 +18,7 @@ function OpenMessList() {
                             <OpenMessItem
                                 key={index}
                                 id={item.id}
-                                avt={item.avt}
-                                name={item.name}
+                                data={item}
                                 active={index < 3}
                             />
                         );

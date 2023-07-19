@@ -17,11 +17,7 @@ function SmallMessList() {
                                         key={item.id}
                                         className=" relative mt-3"
                                     >
-                                        <MessItem
-                                            id={item.id}
-                                            avt={item.avt}
-                                            name={item.name}
-                                        />
+                                        <MessItem data={item} />
                                         {index === 4 && messList.length > 5 && (
                                             <div className=" absolute top-0 left-0 group">
                                                 <div className=" relative  h-full w-full">
