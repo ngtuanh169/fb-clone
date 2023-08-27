@@ -1,14 +1,13 @@
 import { formatAvatar } from "../../../Hooks/useFormat";
 import Loading from "../../Loading";
-import avt from "../../../assets/images/avatar/avatar.jpg";
 function InfoUser({ data = {} }) {
     return (
         <div className="flex flex-col items-center w-full mt-5 mb-1">
             {data.othersName ? (
                 <>
-                    <div className="">
+                    <div className=" h-[60px] w-[60px]">
                         <img
-                            className=" h-[60px] w-[60px] rounded-full boder"
+                            className=" w-full h-full rounded-full boder"
                             src={formatAvatar(data.othersAvt, data.othersSx)}
                             alt=""
                         />

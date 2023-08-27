@@ -67,6 +67,8 @@ function Register() {
             );
             setIsLoading(false);
             if (res[0].status === "success") {
+                localStorage.setItem("accessToken", res[0].accessToken);
+                localStorage.setItem("refreshToken", res[0].refreshToken);
                 dispatch(addUser(res[0].userInfo[0]));
                 navigate("/");
             }

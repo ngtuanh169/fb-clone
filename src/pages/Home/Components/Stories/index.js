@@ -31,7 +31,7 @@ function Stories() {
     }, [context.width]);
 
     const handleClickNext = () => {
-        if (indexSlider < listStories.length - 3)
+        if (indexSlider <= listStories.length - 3)
             setIndexSlider(indexSlider + 1);
     };
 
@@ -113,7 +113,7 @@ function Stories() {
                             <AiOutlineLeft className=" mx-auto text-2xl text-gray-600" />
                         </button>
                     )}
-                    {indexSlider < listStories.length - number && (
+                    {indexSlider <= listStories.length - number && (
                         <button
                             className=" h-11 w-11 rounded-full bg-white absolute right-2 top-1/3 shadow shadow-gray-700"
                             onClick={handleClickNext}

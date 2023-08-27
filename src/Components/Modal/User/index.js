@@ -11,10 +11,10 @@ import DarkMode from "./DarkMode";
 import { FiLogOut } from "react-icons/fi";
 import { BsQuestionCircleFill } from "react-icons/bs";
 import { FaMoon } from "react-icons/fa";
-import avt from "../../../assets/images/avatar/avatar.jpg";
 function User({ click = () => {} }) {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
+    const noti = useSelector((state) => state.messNotification);
     const DivLeftRef = useRef();
     const DivRightRef = useRef();
     const [list, setList] = useState({ Comp: undefined });
@@ -28,7 +28,7 @@ function User({ click = () => {} }) {
             DivRightRef.current &&
             setHeightDivRight(DivRightRef.current.offsetHeight);
     }, [list]);
-
+    console.log(noti);
     return (
         <div
             ref={DivLeftRef}

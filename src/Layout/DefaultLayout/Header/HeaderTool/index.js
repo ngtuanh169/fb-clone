@@ -1,17 +1,23 @@
 import { useState, useRef, useContext, useEffect } from "react";
 import { ScreenSize } from "../../../../App";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { formatAvatar } from "../../../../Hooks/useFormat";
 import { useClickOutSide } from "../../../../Hooks/useClickOutSide";
+import conversationsApi from "../../../../api/conversationsApi";
+import {
+    add_idList,
+    delete_all,
+} from "../../../../redux/actions/messNotification";
 import ToolItem from "./ToolItem";
 import Messenger from "../../../../Components/Modal/Messenger";
 import Notification from "../../../../Components/Modal/Notification";
 import User from "../../../../Components/Modal/User";
 import { CgMenuGridO } from "react-icons/cg";
 import { BsMessenger, BsBellFill } from "react-icons/bs";
-import avatar from "../../../../assets/images/avatar/avatar.jpg";
 function HeaderTool() {
     const user = useSelector((state) => state.user);
+    const messNotification = useSelector((state) => state.messNotification);
+    const dispatch = useDispatch();
     const context = useContext(ScreenSize);
     const modalRef = useRef();
     const modalNotifyRef = useRef();
@@ -20,6 +26,7 @@ function HeaderTool() {
     const [showMess, setShowMess] = useState(false);
     const [showModalNotify, setShowModalNotify] = useState(false);
     const [showModalUser, setShowModalUser] = useState(false);
+    // const [notifyMess, setNotifyMess] = useState([]);
 
     useClickOutSide(modalRef, () => setShowMess(false));
     useClickOutSide(modalNotifyRef, () => setShowModalNotify(false));
@@ -31,6 +38,34 @@ function HeaderTool() {
             document.body.style.overflow = "visible";
         }
     }, [showModalNotify]);
+    useEffect(() => {
+        const getUnwatched = async () => {
+            const res = await conversationsApi.unwatched({
+                userId: user.userId,
+            });
+            dispatch(add_idList(res));
+        };
+        getUnwatched();
+    }, []);
+    useEffect(() => {
+        const updateUnwatched = async () => {
+            const params = new FormData();
+            params.append("userId", user.userId);
+            const res = await conversationsApi.updateUnwatched(params);
+            console.log(res);
+            if (res[0].status === "success") {
+                dispatch(delete_all());
+            }
+        };
+        showMess && messNotification.length > 0 && updateUnwatched();
+    }, [showMess]);
+    useEffect(() => {
+        if (showModalNotify) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "visible";
+        }
+    }, []);
     return (
         <div className=" md:w-[180px] lg:w-[350px] relative px-4">
             <ul className="flex justify-end h-full">
@@ -45,7 +80,7 @@ function HeaderTool() {
                     <ToolItem
                         backGroudColor={showMess ? "bg-blue-100" : false}
                         onClick={() => setShowMess(!showMess)}
-                        notiMumber={2}
+                        notiMumber={messNotification.length}
                     >
                         <div className="flex justify-center items-center h-10 w-10 rounded-full overflow-hidden">
                             <div className="flex justify-center items-center h-10 w-10 rounded-full">

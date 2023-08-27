@@ -1,58 +1,82 @@
 import { useState, useContext } from "react";
-import { formatTimeMess } from "../../../Hooks/useFormat";
+import { useSelector } from "react-redux";
+import { formatTimeMess, formatAvatar } from "../../../Hooks/useFormat";
 import { ContextValue } from "./index";
 import ElementFixed from "../../ElementFixed";
-function TextMessItem({ data }) {
+function TextMessItem({ data = {}, item = {}, index }) {
+    const user = useSelector((state) => state.user);
     const context = useContext(ContextValue);
     return (
         <div
-            style={{ justifyContent: data.userId !== 1 ? "" : "end" }}
+            style={{
+                justifyContent: item.senderId !== user.userId ? "" : "end",
+            }}
             className="flex w-full"
         >
             <div className="flex flex-col w-full">
                 <div
-                    style={{ justifyContent: data.userId !== 1 ? "" : "end" }}
-                    className="flex  w-full"
+                    style={{
+                        justifyContent:
+                            item.senderId !== user.userId ? "" : "end",
+                    }}
+                    className="flex w-full"
                 >
-                    <div className="  flex items-end max-w-[70%]">
-                        {data.userId !== 1 && (
-                            <div className="h-7 w-7 mr-2">
+                    <div className="  flex items-end  ">
+                        {item.senderId !== user.userId && (
+                            <div className="h-7 w-7 mr-2 z-20">
                                 <img
                                     className="h-full w-full object-cover rounded-full"
-                                    src={data.avt}
+                                    src={formatAvatar(
+                                        data.othersAvt,
+                                        data.othersSx
+                                    )}
                                     alt=""
                                 />
                             </div>
                         )}
-                        <div className="flex flex-1 group ">
+                        <div className="flex group hover:z-30">
                             <div
-                                style={{ opacity: data.sending ? ".3" : "1" }}
-                                className={`w-full p-2 rounded-2xl  ${
-                                    data.userId !== 1
+                                style={{ opacity: item.sending ? ".3" : "1" }}
+                                className={`flex items-center justify-center w-max min-w-[38px] p-2 rounded-2xl  ${
+                                    item.senderId !== user.userId
                                         ? "bg-gray-200"
                                         : " bg-blue-500 text-white"
                                 }`}
                             >
-                                <span className=" text-[15px]">
-                                    {data.text}
+                                <span className="block max-w-[190px] text-[15px] break-words">
+                                    {item.message.text}
                                 </span>
                             </div>
-                            <ElementFixed scrollValue={context}>
-                                <span
-                                    style={{ boxShadow: "0 3px 2px #5a5959" }}
-                                    className="flex w-max px-2 py-1 text-[13px] text-white rounded-md bg-matteBlack 
-                                        opacity-0 invisible transition-all delay-100 group-hover:visible group-hover:opacity-100 "
+                            {!item?.sending && (
+                                <ElementFixed
+                                    scrollValue={context}
+                                    id={item.id}
                                 >
-                                    {formatTimeMess(data.time)}
-                                </span>
-                            </ElementFixed>
+                                    <span
+                                        style={{
+                                            boxShadow: "0 3px 2px #5a5959",
+                                        }}
+                                        className="flex w-max px-2 py-1 text-[13px] text-white rounded-md bg-matteBlack 
+                                        opacity-0 invisible transition-all delay-100 group-hover:visible group-hover:opacity-100 "
+                                    >
+                                        {formatTimeMess(item.createdAt)}
+                                    </span>
+                                </ElementFixed>
+                            )}
                         </div>
                     </div>
                 </div>
-                {data.sending && (
+                {item?.sending && (
                     <div className=" flex justify-end">
                         <span className="text-[12px] text-gray-500 font-normal">
                             Đang gửi
+                        </span>
+                    </div>
+                )}
+                {item?.id && item?.timeId && index === 0 && (
+                    <div className=" flex justify-end">
+                        <span className="text-[12px] text-gray-500 font-normal">
+                            Đã gửi
                         </span>
                     </div>
                 )}

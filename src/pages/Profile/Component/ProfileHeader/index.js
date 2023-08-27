@@ -110,7 +110,9 @@ function ProdileHeader() {
                                                 className="w-[168px] h-[168px] rounded-full border-[4px] border-white  "
                                                 src={formatAvatar(
                                                     user.avatar,
-                                                    user.sx
+                                                    userData.sx
+                                                        ? userData.sx
+                                                        : user.sx
                                                 )}
                                                 alt=""
                                             />

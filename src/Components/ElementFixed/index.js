@@ -1,5 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-function ElementFixed({ children, scrollValue }) {
+import { useState, useEffect, useRef, useContext } from "react";
+import { ScreenSize } from "../../App.js";
+function ElementFixed({ children, scrollValue, id }) {
+    const context = useContext(ScreenSize);
     const divRef = useRef();
     const elementRef = useRef();
     const [bounding, setBounding] = useState({});
@@ -12,7 +14,7 @@ function ElementFixed({ children, scrollValue }) {
                 width: elementRef.current.clientWidth,
                 height: elementRef.current.clientHeight,
             });
-    }, []);
+    }, [id, context]);
     return (
         <div ref={divRef} className=" relative h-0 w-0">
             <div

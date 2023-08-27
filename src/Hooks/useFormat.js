@@ -71,7 +71,7 @@ export const formatTimeMess = (time) => {
         return undefined;
     }
     const today = new Date().getDate();
-    const ojDateTime = new Date(+time);
+    const ojDateTime = new Date(time);
     const hours = ojDateTime.getHours();
     const minutes = ojDateTime.getMinutes();
     const day = ojDateTime.getDate();
@@ -79,9 +79,13 @@ export const formatTimeMess = (time) => {
     const fullYear = ojDateTime.getFullYear();
 
     if (today === day) {
-        return `${hours}:${minutes}`;
+        return `${hours < 10 ? `0${hours}` : hours}:${
+            minutes < 10 ? `0${minutes}` : minutes
+        }`;
     } else {
-        return `${hours}:${minutes} ${day} Tháng ${month}, ${fullYear}`;
+        return `${hours < 10 ? `0${hours}` : hours}:${
+            minutes < 10 ? `0${minutes}` : minutes
+        } ${day} Tháng ${month}, ${fullYear}`;
     }
 };
 export const formatFullDate = (time) => {

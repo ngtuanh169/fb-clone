@@ -20,6 +20,7 @@ function RenderGridLayout({ fileList = [], onClick = () => {} }) {
         >
             {fileList.length > 0 &&
                 fileList.map((item, index) => {
+                    console.log(fileList.length);
                     const type = item.type.split("/")[0];
                     let divColumEnd = "";
                     if (index === 0) {
@@ -36,7 +37,7 @@ function RenderGridLayout({ fileList = [], onClick = () => {} }) {
                                         fileList.length > 2 ? "200px" : "100%",
                                 }}
                                 key={index}
-                                className={` ${divColumEnd}`}
+                                className={`relative ${divColumEnd}`}
                             >
                                 {type === "image" ? (
                                     <img
@@ -44,7 +45,7 @@ function RenderGridLayout({ fileList = [], onClick = () => {} }) {
                                         src={item.url}
                                     />
                                 ) : (
-                                    <div className=" relative z-10 h-full">
+                                    <div className="w-full h-full">
                                         <Video
                                             videoUrl={item.url}
                                             type={item.type}
@@ -56,16 +57,16 @@ function RenderGridLayout({ fileList = [], onClick = () => {} }) {
                                         >
                                             <BsPlayCircle className=" text-[50px] text-white z-30" />
                                         </div>
-                                        {index === 3 && fileList.length > 4 && (
-                                            <div
-                                                className=" absolute top-0 left-0 flex items-center justify-center
+                                    </div>
+                                )}
+                                {index === 3 && fileList.length > 4 && (
+                                    <div
+                                        className=" absolute top-0 left-0 flex items-center justify-center
                                                  w-full h-full bg-matteBlack2 z-20"
-                                            >
-                                                <span className="text-[25px] font-bold text-white">
-                                                    +{fileList.length - 4}
-                                                </span>
-                                            </div>
-                                        )}
+                                    >
+                                        <span className="text-[25px] font-bold text-white">
+                                            +{fileList.length - 4}
+                                        </span>
                                     </div>
                                 )}
                             </div>

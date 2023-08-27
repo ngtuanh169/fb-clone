@@ -5,6 +5,7 @@ import openMessList from "./openMessList";
 import stories from "./stories";
 import user from "./user";
 import statusMessage from "./statusMessage";
+import messNotification from "./messNotification";
 
 // const userPersistConfig = {
 //     key: "user",
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
     stories,
     user,
     statusMessage,
+    messNotification,
     // user: persistReducer(userPersistConfig, user),
 });
 

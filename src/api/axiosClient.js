@@ -1,5 +1,6 @@
 import axios from "axios";
 import queryString from "query-string";
+import { useDispatch } from "react-redux";
 import authApi from "./authApi";
 
 // Set up default config for http requests here
@@ -22,7 +23,6 @@ axiosClient.interceptors.request.use(async (config) => {
     }
     return config;
 });
-
 axiosClient.interceptors.response.use(
     (response) => {
         if (response && response.data) {

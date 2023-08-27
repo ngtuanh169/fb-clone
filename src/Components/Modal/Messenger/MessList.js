@@ -21,7 +21,7 @@ function MessList({ closeModal = () => {}, showMessWaiting = () => {} }) {
     }, []);
     return (
         <div className="my-2 px-2 w-full h-[400px] scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-full">
-            <div
+            {/* <div
                 className="w-full p-2 rounded-md cursor-pointer hover:bg-hover"
                 onClick={showMessWaiting}
             >
@@ -46,7 +46,7 @@ function MessList({ closeModal = () => {}, showMessWaiting = () => {} }) {
                         <BsChevronRight />
                     </div>
                 </div>
-            </div>
+            </div> */}
             {conversations.length > 0 &&
                 conversations.map((item) => (
                     <MessItem

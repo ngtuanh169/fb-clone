@@ -13,7 +13,7 @@ function OpenMessList() {
         >
             {listMess.length > 0 &&
                 listMess.map((item, index) => {
-                    if (index === 0) {
+                    if (index < 1) {
                         return (
                             <OpenMessItem
                                 key={index}

@@ -20,7 +20,6 @@ function Item({ data }) {
                 divRef.current.classList.add("animate-closeStatusMess");
             }
         }, 3000);
-        console.log(divRef.current);
         return () => clearTimeout(timeId);
     }, []);
     return (

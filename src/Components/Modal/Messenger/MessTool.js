@@ -44,13 +44,13 @@ function MessTool() {
                         Hộp thư
                     </span>
                 </Button>
-                <Button
+                {/* <Button
                     _className={
                         "flex items-center ml-2 py-1 px-2 rounded-full cursor-pointer hover:bg-hover"
                     }
                 >
                     <span className=" font-semibold text-base">Cộng đồng</span>
-                </Button>
+                </Button> */}
             </div>
         </div>
     );

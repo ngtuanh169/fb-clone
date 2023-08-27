@@ -13,13 +13,12 @@ function UserSearch({ text = "", closeModal = () => {} }) {
             try {
                 setIsLoading(true);
                 const res = await userApi.searchUser({ text, limit: 6 });
-                console.log(res);
                 setDataList(res);
                 setIsLoading(false);
             } catch (error) {
                 console.log(error);
             }
-        }, 1500);
+        }, 1000);
         return () => clearTimeout(timeId);
     }, [text]);
     return (
