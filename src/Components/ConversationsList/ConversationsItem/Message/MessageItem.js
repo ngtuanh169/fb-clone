@@ -95,7 +95,7 @@ function MessageItem({ data = {}, item = {}, index }) {
                                         {item.message.text}
                                     </span>
                                 </div>
-                                <div className="grid grid-cols-2 gap-1 w-[190px]">
+                                {/* <div className="grid grid-cols-2 gap-1 w-[190px]">
                                     {data1.map((item, index) => (
                                         <div
                                             className=" cursor-pointer"
@@ -129,7 +129,7 @@ function MessageItem({ data = {}, item = {}, index }) {
                                             )}
                                         </div>
                                     ))}
-                                </div>
+                                </div> */}
                             </div>
 
                             {showTime && (
