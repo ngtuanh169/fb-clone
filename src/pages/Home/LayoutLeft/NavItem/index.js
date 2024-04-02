@@ -1,16 +1,6 @@
 import { Link } from "react-router-dom";
 import Button from "../../../../Components/Button";
 function Navtem({ children, text, to, href, iconClassName = "" }) {
-    // let Comp = "div";
-    // const _props = {};
-    // if (to) {
-    //     Comp = Link;
-    //     _props.to = to;
-    // }
-    // if (href) {
-    //     Comp = "a";
-    //     _props.href = href;
-    // }
     return (
         <li className="">
             <Button
@@ -27,7 +17,7 @@ function Navtem({ children, text, to, href, iconClassName = "" }) {
                         ></i>
                     )}
                 </span>
-                <span className=" block flex-1 h-full font-semibold items-center line-clamp-2 text-ellipsis ">
+                <span className=" block flex-1 h-full font-semibold items-center line-clamp-2 text-ellipsis break-words">
                     {text}
                 </span>
             </Button>

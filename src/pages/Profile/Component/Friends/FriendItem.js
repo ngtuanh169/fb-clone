@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { ScreenSize } from "../../../../App";
-import img from "../../../../assets/images/avatar/avatar.jpg";
-import HoverInfoUser from "../../../../Components/Modal/HoverInfoUser";
-function FriendItem({}) {
+import { formatAvatar } from "../../../../Hooks/useFormat";
+function FriendItem({ data }) {
     const context = useContext(ScreenSize);
     const imgRef = useRef();
     const [widthDiv, setWidthDiv] = useState(0);
@@ -13,32 +12,23 @@ function FriendItem({}) {
     return (
         <div className="group relative flex flex-col ">
             <div ref={imgRef} style={{ height: `${widthDiv}px` }} className=" ">
-                <img
-                    className=" w-full h-full rounded-lg cursor-pointer hover:opacity-90"
-                    src={img}
-                    alt=""
-                />
+                <Link
+                    to={`/profile/${data.id}`}
+                    className="block w-full h-full rounded-lg border overflow-hidden hover:opacity-90"
+                >
+                    <img
+                        className="w-full h-full object-cover object-center "
+                        src={formatAvatar(data.userAvt, data.userSx)}
+                        alt=""
+                    />
+                </Link>
             </div>
             <Link
-                to={"/"}
+                to={`/profile/${data.id}`}
                 className="w-full text-[13px] line-clamp-1 font-semibold hover:underline"
             >
-                Nguyen Tu Anh
+                {data.userName}
             </Link>
-            {context.width >= 1024 && (
-                <div
-                    className="absolute bottom-[100%] right-[-150px] invisible z-[99] opacity-0 transition-all ease-linear 
-                group-hover:visible group-hover:opacity-100"
-                >
-                    <HoverInfoUser
-                        avt={img}
-                        name={"Nguyen Tu Anh"}
-                        numberFriends={1231}
-                        address={"Hà Nội"}
-                        followers={1232}
-                    />
-                </div>
-            )}
         </div>
     );
 }

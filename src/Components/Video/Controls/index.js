@@ -1,6 +1,6 @@
+import Tools from "./Tools";
 import PlayVideo from "./PlayVideo";
 import TimeLine from "./TimeLine";
-import Tools from "./Tools";
 function Controls() {
     return (
         <div className="flex items-center w-full h-full px-2 pb-2">

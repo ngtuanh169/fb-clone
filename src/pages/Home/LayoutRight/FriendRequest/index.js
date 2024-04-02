@@ -1,51 +1,73 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { formatTime } from "../../../../Hooks/useFormat";
-import Button from "../../../../Components/Button";
-function FriendRequest({ avatar, time }) {
+import { useSelector } from "react-redux";
+import friendsApi from "../../../../api/friendsApi";
+import SkeletonLoading from "../../../../Components/SkeletonLoading";
+import Item from "./Item";
+function FriendRequest({ data }) {
+    const user = useSelector((state) => state.user);
+    const [payload, setPayload] = useState({ limit: 2, page: 1, number: 0 });
+    const [requestList, setRequestList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        const getFriendRequest = async () => {
+            try {
+                setLoading(true);
+                const params = { ...payload, userId: user.userId };
+                const res = await friendsApi.getFriendRequest(params);
+                if (res.success && res.count > 0) {
+                    setRequestList(res.data);
+                }
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        user?.userId && getFriendRequest();
+    }, []);
+
     return (
-        <div className="w-full rounded-lg mb-2">
-            <div className="flex justify-between p-2">
-                <div className="flex w-full">
-                    <Link to={"/"}>
-                        <img
-                            className=" w-[46px] h-[46px] rounded-full mr-3 "
-                            src={avatar}
-                            alt=""
-                        />
+        <div className="w-full border-b border-gray-300">
+            <div className="flex justify-between items-center mb-1">
+                <span className=" text-[17px] text-gray-500 font-medium">
+                    Lời mời kết bạn
+                </span>
+                {requestList.length === 2 && (
+                    <Link
+                        to={"/friends/request"}
+                        className={" p-[6px] rounded hover:bg-gray-200"}
+                    >
+                        <span className="text-blue-500">Xem tất cả</span>
                     </Link>
-                    <div className=" flex-1 flex-col">
-                        <div className="flex flex-col">
-                            <Link to={"/"} className={" w-max"}>
-                                <span className=" font-semibold hover:underline">
-                                    Nguyễn Tú Anh
-                                </span>
-                            </Link>
-                            <span className=" text-[13px] text-gray-500 ">
-                                {formatTime(time)}
-                            </span>
-                        </div>
-                        <div className="flex justify-between mt-2">
-                            <Button
-                                _className={
-                                    "w-[45%] p-1.5 rounded-md bg-blue-600 hover:bg-blue-700 "
-                                }
-                            >
-                                <span className="font-medium text-white">
-                                    Xác nhận
-                                </span>
-                            </Button>
-                            <Button
-                                _className={
-                                    "w-[45%] p-1.5 rounded-md bg-gray-300 hover:bg-gray-400 "
-                                }
-                            >
-                                <span className="font-medium">Xóa</span>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                )}
             </div>
-            {/* </Link> */}
+            {requestList.length === 0 && (
+                <div className="w-full text-center">
+                    <span className="text-gray-500 text-[15px]">
+                        Không có yêu cầu nào mới
+                    </span>
+                </div>
+            )}
+            {loading &&
+                Array(2)
+                    .fill(0)
+                    .map((item, index) => (
+                        <div
+                            key={index}
+                            className="flex items-center w-full h-14 mb-2"
+                        >
+                            <div className="h-14 w-14 mr-4">
+                                <SkeletonLoading circle={true} />
+                            </div>
+                            <div className="flex-1 h-[55px]">
+                                <SkeletonLoading />
+                            </div>
+                        </div>
+                    ))}
+
+            {!loading &&
+                requestList.length > 0 &&
+                requestList.map((item) => <Item key={item.id} data={item} />)}
         </div>
     );
 }

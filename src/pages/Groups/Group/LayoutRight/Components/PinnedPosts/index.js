@@ -61,7 +61,7 @@ function PinnedPosts() {
                         </Button>
                     </div>
                 </div>
-                <div className="flex w-full px-2 pb-2">
+                <div className="flex w-full pb-2">
                     {showPinnedPosts && <PostsList />}
                 </div>
             </MainCard>

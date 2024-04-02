@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createContext } from "react";
 import Modal from "../Modal";
 import MainCard from "../MainCard";
@@ -8,74 +8,47 @@ import PostsContent from "./PostsContent";
 import PostsTools from "./PostsTools";
 import PostsReact from "./PostReact";
 import PostInput from "./PostsInput";
-import iconLike from "../../assets/images/gifIcon/icon-like.gif";
-import iconLove from "../../assets/images/gifIcon/icon-love.gif";
-import iconHaha from "../../assets/images/gifIcon/icon-haha.gif";
-import iconWow from "../../assets/images/gifIcon/icon-wow.gif";
-import iconSad from "../../assets/images/gifIcon/icon-sad.gif";
-import iconAngry from "../../assets/images/gifIcon/icon-angry.gif";
-
-import like from "../../assets/images/imgIcon/icon-like.png";
-import like1 from "../../assets/images/imgIcon/like.png";
-import love from "../../assets/images/imgIcon/love.png";
-import haha from "../../assets/images/imgIcon/haha.png";
-import wow from "../../assets/images/imgIcon/wow.png";
-import sad from "../../assets/images/imgIcon/sad.png";
-import angry from "../../assets/images/imgIcon/angry.png";
 
 import { MdOutlineClose } from "react-icons/md";
+import { BiHide } from "react-icons/bi";
 export const ValueContext = createContext();
 function Posts({
-    userId,
-    avatar,
-    name,
-    time,
-    group = false,
-    groupId = "",
-    groupName = "",
-    adGroup = false,
+    data = {},
+    adminId = 0,
     groupMember = false,
     iconClose = false,
     pagePhoto = false,
     pageProfile = false,
+    postsList = [],
+    setPostsList = () => {},
 }) {
-    // const iconList = [
-    //     { name: "Thích", icon: iconLike, img: like, img1: like1 },
-    //     { name: "Yêu thích", icon: iconLove, img: love },
-    //     { name: "Haha", icon: iconHaha, img: haha },
-    //     { name: "Wow", icon: iconWow, img: wow },
-    //     { name: "Buồn", icon: iconSad, img: sad },
-    //     { name: "Phẫn nộ", icon: iconAngry, img: angry },
-    // ];
+    const [postsData, setPostsData] = useState(data);
     const [isFocus, setIsFocus] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [textColor, setTextColor] = useState("");
-    const [reactIcon, setReactIcon] = useState("");
-    let Comp = MainCard;
-    if (pagePhoto) {
-        Comp = "div";
-    }
+    const [commentsList, setCommentsList] = useState([]);
+    const [hidePosts, setHidePosts] = useState(false);
     const valueContext = {
-        userId,
-        avatar,
-        name,
-        time,
-        group,
-        groupId,
-        groupName,
-        adGroup,
+        postsList,
+        setPostsList,
+        postsData,
+        setHidePosts,
+        setPostsData,
+        commentsList,
+        setCommentsList,
+        adminId,
         groupMember,
         iconClose,
         pagePhoto,
         pageProfile,
         showModal,
         setShowModal,
-        // iconList,
-        reactIcon,
-        setReactIcon,
-        textColor,
-        setTextColor,
     };
+    useEffect(() => {
+        setCommentsList([]);
+    }, [showModal]);
+    useEffect(() => {
+        setPostsData(data);
+    }, [data.id]);
     return (
         <ValueContext.Provider value={valueContext}>
             {pagePhoto ? (
@@ -92,50 +65,68 @@ function Posts({
                     </div>
                     <div className="px-2 py-2">
                         <PostInput
-                            avatar={avatar}
                             isFocus={isFocus}
                             setIsFocus={setIsFocus}
+                            commentsList={commentsList}
+                            setCommentsList={setCommentsList}
                         />
                     </div>
                 </div>
             ) : (
                 <MainCard>
-                    <div className="px-2 pt-2">
-                        <PostTime />
-                    </div>
-                    <PostsContent />
-                    <div className="px-2 ">
-                        <PostsTools setIsFocus={setIsFocus} />
-                    </div>
-
-                    {pageProfile && (
-                        <>
+                    {hidePosts ? (
+                        <div className="flex justify-between items-center gap-4 w-full p-4">
+                            <div className="">
+                                <BiHide className="text-[20px]" />
+                            </div>
+                            <div className="flex flex-col grow">
+                                <span className=" font-medium">Đã ẩn</span>
+                                <span className="  text-[11px] text-gray-500 font-medium">
+                                    Việc ẩn bài viết giúp Facebook cá nhân hóa
+                                    Bảng feed của bạn.
+                                </span>
+                            </div>
+                            <div className="">
+                                <Button
+                                    _className={
+                                        "w-max p-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                                    }
+                                    onClick={() => setHidePosts(false)}
+                                >
+                                    <span className=" font-medium">
+                                        Hoàn tác
+                                    </span>
+                                </Button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col w-full">
                             <div className="px-2 pt-2">
-                                <PostsReact />
+                                <PostTime />
                             </div>
-                            <div className="px-2 py-2">
-                                <PostInput
-                                    avatar={avatar}
-                                    isFocus={isFocus}
-                                    setIsFocus={setIsFocus}
-                                />
+                            <PostsContent />
+                            <div className="px-2 ">
+                                <PostsTools setIsFocus={setIsFocus} />
                             </div>
-                        </>
+                        </div>
                     )}
                 </MainCard>
             )}
-            {showModal && !pageProfile && (
+            {showModal && (
                 <Modal closeModal={() => setShowModal(false)}>
                     <div
-                        className=" w-[370px] sm:w-[500px] md:w-[700px] m-auto rounded-lg bg-white  shadow-lg shadow-gray-300 overflow-hidden"
+                        className=" w-full sm:w-[500px] md:w-[700px] m-auto px-1"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex flex-col w-full h-[680px] max-h-[80vh] md:max-h-[95vh]">
+                        <div
+                            className="flex flex-col w-full h-[680px] max-h-[80vh] md:max-h-[95vh]  
+                            rounded-lg bg-white shadow-lg shadow-gray-300 overflow-hidden"
+                        >
                             <div
                                 style={{ boxShadow: "0 .5px 0 #ccc" }}
                                 className=" relative flex items-center justify-center w-full h-[60px] border-b "
                             >
-                                <span className=" font-bold text-[20px]">{`Bài viết của ${name}`}</span>
+                                <span className=" font-bold text-[20px]">{`Bài viết của ${data.userName}`}</span>
                                 <div className=" absolute top-0 right-2 flex items-center h-full">
                                     <Button
                                         _className={
@@ -152,7 +143,7 @@ function Posts({
                             scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-full"
                             >
                                 <div className="px-2 pt-2">
-                                    <PostTime />
+                                    <PostTime hideIcon={true} />
                                 </div>
                                 <PostsContent />
                                 <div className="px-2 ">
@@ -164,9 +155,10 @@ function Posts({
                             </div>
                             <div className=" w-full px-2 py-2 border-t">
                                 <PostInput
-                                    avatar={avatar}
                                     isFocus={isFocus}
                                     setIsFocus={setIsFocus}
+                                    commentsList={commentsList}
+                                    setCommentsList={setCommentsList}
                                 />
                             </div>
                         </div>

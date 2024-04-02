@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import MainCard from "../../../../Components/MainCard";
 import img from "../../../../assets/images/avatar/avatar.jpg";
 function Photo() {
+    const { userId } = useParams();
     const imgRef = useRef();
     const [widthDiv, setWidthDiv] = useState(0);
     useEffect(() => {
@@ -14,7 +15,7 @@ function Photo() {
                 <div className="flex justify-between">
                     <h2 className="text-[20px] font-bold">Ảnh</h2>
                     <Link
-                        to={"/profile/1/photos"}
+                        to={`/profile/${userId}/photos`}
                         className={
                             "py-1 px-2 text-blue-700 rounded-md hover:bg-hover"
                         }

@@ -8,6 +8,7 @@ module.exports = {
                 bgModal: "rgb(var(--color-bg-modal) / 0.8)",
                 matteBlack: "rgb(var(--color-matteBlack) / 0.7)",
                 matteBlack2: "rgb(var(--color-matteBlack) / 0.3)",
+                matteBlack3: "rgb(var(--color-matteBlack) / 0.9)",
                 matteGray: "rgb(var(--color-matteGray) / 0.5)",
             },
             backgroundImage: {
@@ -23,6 +24,8 @@ module.exports = {
                     "url('https://static.xx.fbcdn.net/rsrc.php/v3/yg/r/dX5WoC_N0lP.png')",
                 urlIcons5:
                     "url('https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/K_JV4KD8eC_.png')",
+                bgFileDetails:
+                    "url('https://res.cloudinary.com/dziswrfiq/image/upload/v1695986309/facebook_clone/banner/a1_t3ujjs.jpg')",
             },
             backgroundSize: {
                 szNavIcons: "37px 555px",
@@ -66,6 +69,14 @@ module.exports = {
                 shadow012: "0 1px 2px #ccc",
             },
             keyframes: {
+                buttonVideo: {
+                    "0%": { transform: "scale(1) ", opacity: "1" },
+                    "100%": { transform: "scale(2) ", opacity: "0" },
+                },
+                zommInx2: {
+                    from: { transform: "scale(1)" },
+                    to: { transform: "scale(2)" },
+                },
                 growUp: {
                     from: { transform: "scale(0)" },
                     to: { transform: "scale(1)" },
@@ -101,6 +112,10 @@ module.exports = {
                     "70%": { backgroundColor: "transparent" },
                     "100%": { backgroundColor: "transparent" },
                 },
+                loadingCircleLine: {
+                    from: { transform: "rotate(0deg)" },
+                    to: { transform: "rotate(360deg)" },
+                },
                 statusMess: {
                     from: { width: "100%" },
                     to: { width: "0%" },
@@ -119,11 +134,20 @@ module.exports = {
                     "50%": { left: "100%" },
                     "100%": { left: "-50%" },
                 },
+                dotNotification: {
+                    "0%": { top: "0`" },
+                    "15%": { top: "-2px" },
+                    "30%": { top: "0" },
+                    "40%": { top: "-2px" },
+                    "50%": { top: "0" },
+                    "100%": { top: "0" },
+                },
             },
             transitionProperty: {
                 height: "height",
             },
             animation: {
+                buttonVideo: "buttonVideo 0.4s linear forwards",
                 growUp: "growUp 0.2s linear",
                 openNewNoti: "openNewNoti 0.2s ease-out",
                 closeNewNoti: "closeNewNoti 0.2s ease-out",
@@ -135,6 +159,8 @@ module.exports = {
                 openStatusMess: "openStatusMess 0.3s linear forwards ",
                 closeStatusMess: "closeStatusMess 0.3s linear forwards ",
                 SkeletonLoading: "SkeletonLoading 3s linear infinite ",
+                loadingCircleLine: "loadingCircleLine 1.2s infinite ",
+                dotNotification: "dotNotification 1.2s infinite ",
             },
         },
     },

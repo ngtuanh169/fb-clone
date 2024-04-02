@@ -1,12 +1,9 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import MainCard from "../../../../../../Components/MainCard";
 import Button from "../../../../../../Components/Button";
-import { NavContext } from "../../../NavProvider";
-import Files from "../../Files";
 import image from "../../../../../../assets/images/avatar/avatar.jpg";
 function MediaFiles() {
-    const context = useContext(NavContext);
     const divRef = useRef();
     const [clientWidth, setClientWidth] = useState(0);
     useEffect(() => {
@@ -43,15 +40,9 @@ function MediaFiles() {
                 <div className="w-full px-4 pb-4 pt-2">
                     <Button
                         _className={
-                            "w-full p-2 text-center bg-gray-200 rounded-md hover:bg-gray-300"
+                            "block w-full p-2 text-center bg-gray-200 rounded-md hover:bg-gray-300"
                         }
-                        onClick={() =>
-                            context.setCurrentNav({
-                                id: 5,
-                                name: "files",
-                                Comp: Files,
-                            })
-                        }
+                        to={`/group/57/files`}
                     >
                         <span className=" font-medium">Xem tất cả</span>
                     </Button>

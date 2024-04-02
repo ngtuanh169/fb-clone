@@ -3,8 +3,13 @@ import { PostsContext } from "../../PostsProvider";
 import TagFriends from "../../TagFriends";
 import Text from "./Text";
 import AddFiles from "./AddFiles";
-function Content({ addImg = false, setCurrentComp = () => {} }) {
-    const context = useContext(PostsContext);
+function Content({
+    addImg = false,
+    setCurrentComp = () => {},
+    loading = false,
+}) {
+    const { fileList, taggedFriends, setFriendsList } =
+        useContext(PostsContext);
     const [showAddImg, setShowAddImg] = useState(addImg);
 
     return (
@@ -15,6 +20,7 @@ function Content({ addImg = false, setCurrentComp = () => {} }) {
                     <AddFiles
                         setShowAddImg={setShowAddImg}
                         setCurrentComp={setCurrentComp}
+                        loading={loading}
                     />
                 )}
             </div>
@@ -24,9 +30,7 @@ function Content({ addImg = false, setCurrentComp = () => {} }) {
                 </span>
                 <span
                     className={`flex justify-center items-center w-[40px] h-[40px] rounded-full ml-3 text-green-500 text-xl cursor-pointer ${
-                        context.fileList.length > 0 || showAddImg
-                            ? "bg-slate-200"
-                            : ""
+                        fileList.length > 0 || showAddImg ? "bg-slate-200" : ""
                     } hover:bg-slate-200`}
                     onClick={() => setShowAddImg(!showAddImg)}
                 >
@@ -39,9 +43,12 @@ function Content({ addImg = false, setCurrentComp = () => {} }) {
                 <span
                     className={`flex justify-center items-center w-[40px] h-[40px] rounded-full ml-2
                      text-blue-500 text-xl cursor-pointer ${
-                         context.taggedFriends.length > 0 ? "bg-blue-100" : ""
+                         taggedFriends.length > 0 ? "bg-blue-100" : ""
                      } hover:bg-blue-200 `}
-                    onClick={() => setCurrentComp({ Comp: TagFriends })}
+                    onClick={() => {
+                        setFriendsList([]);
+                        setCurrentComp({ Comp: TagFriends });
+                    }}
                 >
                     <img
                         className="h-6 w-6"

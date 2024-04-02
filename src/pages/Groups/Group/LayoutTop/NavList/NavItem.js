@@ -1,25 +1,26 @@
-import { useContext } from "react";
-import { NavContext } from "../../NavProvider";
-import Button from "../../../../../Components/Button";
-function NavItem({ nav }) {
-    const context = useContext(NavContext);
+import { NavLink } from "react-router-dom";
+function NavItem({ data }) {
     return (
-        <div
-            className={`border-b-4 ${
-                context.currentNav.id === nav.id
-                    ? "border-blue-700 "
-                    : " border-transparent"
-            } `}
+        <NavLink
+            to={data.link}
+            className={({ isActive }) =>
+                ` relative block p-4 font-medium text-gray-500 rounded-md ${
+                    isActive ? "cursor-default" : " hover:bg-hover"
+                } `
+            }
+            end
         >
-            <Button
-                _className={`p-4 font-medium text-gray-500 rounded-md ${
-                    context.currentNav.id === nav.id ? "cursor-default" : ""
-                } hover:bg-hover`}
-                onClick={() => context.setCurrentNav(nav)}
-            >
-                {nav.name}
-            </Button>
-        </div>
+            {({ isActive }) => (
+                <>
+                    <span>{data.name}</span>
+                    <span
+                        className={`absolute left-0 bottom-0 w-full h-1 ${
+                            isActive ? "bg-blue-700" : "bg-transparent"
+                        }`}
+                    ></span>
+                </>
+            )}
+        </NavLink>
     );
 }
 

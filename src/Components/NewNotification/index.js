@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import Button from "../Button";
 import Item from "./Item";
+import { SocketContext } from "../../Socket/index";
 import avt from "../../assets/images/avatar/avatar.jpg";
 function NewNotification({ chidren }) {
+    const context = useContext(SocketContext);
+
     const dataFriendRequest = {
         id: 1,
         type: "friendRequest",
@@ -71,63 +74,20 @@ function NewNotification({ chidren }) {
     };
 
     const [notiList, setNotiList] = useState([]);
-    const addNoti = (data) => {
-        const idNoti = new Date().getTime();
-        setNotiList([...notiList, { idNoti, ...data }]);
+    const addNoti = (e) => {
+        const data = JSON.parse(e.data);
+        if (data.type === "notification") {
+            const idNoti = new Date().getTime();
+            setNotiList((prev) => [...prev, { idNoti, ...data }]);
+        }
     };
 
+    useEffect(() => {
+        context && context.addEventListener("message", addNoti);
+        return () => context && context.removeEventListener("message", addNoti);
+    }, [context]);
     return (
         <div className=" fixed bottom-3 left-3 flex flex-col justify-end z-50">
-            {/* <div className="flex">
-                <Button
-                    _className={
-                        "bg-blue-500 text-white font-medium p-2 rounded-md mr-2"
-                    }
-                    onClick={() => addNoti(dataFriendRequest)}
-                >
-                    friendRequest
-                </Button>
-                <Button
-                    _className={
-                        "bg-gray-500 text-white font-medium p-2 rounded-md mr-2"
-                    }
-                    onClick={() => addNoti(dataLikePost)}
-                >
-                    likePost
-                </Button>
-                <Button
-                    _className={
-                        "bg-green-500 text-white font-medium p-2 mr-2 rounded-md"
-                    }
-                    onClick={() => addNoti(dataCommentPost)}
-                >
-                    commentPost
-                </Button>
-                <Button
-                    _className={
-                        "bg-green-500 text-white font-medium p-2 mr-2 rounded-md"
-                    }
-                    onClick={() => addNoti(dataCommentPostGroup)}
-                >
-                    commentPostGroup
-                </Button>
-                <Button
-                    _className={
-                        "bg-green-500 text-white font-medium p-2 rounded-md"
-                    }
-                    onClick={() => addNoti(dataLikePostGroup)}
-                >
-                    likePostGroup
-                </Button>
-                <Button
-                    _className={
-                        "bg-green-500 text-white font-medium p-2 ml-2 rounded-md"
-                    }
-                    onClick={() => addNoti(dataRequestJoinGroup)}
-                >
-                    joinGroup
-                </Button>
-            </div> */}
             {notiList.length > 0 &&
                 notiList.map((item, index) => {
                     if (index === 0) {

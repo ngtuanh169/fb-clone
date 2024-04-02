@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState, useContext } from "react";
 import { useSelector } from "react-redux";
 import { formatAvatar } from "../../Hooks/useFormat";
@@ -6,8 +6,8 @@ import { ScreenSize } from "../../App";
 import MainCard from "../MainCard";
 import ToolItem from "./ToolItem";
 import SendPosts from "../Modal/SendPosts";
-import avatar from "../../assets/images/avatar/avatar.jpg";
-function InputBox() {
+function InputBox({ postsList = [], setPostList = () => {} }) {
+    const { groupId } = useParams();
     const user = useSelector((state) => state.user);
     const context = useContext(ScreenSize);
     const [openSenPosts, setOpenSenPosts] = useState(false);
@@ -19,6 +19,8 @@ function InputBox() {
             {openSenPosts && (
                 <SendPosts
                     addImg={addImg}
+                    postsList={postsList}
+                    setPostsList={setPostList}
                     closeModal={() => {
                         setAddImg(false);
                         setOpenSenPosts(false);
@@ -29,8 +31,12 @@ function InputBox() {
                 <div className="flex flex-col p-2">
                     <div className="flex w-full border-b p-2 border-gray-300">
                         <Link
-                            to={"/profile/1"}
-                            className="block h-[40px] w-[40px] rounded-full overflow-hidden"
+                            to={
+                                groupId
+                                    ? `/group/${groupId}/user/${user.userId}`
+                                    : `/profile/${user.userId}`
+                            }
+                            className="block h-[40px] w-[40px] rounded-full overflow-hidden border"
                         >
                             <img
                                 className="h-full w-full object-cover object-center"
@@ -39,7 +45,8 @@ function InputBox() {
                             />
                         </Link>
                         <span
-                            className="flex-1 flex w-full p-2 pl-3 ml-2 rounded-full cursor-pointer bg-slate-100 items-center text-slate-500 hover:bg-hover"
+                            className="flex-1 flex w-full p-2 pl-3 ml-2 rounded-full cursor-pointer bg-slate-100 items-center
+                                 text-slate-500 line-clamp-1 hover:bg-hover"
                             onClick={changeModalSenPosts}
                         >
                             Tu Anh ơi, bạn đang nghĩ gì thế?

@@ -54,9 +54,7 @@ function FileItem({ fileId, fileUrl, fileType }) {
                     alt=""
                 />
             )}
-            {type === "video" && (
-                <Video videoUrl={fileUrl} type={fileType} showControls={true} />
-            )}
+            {type === "video" && <Video videoUrl={fileUrl} type={fileType} />}
         </div>
     );
 }

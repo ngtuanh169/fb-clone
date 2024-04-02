@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useClickOutSide } from "../../../../Hooks/useClickOutSide";
+import { ScreenSize } from "../../../../App";
 import SearchHistory from "./SearchHistory";
 import UserSearch from "./UserSearch";
 import Button from "../../../../Components/Button";
@@ -7,13 +8,22 @@ import { BsFacebook } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CgArrowLeft } from "react-icons/cg";
 function HeaderSearch() {
+    const screenSize = useContext(ScreenSize);
     const inputRef = useRef();
-
     const divRef = useRef();
     const [isFocus, setIsFocus] = useState(false);
     const [text, setText] = useState("");
     const [showModal, setShowModal] = useState(false);
     useClickOutSide(divRef, () => setShowModal(false));
+    useEffect(() => {
+        if (screenSize.width <= 640 && showModal) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "visible";
+            setText("");
+        }
+    }, [showModal]);
+
     useEffect(() => {
         isFocus && inputRef.current.focus();
         isFocus && text && setShowModal(true);
@@ -25,35 +35,49 @@ function HeaderSearch() {
             }  `}
         >
             <div
-                className={` absolute top-0 left-0 w-[320px] xl:w-full h-full   `}
+                className={` absolute top-0 left-0 ${
+                    showModal && screenSize.width <= 640
+                        ? " w-screen h-screen "
+                        : "w-[320px]"
+                } xl:w-full h-full transition-all `}
             >
                 <div
                     ref={divRef}
-                    className={`w-full bg-white rounded-lg ${
+                    className={`flex flex-col w-full h-full sm:h-auto bg-white rounded-lg overflow-hidden ${
                         showModal ? "drop-shadow-xl" : ""
                     }`}
                 >
-                    <div className="h-14 w-full flex items-center px-4  ">
+                    <div className="flex items-center h-14 w-full px-4 ">
                         <div className=" h-max pr-2">
-                            <Button
-                                to={isFocus ? "" : "/"}
-                                _className={`flex justify-center items-center  ${
-                                    isFocus
-                                        ? "w-[35px] h-[35px] flex justify-center items-center rounded-full hover:bg-slate-200"
-                                        : "flex w-[40px] h-[40px]"
-                                }`}
-                            >
-                                {isFocus ? (
+                            {showModal ? (
+                                <Button
+                                    _className={`flex justify-center items-center  ${
+                                        isFocus
+                                            ? "w-[35px] h-[35px] flex justify-center items-center rounded-full hover:bg-slate-200"
+                                            : "flex w-[40px] h-[40px]"
+                                    }`}
+                                    onClick={() => setShowModal(false)}
+                                >
                                     <CgArrowLeft className=" text-gray-500 mr-1 text-[22px] " />
-                                ) : (
+                                </Button>
+                            ) : (
+                                <Button
+                                    to={"/"}
+                                    _className={`flex justify-center items-center  ${
+                                        isFocus
+                                            ? "w-[35px] h-[35px] flex justify-center items-center rounded-full hover:bg-slate-200"
+                                            : "flex w-[40px] h-[40px]"
+                                    }`}
+                                >
                                     <BsFacebook className=" text-[45px] text-blue-600" />
-                                )}
-                            </Button>
+                                </Button>
+                            )}
                         </div>
                         <div
-                            className={`xl:flex-1 flex items-center justify-center h-10 w-10  py-2 px-4 boder bg-gray-100 rounded-full ${
-                                showModal ? "flex-1" : ""
-                            }`}
+                            className={`xl:grow flex items-center justify-center h-10 w-10 py-2 px-4 boder
+                             bg-gray-100 rounded-full ${
+                                 showModal ? "grow" : ""
+                             }`}
                         >
                             <Button
                                 _className={`transition-all duration-[150] ease-linear ${
@@ -68,7 +92,7 @@ function HeaderSearch() {
 
                             <input
                                 ref={inputRef}
-                                className=" flex-1 w-full bg-transparent outline-none "
+                                className=" grow w-full bg-transparent outline-none "
                                 type="text"
                                 placeholder="Tìm kiếm trên Facebook"
                                 value={text}
@@ -82,8 +106,11 @@ function HeaderSearch() {
                         </div>
                     </div>
                     {showModal && (
-                        <div className="w-full n max-h-[85vh]">
-                            {text ? (
+                        <div
+                            className=" grow w-full h-full sm:w-full sm:h-max sm:max-h-[60vh] 
+                            scrollbar-thin scrollbar-thumb-gray-300 scrollbar-thumb-rounded-full"
+                        >
+                            {text.trim() ? (
                                 <div className=" w-full ">
                                     <UserSearch
                                         text={text}

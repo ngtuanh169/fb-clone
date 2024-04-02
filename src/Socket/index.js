@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { addMessage } from "../redux/actions/conversationsList";
 import { add_id } from "../redux/actions/messNotification";
 const SocketContext = createContext();
 function SocketProvider({ children }) {
@@ -16,19 +17,19 @@ function SocketProvider({ children }) {
             socket && socket?.close();
         }
     }, [user?.userId]);
-    // useEffect(() => {
-    //     const handleRealtime = () => {
-    //         socket.onmessage = (e) => {
-    //             const data = JSON.parse(e.data);
-    //             switch (data.type) {
-    //                 case "message":
-    //                     dispatch(add_id(data.conversationsId));
-    //                 case "notification":
-    //             }
-    //         };
-    //     };
-    //     socket && handleRealtime();
-    // }, [socket]);
+    useEffect(() => {
+        const handleRealtime = () => {
+            socket.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                switch (data.type) {
+                    case "message":
+                        dispatch(add_id(data.conversationsId));
+                    case "notification":
+                }
+            };
+        };
+        socket && handleRealtime();
+    }, [socket]);
     return (
         <SocketContext.Provider value={socket}>
             {children}

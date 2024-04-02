@@ -1,10 +1,12 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import Button from "../../../../../Components/Button";
+import { ScreenSize } from "../../../../../App";
 function NavItem({ children, to, name, onClick = () => {} }) {
     let Comp = "div";
     if (to) {
         Comp = NavLink;
     }
+    const screeContext = useContext(ScreenSize);
     return (
         <li
             className=" relative group/item flex items-center h-full w-full text-gray-600 "
@@ -28,17 +30,21 @@ function NavItem({ children, to, name, onClick = () => {} }) {
                     {children}
                 </span>
             </Comp>
-            {/* <div
-                className=" xl:block absolute top-[100%] left-0 w-full group/edit text-center pt-2 invisible opacity-0 
-                transition-all ease-linear delay-100 group-hover/item:visible group-hover/item:opacity-100"
-            >
-                <span
-                    className=" p-2 text-[13px] text-white bg-gray-600 rounded-md drop-shadow-md 
-                transition-all ease-linear delay-100 group-hover/edit:invisible group-hover/edit:opacity-0 "
+            {screeContext.width >= 768 && (
+                <div
+                    className=" absolute top-[100%] left-0 flex justify-center w-full group/edit text-center pt-1 invisible opacity-0 
+                        transition-all ease-linear delay-100 group-hover/item:visible group-hover/item:opacity-100"
                 >
-                    {name}
-                </span>
-            </div> */}
+                    <div className="w-max">
+                        <span
+                            className="block w-max p-2 text-[13px] text-white bg-gray-600 rounded-md drop-shadow-md 
+                            transition-all ease-linear delay-100 group-hover/edit:invisible group-hover/edit:opacity-0 "
+                        >
+                            {name}
+                        </span>
+                    </div>
+                </div>
+            )}
         </li>
     );
 }

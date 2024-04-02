@@ -12,8 +12,8 @@ const conversationsApi = {
         const url = "/conversations/unwatched.php";
         return axiosClient.get(url, { params });
     },
-    updateUnwatched: (params) => {
-        const url = "/conversations/updateUnwatched.php";
+    updateWatched: (params) => {
+        const url = "/conversations/updateWatched.php";
         return axiosClient.post(url, params);
     },
     updateWatchedById: (params) => {

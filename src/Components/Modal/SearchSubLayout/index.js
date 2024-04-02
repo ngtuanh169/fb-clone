@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Button from "../../Button";
 import { BiSearchAlt2 } from "react-icons/bi";
-function SearchSubLayout({ nameInput = "" }) {
+function SearchSubLayout({ nameInput = "", text = "", setText = () => {} }) {
     const inputRef = useRef();
     const [isFocus, setIsFocus] = useState(false);
     useEffect(() => {
@@ -20,7 +20,9 @@ function SearchSubLayout({ nameInput = "" }) {
                     ref={inputRef}
                     className="flex-1 w-full py-1 bg-transparent outline-none"
                     type="text"
+                    value={text}
                     placeholder={nameInput}
+                    onChange={(e) => setText(e.target.value)}
                     onBlur={() => setIsFocus(false)}
                 />
             </div>

@@ -1,24 +1,36 @@
 import Button from "../../../../Components/Button";
-function NavItem({ id, name, isActive, setIsActive }) {
+function NavItem({
+    item,
+    currentNav,
+    setCurrentNav = () => {},
+    setCallApi = () => {},
+}) {
     return (
         <div className="">
             <Button
                 _className={`p-4 rounded-md ${
-                    id === isActive ? "" : "hover:bg-hover"
+                    item.id === currentNav.id ? "" : "hover:bg-hover"
                 }`}
-                onClick={() => setIsActive(id)}
+                onClick={() => {
+                    setCurrentNav(item);
+                    setCallApi(true);
+                }}
             >
                 <span
                     className={`  font-semibold ${
-                        id === isActive ? "text-blue-500" : "text-gray-500"
+                        item.id === currentNav.id
+                            ? "text-blue-500"
+                            : "text-gray-500"
                     }`}
                 >
-                    {name}
+                    {item.name}
                 </span>
             </Button>
             <b
                 className={`flex w-full h-[2px] ${
-                    id === isActive ? "bg-blue-500" : " bg-transparent"
+                    item.id === currentNav.id
+                        ? "bg-blue-500"
+                        : " bg-transparent"
                 }`}
             ></b>
         </div>

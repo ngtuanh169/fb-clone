@@ -1,24 +1,28 @@
 import Button from "../../../Components/Button";
-function ToolItem({ id, name, isActive, setIsActive }) {
+function ToolItem({ data, currentNav, setCurrentNav }) {
     return (
         <div className="">
             <Button
                 _className={`p-3 rounded-md ${
-                    id === isActive ? "" : "hover:bg-hover"
+                    data.id === currentNav.id ? "" : "hover:bg-hover"
                 }`}
-                onClick={() => setIsActive(id)}
+                onClick={() => setCurrentNav(data)}
             >
                 <span
                     className={`  font-semibold ${
-                        id === isActive ? "text-blue-500" : "text-gray-500"
+                        data.id === currentNav.id
+                            ? "text-blue-500"
+                            : "text-gray-500"
                     }`}
                 >
-                    {name}
+                    {data.name}
                 </span>
             </Button>
             <b
                 className={`flex w-full h-[2px] ${
-                    id === isActive ? "bg-blue-500" : " bg-transparent"
+                    data.id === currentNav.id
+                        ? "bg-blue-500"
+                        : " bg-transparent"
                 }`}
             ></b>
         </div>

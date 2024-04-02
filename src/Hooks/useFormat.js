@@ -36,11 +36,10 @@ export const formatTime = (time) => {
     if (!time) {
         return undefined;
     }
-    const ojDateTime = new Date(+time);
+    const ojDateTime = new Date(time);
     const day = ojDateTime.getDate();
     const month = ojDateTime.getMonth() + 1;
     const fullYear = ojDateTime.getFullYear();
-
     const fullTime = new Date(time).getTime();
     const timeNow = new Date().getTime();
 
@@ -89,11 +88,7 @@ export const formatTimeMess = (time) => {
     }
 };
 export const formatFullDate = (time) => {
-    if (!time) {
-        return undefined;
-    }
-
-    const ojDateTime = new Date(+time);
+    const ojDateTime = new Date(time);
     const day = ojDateTime.getDate();
     const month = ojDateTime.getMonth() + 1;
     const fullYear = ojDateTime.getFullYear();
@@ -102,16 +97,16 @@ export const formatFullDate = (time) => {
 };
 export const formatTimestamp = (time) => {
     if (!time) {
-        return undefined;
+        return;
     }
     const timestamp = time.trim();
     const DateObj = new Date(timestamp);
     const fullTime = DateObj.getTime();
     const timeNow = new Date().getTime();
     const seconds = Math.floor((timeNow - fullTime) / 1000);
-    const day = DateObj.getDate();
-    const month = DateObj.getMonth();
-    const year = DateObj.getFullYear();
+    // const day = DateObj.getDate();
+    // const month = DateObj.getMonth();
+    // const year = DateObj.getFullYear();
     if (seconds < 60) {
         return seconds < 10 ? "vừa xong" : `${seconds} giây trước`;
     }
@@ -127,7 +122,36 @@ export const formatTimestamp = (time) => {
     if (days < 30) {
         return `${days} ngày trước`;
     }
-    return ` ngày ${day}/${month}/${year}`;
+    const months = Math.floor(days / 30);
+    if (months < 12) {
+        return `${months} tháng trước`;
+    }
+    const years = Math.floor(months / 12);
+    if (years < 12) {
+        return `${years} năm trước`;
+    }
+    return;
+    // return ` ngày ${day}/${month}/${year}`;
+};
+export const formatTimeVideo = (number) => {
+    const seconds = Math.floor(number);
+    const day = Math.floor(seconds / (3600 * 24));
+    const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secondsLeft = Math.floor((seconds % 3600) % 60);
+
+    let time = "";
+
+    if (day > 0) {
+        time = day.toString().padStart(2, "0");
+    }
+    if (hours > 0) {
+        const tHours = hours.toString().padStart(2, "0");
+        time = day > 0 ? `${time}:${tHours}:` : `${hours}:`;
+    }
+    const tMinutes = minutes.toString().padStart(2, "0");
+    const tSeconds = secondsLeft.toString().padStart(2, "0");
+    return `${time}${tMinutes}:${tSeconds}`;
 };
 export const formatAvatar = (avt, sx) => {
     if (!avt) {

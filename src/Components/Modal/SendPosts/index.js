@@ -3,7 +3,12 @@ import { ScreenSize } from "../../../App";
 import Modal from "..";
 import { PostsProvider } from "./PostsProvider";
 import Posts from "./Posts";
-function SendPosts({ closeModal = () => {}, addImg }) {
+function SendPosts({
+    closeModal = () => {},
+    addImg,
+    postsList = [],
+    setPostsList = () => {},
+}) {
     const context = useContext(ScreenSize);
     const divRef = useRef();
     const [clientWidth, setClientWidth] = useState(0);
@@ -11,7 +16,7 @@ function SendPosts({ closeModal = () => {}, addImg }) {
     useEffect(() => {
         divRef.current && setClientWidth(divRef.current.clientWidth);
     }, [currentComp, context.width]);
-    console.log(clientWidth);
+
     return (
         <PostsProvider>
             <Modal closeModal={closeModal}>
@@ -35,6 +40,8 @@ function SendPosts({ closeModal = () => {}, addImg }) {
                                 closeModal={closeModal}
                                 addImg={addImg}
                                 setCurrentComp={setCurrentComp}
+                                postsList={postsList}
+                                setPostsList={setPostsList}
                             />
                         </div>
                         <div

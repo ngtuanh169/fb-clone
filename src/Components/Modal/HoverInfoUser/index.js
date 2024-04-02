@@ -1,46 +1,89 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useClickOutSide } from "../../../Hooks/useClickOutSide";
-import { formatNumber } from "../../../Hooks/useFormat";
+import { formatAvatar, formatNumber } from "../../../Hooks/useFormat";
+import profileIntroductionApi from "../../../api/profileIntroductionApi";
+import friendsApi from "../../../api/friendsApi";
 import MainCard from "../../MainCard";
 import Button from "../../Button";
+import SkeletonLoading from "../../SkeletonLoading";
 import { FaUserPlus, FaUserLock, FaRegUserCircle } from "react-icons/fa";
 import { BsMessenger } from "react-icons/bs";
 import { HiDotsHorizontal } from "react-icons/hi";
-import friend from "../../../assets/images/imgIcon/friend.png";
-import home from "../../../assets/images/imgIcon/home.png";
 import signal from "../../../assets/images/imgIcon/signal.png";
-function HoverInfoUser({ id, avt, name, numberFriends, address, followers }) {
-    const listInfo = [
-        { id: 1, icon: friend, text: `${formatNumber(numberFriends)} bạn bè` },
-        { id: 2, icon: home, text: `Sống tại ${address}` },
-        {
-            id: 3,
-            icon: signal,
-            text: `Có ${formatNumber(followers)} người theo dõi`,
-        },
-    ];
+import { Link } from "react-router-dom";
+function HoverInfoUser({ id, avt, name, sx, login }) {
     const modalRef = useRef();
     const [openModal, setOpenModal] = useState(false);
+    const [followers, setFollowers] = useState(0);
+    const [introductionList, setIntroductionList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     useClickOutSide(modalRef, () => setOpenModal(false));
+    // useEffect(() => {
+    //     const countFollowers = async () => {
+    //         try {
+    //             setLoading(true);
+    //             const params = { userId: id };
+    //             const res = await friendsApi.countFriendsRequest(params);
+    //             console.log(res);
+    //             if (res.success) {
+    //                 setFollowers(res.count);
+    //             }
+    //             // setLoading(false)
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
+    //     id && countFollowers();
+    // }, [id]);
+    useEffect(() => {
+        const getProfileIntroduction = async () => {
+            try {
+                setLoading2(true);
+                const params = { userId: id };
+                const res = await profileIntroductionApi.get(params);
+                if (res?.length > 0) {
+                    setIntroductionList(res);
+                }
+                setLoading2(false);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        id && getProfileIntroduction();
+    }, [id]);
     return (
         <div className="w-[400px] p-2">
             <MainCard>
                 <div className="flex flex-col w-full h-full p-3 ">
                     <div className="flex px-3">
-                        <div className="flex justify-center items-center">
-                            <img
-                                className="w-[100px] h-[100px] rounded-full"
-                                src={avt}
-                                alt=""
-                            />
+                        <div className=" relative flex justify-center items-center rounded-full ">
+                            <Link
+                                className="w-max h-max rounded-full"
+                                to={`/profile/${id}`}
+                            >
+                                <img
+                                    className="w-[100px] h-[100px] rounded-full border"
+                                    src={formatAvatar(avt, sx)}
+                                    alt=""
+                                />
+                            </Link>
+                            {login && (
+                                <span
+                                    className=" absolute bottom-[5px] right-[8px] w-4 h-4 rounded-full
+                                 bg-green-500 border-[3px] border-white"
+                                ></span>
+                            )}
                         </div>
                         <div className="flex-1 ml-3">
                             <div className="w-full mb-2">
-                                <span className="text-[18px] font-bold">
-                                    {name}
-                                </span>
+                                <Link to={`/profile/${id}`}>
+                                    <span className="text-[18px] font-bold">
+                                        {name}
+                                    </span>
+                                </Link>
                             </div>
-                            {listInfo.length > 0 &&
+                            {/* {listInfo.length > 0 &&
                                 listInfo.map((item) => (
                                     <div
                                         key={item.id}
@@ -55,7 +98,39 @@ function HoverInfoUser({ id, avt, name, numberFriends, address, followers }) {
                                             {item.text}
                                         </span>
                                     </div>
-                                ))}
+                                ))} */}
+                            <div className="flex items-center w-full mb-1">
+                                {loading2 ? (
+                                    <>
+                                        <span className="block w-[20px] h-[20px] rounded-full overflow-hidden">
+                                            <SkeletonLoading />
+                                        </span>
+                                        <span className="block w-[100px] h-5 ml-3 rounded-md overflow-hidden">
+                                            <SkeletonLoading />
+                                        </span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <img
+                                            className="w-[20px] h-[20px] opacity-50"
+                                            src={signal}
+                                            alt=""
+                                        />
+                                        <span className="ml-3">
+                                            <span>Có</span>
+                                            <Link
+                                                to={`/profile/${id}/friends`}
+                                                className="mx-1 font-medium hover:underline"
+                                            >
+                                                {`${formatNumber(
+                                                    followers
+                                                )} người`}
+                                            </Link>
+                                            <span>theo dõi</span>
+                                        </span>
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
                     <div className="flex justify-between mt-2">

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { NavProvider } from "./NavProvider";
 import { ScreenSize } from "../../../App";
+import { GroupProvider } from "./GroupProvider";
 import LayoutLeft from "./LayouLeft";
 import LayoutRight from "./LayoutRight";
 import MemberInfo from "./MemberInfo";
@@ -9,11 +9,11 @@ function Group() {
     const { groupId, userId } = useParams();
     const context = useContext(ScreenSize);
     return (
-        <div className="">
-            {userId ? (
-                <MemberInfo />
-            ) : (
-                <NavProvider>
+        <GroupProvider>
+            <div className="">
+                {userId ? (
+                    <MemberInfo />
+                ) : (
                     <div className="flex">
                         {context.width >= 1280 && (
                             <div className="">
@@ -24,9 +24,9 @@ function Group() {
                             <LayoutRight />
                         </div>
                     </div>
-                </NavProvider>
-            )}
-        </div>
+                )}
+            </div>
+        </GroupProvider>
     );
 }
 

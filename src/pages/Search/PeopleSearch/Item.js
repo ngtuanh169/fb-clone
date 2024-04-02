@@ -1,30 +1,37 @@
-import { useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { formatNumberK } from "../../../Hooks/useFormat";
-import { ScreenSize } from "../../../App";
+import { useSelector, useDispatch } from "react-redux";
+import { formatAvatar, formatNumberK } from "../../../Hooks/useFormat";
+import { addConversations } from "../../../redux/actions/conversationsList";
+import conversationsApi from "../../../api/conversationsApi";
 import MainCard from "../../../Components/MainCard";
 import Button from "../../../Components/Button";
-import HoverInfoUser from "../../../Components/Modal/HoverInfoUser";
-import { BsDot } from "react-icons/bs";
-function Item({
-    id,
-    name,
-    avt,
-    friends,
-    followers,
-    address,
-    isFriend = false,
-}) {
-    const context = useContext(ScreenSize);
+import { BsDot, BsMessenger } from "react-icons/bs";
+import { FaRegUserCircle } from "react-icons/fa";
+function Item({ data = {} }) {
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const _addConversations = async (userId, othersId) => {
+        try {
+            const params = new FormData();
+            params.append("userId", userId);
+            params.append("othersId", othersId);
+            const res = await conversationsApi.add(params);
+            res[0].status === "success" &&
+                dispatch(addConversations(res[0].conversationsId, othersId));
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <div className="w-full md:w-[680px]">
             <MainCard>
                 <div className="flex w-full p-4">
                     <div className="w-[60px] h-[60px] rounded-full border overflow-hidden">
-                        <Link className="" to={"/profile"}>
+                        <Link className="" to={`/profile/${data.id}`}>
                             <img
                                 className="w-full h-full object-cover "
-                                src={avt}
+                                src={formatAvatar(data.avatar, data.sx)}
                                 alt=""
                             />
                         </Link>
@@ -33,59 +40,87 @@ function Item({
                         <div className="flex flex-col justify-between">
                             <div className="">
                                 <Link
-                                    to={"/profile"}
+                                    to={`/profile/${data.id}`}
                                     className=" hover:underline"
                                 >
                                     <span className=" font-semibold text-[17px]">
-                                        {name}
+                                        {data.name}
                                     </span>
                                 </Link>
                             </div>
-                            <div className="flex flex-col sm:flex-row py-1 text-gray-500">
-                                {isFriend && (
-                                    <>
+                            <div className="flex flex-row flex-wrap py-1 text-gray-500 ">
+                                {data.checkFriend && (
+                                    <div className="flex items-center w-max">
                                         <span>Bạn bè</span>
-                                        {context.width >= 640 && (
+                                        {(data.countFriends > 0 ||
+                                            data.countFollowers > 0) && (
                                             <span className=" flex h-full items-center">
                                                 <BsDot />
                                             </span>
                                         )}
-                                    </>
+                                    </div>
                                 )}
-                                <div className="flex">
-                                    {friends > 0 && (
-                                        <>
-                                            <span>{`${formatNumberK(
-                                                +friends
-                                            )} bạn bè`}</span>
+                                {data.countFriends > 0 && (
+                                    <div className="flex items-center w-max">
+                                        <span>
+                                            <span className=" font-medium mr-1">
+                                                {formatNumberK(
+                                                    +data.countFriends
+                                                )}
+                                            </span>
+                                            bạn bè
+                                        </span>
+                                        {data.countFollowers > 0 && (
                                             <span className=" flex h-full items-center">
                                                 <BsDot />
                                             </span>
-                                        </>
-                                    )}
-                                    {followers > 0 && (
-                                        <>
-                                            <span>{`${formatNumberK(
-                                                +followers
-                                            )} người theo dõi`}</span>
-                                        </>
-                                    )}
+                                        )}
+                                    </div>
+                                )}
+                                {data.countFollowers > 0 && (
+                                    <div className="flex w-max">
+                                        <span>
+                                            <span className=" font-medium mr-1">
+                                                {formatNumberK(
+                                                    +data.countFollowers
+                                                )}
+                                            </span>
+                                            người theo dõi
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                            {data.address && (
+                                <div className="flex items-center w-max text-gray-500">
+                                    <span>{`Sống tại ${data.address}`}</span>
                                 </div>
-                            </div>
-                            <div className="text-gray-500">
-                                <span>{`Sống tại ${address}`}</span>
-                            </div>
+                            )}
                         </div>
                         <div className="flex items-center w-full mt-2 sm:mt-0 sm:w-auto h-full">
-                            <Button
-                                _className={
-                                    "w-full sm:w-auto p-2 bg-blue-100 rounded-lg hover:bg-blue-200"
-                                }
-                            >
-                                <span className=" font-medium text-blue-500">
-                                    {isFriend ? "Nhắn tin" : "Thêm bạn bè"}
-                                </span>
-                            </Button>
+                            {data.checkFriend ? (
+                                <Button
+                                    _className={`flex items-center justify-center w-full p-2 bg-blue-500 text-white rounded-lg 
+                                        hover:bg-blue-600`}
+                                    onClick={() =>
+                                        _addConversations(user.userId, data.id)
+                                    }
+                                >
+                                    <BsMessenger />
+                                    <span className="ml-1 font-medium">
+                                        Nhắn tin
+                                    </span>
+                                </Button>
+                            ) : (
+                                <Button
+                                    _className={`flex items-center justify-center w-full p-2 bg-gray-200 rounded-lg hover:bg-gray-300`}
+                                    to={`/profile/${data.id}`}
+                                >
+                                    <FaRegUserCircle />
+                                    <span className="ml-1 font-medium">
+                                        Xem trang cá nhân
+                                    </span>
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -1,14 +1,17 @@
-import { useState } from "react";
-import MainCard from "../../../../../Components/MainCard";
+import { useState, useContext } from "react";
+import { useSelector } from "react-redux";
 import { formatNumber } from "../../../../../Hooks/useFormat";
+import MainCard from "../../../../../Components/MainCard";
+import { GroupContext } from "../../GroupProvider";
 import AdminGroup from "./AdminGroup";
-import Friends from "./Friends";
-import NewJoinGroup from "./NewJoinGroup";
+import MembersNearYou from "./MembersNearYou";
+import MembersGroup from "./MembersGroup";
 import SearchMember from "./SearchMember";
 import Member from "./Member";
 import { BsSearch } from "react-icons/bs";
-import avt from "../../../../../assets/images/avatar/avatar.jpg";
 function Members() {
+    const user = useSelector((state) => state.user);
+    const { groupData } = useContext(GroupContext);
     const [searchText, setSeacrhText] = useState("");
     return (
         <div className="w-full md:w-[680px] mx-auto ">
@@ -19,7 +22,7 @@ function Members() {
                             <span className=" font-medium">Thành viên</span>
                             <span className="px-1 font-medium">·</span>
                             <span className=" font-medium text-gray-500">
-                                {formatNumber(3040)}
+                                {formatNumber(groupData.members)}
                             </span>
                         </div>
                         <div className="w-full text-gray-500">
@@ -52,18 +55,20 @@ function Members() {
                         <SearchMember text={searchText} />
                     ) : (
                         <>
-                            <div className="w-full pb-4 border-b ">
+                            <div className="w-full py-4 border-b ">
                                 <Member
-                                    id={1}
-                                    avt={avt}
-                                    name={"Nguyen Tu Anh"}
-                                    address={"Hà Nội"}
-                                    hideButton={true}
+                                    data={{
+                                        id: user.userId,
+                                        name: `${user.fName} ${user.lName}`,
+                                        avatar: user.avatar,
+                                        sx: user.sx,
+                                        statusLogin: true,
+                                    }}
                                 />
                             </div>
                             <AdminGroup />
-                            <Friends />
-                            <NewJoinGroup />
+                            <MembersNearYou />
+                            <MembersGroup />
                         </>
                     )}
                 </div>

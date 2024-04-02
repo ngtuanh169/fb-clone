@@ -38,14 +38,16 @@ function Button({
     return (
         <Comp
             style={styles}
-            className={`group active:scale-[0.97] ${_className} ${classNames}`}
+            className={`group/button ${
+                cursorDefault ? "" : "active:scale-[0.97]"
+            } ${_className} ${classNames}`}
             {..._props}
         >
-            {hoverText && (
+            {hoverText && !cursorDefault && (
                 <span
                     className={`w-max p-2 text-[13px] rounded-md text-white bg-matteBlack absolute ${
                         hoverBottom ? "bottom-[-40px]" : "top-[-40px]"
-                    } ${classHoverText} opacity-0 invisible group-hover:opacity-100 group-hover:visible`}
+                    } ${classHoverText} opacity-0 invisible group-hover/button:opacity-100 group-hover/button:visible`}
                 >
                     {hoverText}
                 </span>

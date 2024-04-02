@@ -1,14 +1,14 @@
 import Header from "./Header";
-import OpenMessList from "../../Components/OpenMessList";
-import SmallMessList from "../../Components/SmallMessList";
+import ConversationsList from "../../Components/ConversationsList";
+import SmallConversationsList from "../../Components/SmallConversationsList";
 function DefaultLayout({ children }) {
     return (
         <div className=" w-full h-screen flex flex-col">
-            <div className="w-full fixed z-[99] ">
+            <div className="w-full fixed z-50 ">
                 <Header />
             </div>
-            <OpenMessList />
-            <SmallMessList />
+            <ConversationsList />
+            <SmallConversationsList />
             <div className="flex-1 pt-14">{children}</div>
         </div>
     );

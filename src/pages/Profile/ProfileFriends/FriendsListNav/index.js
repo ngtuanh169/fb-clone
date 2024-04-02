@@ -4,16 +4,14 @@ import { ScreenSize } from "../../../../App";
 import Button from "../../../../Components/Button";
 import NavItem from "./NavItem";
 import { BsFillCaretDownFill, BsCheck2 } from "react-icons/bs";
-function FriendsListNav() {
-    const navList = [
-        { id: 1, name: "Tất cả bạn bè" },
-        { id: 2, name: "Đã thêm gần đây" },
-        { id: 3, name: "Tỉnh/Thành phố hiện tại" },
-        { id: 4, name: "Đang theo dõi" },
-    ];
+function FriendsListNav({
+    navList = [],
+    currentNav,
+    setCurrentNav = () => {},
+    setCallApi = () => {},
+}) {
     const context = useContext(ScreenSize);
     const divRef = useRef();
-    const [isActive, setIsActive] = useState(1);
     const [showModal, setShowModal] = useState(false);
     useClickOutSide(divRef, () => setShowModal(false));
     return (
@@ -24,20 +22,20 @@ function FriendsListNav() {
                         return (
                             <NavItem
                                 key={item.id}
-                                id={item.id}
-                                name={item.name}
-                                isActive={isActive}
-                                setIsActive={setIsActive}
+                                item={item}
+                                currentNav={currentNav}
+                                setCurrentNav={setCurrentNav}
+                                setCallApi={setCallApi}
                             />
                         );
                     } else if (context.width >= 768) {
                         return (
                             <NavItem
                                 key={item.id}
-                                id={item.id}
-                                name={item.name}
-                                isActive={isActive}
-                                setIsActive={setIsActive}
+                                item={item}
+                                currentNav={currentNav}
+                                setCurrentNav={setCurrentNav}
+                                setCallApi={setCallApi}
                             />
                         );
                     }
@@ -46,7 +44,7 @@ function FriendsListNav() {
                 <div ref={divRef}>
                     <Button
                         _className={`relative flex items-center p-4 ${
-                            isActive > 1
+                            currentNav.id > 1
                                 ? "text-blue-500"
                                 : "text-gray-500 hover:bg-hover"
                         } rounded-md `}
@@ -54,7 +52,7 @@ function FriendsListNav() {
                     >
                         <span className=" mr-1 font-medium ">Xem thêm</span>
                         <BsFillCaretDownFill />
-                        {isActive > 1 && (
+                        {currentNav.id > 1 && (
                             <b className=" absolute bottom-0 left-0 w-full h-[2px] bg-blue-500" />
                         )}
                     </Button>
@@ -68,24 +66,27 @@ function FriendsListNav() {
                                     if (index > 0) {
                                         return (
                                             <Button
+                                                key={item.id}
                                                 _className={
                                                     "flex item-center justify-between w-full p-2 text-left rounded-md hover:bg-hover"
                                                 }
                                                 onClick={() => {
-                                                    setIsActive(item.id);
+                                                    setCurrentNav(item);
                                                     setShowModal(false);
+                                                    setCallApi(true);
                                                 }}
                                             >
                                                 <span
                                                     className={`font-medium ${
-                                                        item.id === isActive
+                                                        item.id ===
+                                                        currentNav.id
                                                             ? "text-blue-500"
                                                             : "text-gray-500"
                                                     } `}
                                                 >
                                                     {item.name}
                                                 </span>
-                                                {item.id === isActive && (
+                                                {item.id === currentNav.id && (
                                                     <BsCheck2 className="text-blue-500" />
                                                 )}
                                             </Button>

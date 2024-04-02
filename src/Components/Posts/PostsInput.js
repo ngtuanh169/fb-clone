@@ -1,37 +1,101 @@
 import { useState, useEffect, useRef, useContext } from "react";
+import { useSelector } from "react-redux";
 import { ValueContext } from "./index";
+import { formatAvatar } from "../../Hooks/useFormat";
+import { SocketContext } from "../../Socket";
+import commentApi from "../../api/commentApi";
 import Video from "../Video";
+import LoadingCircleLine from "../LoadingCircleLine";
 import Button from "../Button";
 import { BsCamera, BsPlayCircle } from "react-icons/bs";
-import { CiFaceSmile } from "react-icons/ci";
 import { GrClose } from "react-icons/gr";
 import { IoIosSend } from "react-icons/io";
-function PostInput({ isFocus = false, setIsFocus = () => {} }) {
-    const context = useContext(ValueContext);
+function PostInput({
+    isFocus = false,
+    setIsFocus = () => {},
+    parentId = 0,
+    commentsList = [],
+    setCommentsList = () => {},
+}) {
+    const initValues = {
+        text: "",
+        parentId,
+        file: {},
+    };
+    const user = useSelector((state) => state.user);
+    const socketContext = useContext(SocketContext);
+    const { pagePhoto, postsData, setPostsData } = useContext(ValueContext);
     const inputRef = useRef();
+    const [formValues, setFormValues] = useState(initValues);
     const [file, setFile] = useState({});
-    const handleAddFile = (file) => {
-        const fileUrl = URL.createObjectURL(file);
-        const type = file.type.split("/")[0];
-        setFile({ fileUrl, file, type });
-    };
-    const deleteFile = () => {
-        URL.revokeObjectURL(file.fileUrl);
-        setFile({});
-    };
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         isFocus && inputRef.current && inputRef.current.focus();
     }, [isFocus]);
+
+    const handleAddFile = (file) => {
+        if (!file) {
+            return;
+        }
+        const type = file.type.split("/")[0];
+        if (type !== "image" && type !== "video") {
+            return;
+        }
+        const fileUrl = URL.createObjectURL(file);
+        setFile({ fileUrl, type });
+        setFormValues({ ...formValues, file });
+    };
+
+    const deleteFile = () => {
+        URL.revokeObjectURL(file.fileUrl);
+        setFile({});
+        setFormValues({ ...formValues, file: {} });
+    };
+
+    const addComment = async (formValues) => {
+        try {
+            setLoading(true);
+            const params = new FormData();
+            params.append("postsId", postsData.id);
+            params.append("parentId", formValues.parentId);
+            params.append("file", formValues.file);
+            params.append("text", formValues.text);
+            const res = await commentApi.add(params);
+            if (res.success && res?.data) {
+                setFormValues(initValues);
+                setFile({});
+                setPostsData({
+                    ...postsData,
+                    countComments: postsData.countComments + 1,
+                });
+                setCommentsList([...commentsList, { ...res.data, fake: true }]);
+            }
+            if (res.success && user.userId !== postsData.userId) {
+                const sendData = {
+                    ...res.noti,
+                    senderId: user.userId,
+                    senderName: `${user.fName} ${user.lName}`,
+                    senderAvt: user.avatar,
+                    senderSx: user.sx,
+                };
+                socketContext && socketContext.send(JSON.stringify(sendData));
+            }
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     return (
         <div className="w-full flex ">
             <div className="w-max">
                 <img
                     style={{
-                        width: context.pagePhoto ? "32px" : "40px",
-                        height: context.pagePhoto ? "32px" : "40px",
+                        width: pagePhoto ? "32px" : "40px",
+                        height: pagePhoto ? "32px" : "40px",
                     }}
-                    className="rounded-full mr-2 "
-                    src={context.avatar}
+                    className="rounded-full mr-2 border "
+                    src={formatAvatar(user.avatar, user.sx)}
                     alt=""
                 />
             </div>
@@ -40,10 +104,24 @@ function PostInput({ isFocus = false, setIsFocus = () => {} }) {
                     <div className="w-full">
                         <input
                             ref={inputRef}
+                            style={{ opacity: loading ? ".6" : "" }}
                             className=" w-full bg-transparent outline-none"
                             type="text"
                             placeholder="Viết câu trả lời..."
+                            value={formValues.text}
+                            onChange={(e) =>
+                                !loading &&
+                                setFormValues({
+                                    ...formValues,
+                                    text: e.target.value,
+                                })
+                            }
                             onBlur={() => setIsFocus(false)}
+                            onKeyDown={(e) =>
+                                e.keyCode === 13 &&
+                                !loading &&
+                                addComment(formValues)
+                            }
                         />
                     </div>
                     <div className="flex justify-between w-full mt-2">
@@ -59,27 +137,33 @@ function PostInput({ isFocus = false, setIsFocus = () => {} }) {
                                 type="file"
                                 id="addFile"
                                 onChange={(e) =>
-                                    handleAddFile(e.target.files[0])
+                                    !loading && handleAddFile(e.target.files[0])
                                 }
                             />
-                            <div className="flex items-center">
-                                <Button
-                                    _className={
-                                        "flex justify-center items-center w-8 h-8 rounded-full cursor-not-allowed  "
-                                    }
-                                    // hoverText={"Chọn một biểu tượng cảm xúc"}
-                                >
-                                    <CiFaceSmile className="text-[20px] text-gray-500" />
-                                </Button>
-                            </div>
                         </div>
                         <div className="flex items-center">
                             <Button
                                 _className={
                                     "flex justify-center items-center w-8 h-8 rounded-full hover:bg-gray-200"
                                 }
+                                cursorDefault={
+                                    (!formValues.text &&
+                                        !formValues.file.name) ||
+                                    loading
+                                }
+                                onClick={() =>
+                                    (formValues.text || formValues.file.name) &&
+                                    !loading &&
+                                    addComment(formValues)
+                                }
                             >
-                                <IoIosSend className=" rotate-45 text-[20px] text-blue-500" />
+                                {loading ? (
+                                    <span className=" block w-5 h-5 ">
+                                        <LoadingCircleLine />
+                                    </span>
+                                ) : (
+                                    <IoIosSend className=" rotate-45 text-[20px] text-blue-500" />
+                                )}
                             </Button>
                         </div>
                     </div>
@@ -90,11 +174,14 @@ function PostInput({ isFocus = false, setIsFocus = () => {} }) {
                             _className={
                                 "absolute right-2 top-0 flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 hover:bg-gray-300"
                             }
-                            onClick={deleteFile}
+                            onClick={!loading && deleteFile}
                         >
                             <GrClose className="text-[12px]" />
                         </Button>
-                        <div className=" relative w-[100px] h-[100px] rounded-xl overflow-hidden">
+                        <div
+                            style={{ opacity: loading ? ".6" : "" }}
+                            className=" relative w-[100px] h-[100px] rounded-xl overflow-hidden"
+                        >
                             {file.type === "image" ? (
                                 <img
                                     className="h-full w-full object-cover"

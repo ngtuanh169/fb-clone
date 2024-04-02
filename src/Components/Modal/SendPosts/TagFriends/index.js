@@ -1,30 +1,70 @@
-import { useState, useContext, useEffect } from "react";
-import Button from "../../../Button";
+import { useState, useContext, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { PostsContext } from "../PostsProvider";
+import friendsApi from "../../../../api/friendsApi";
+import SkeletonLoading from "../../../SkeletonLoading";
+import Button from "../../../Button";
 import Title from "./Title";
 import FriendItem from "./FriendItem";
 import TaggedFriends from "./TaggedFriends";
 import { HiOutlineSearch } from "react-icons/hi";
-import avt from "../../../../assets/images/avatar/avatar.jpg";
 function TagFriends({ setCurrentComp = () => {} }) {
-    const context = useContext(PostsContext);
-    const friendsList = [
-        { id: 1, name: "Nguyễn Tú Anh", avt },
-        { id: 2, name: "Nguyễn Văn Long", avt },
-        { id: 3, name: "Tạ Hoàng Anh", avt },
-        { id: 4, name: "Nguyễn Tú Anh", avt },
-        { id: 5, name: "Nguyễn Thị Hải", avt },
-        { id: 6, name: "Nguyễn Tuấn Anh", avt },
-        { id: 7, name: "Nguyễn Thị Huyền", avt },
-        { id: 8, name: "Nguyễn Hương Lan", avt },
-        { id: 9, name: "Nguyễn Sơn", avt },
-        { id: 10, name: "Nguyễn Minh Thanh", avt },
-        { id: 11, name: "Nguyễn Tú Anh", avt },
-    ];
+    const user = useSelector((state) => state.user);
+    const divRef = useRef();
+    const { friendsList, setFriendsList, taggedFriends } =
+        useContext(PostsContext);
+    const [payload, setPayload] = useState({ limit: 10, page: 1, text: "" });
+    const [totalPage, setTotalPage] = useState(1);
+    const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState("");
     useEffect(() => {
-        context.setFriendsList(friendsList);
-    }, []);
+        const getFriends = async () => {
+            try {
+                setLoading(true);
+                const params = { ...payload, userId: user.userId };
+                const res = await friendsApi.getFriends(params);
+                if (res.success && res.count > 0) {
+                    setFriendsList([...friendsList, ...res.data]);
+                    setTotalPage(Math.ceil(res.count / payload.limit));
+                } else {
+                    setTotalPage(0);
+                }
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        user.userId && payload.page <= totalPage && getFriends();
+    }, [payload]);
+
+    useEffect(() => {
+        const timeId = setTimeout(() => {
+            if (searchText.trim() !== payload.text && !loading) {
+                setPayload({ ...payload, page: 1, text: searchText.trim() });
+                setFriendsList([]);
+                setTotalPage(1);
+            }
+        }, 1000);
+        return () => clearTimeout(timeId);
+    }, [searchText]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollHeight = divRef.current.scrollHeight;
+            const offsetHeight = divRef.current.offsetHeight;
+            const scrollTop = divRef.current.scrollTop;
+            if (scrollHeight - 2 < offsetHeight + scrollTop) {
+                !loading && setPayload({ ...payload, page: payload.page + 1 });
+            }
+        };
+        !loading &&
+            divRef.current &&
+            divRef.current.addEventListener("scroll", handleScroll);
+        return () =>
+            !loading &&
+            divRef.current &&
+            divRef.current.removeEventListener("scroll", handleScroll);
+    }, [loading, divRef.current]);
     return (
         <div className="flex flex-col w-[370px] sm:w-[500px]">
             <Title setCurrentComp={setCurrentComp} />
@@ -53,10 +93,11 @@ function TagFriends({ setCurrentComp = () => {} }) {
                     </Button>
                 </div>
                 <div
+                    ref={divRef}
                     className="a h-[350px] flex flex-col w-full mt-3 overflow-x-hidden
                     scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-full "
                 >
-                    {context.taggedFriends.length > 0 && (
+                    {taggedFriends.length > 0 && (
                         <div className="flex flex-col w-full px-4 pb-4">
                             <TaggedFriends />
                         </div>
@@ -65,15 +106,23 @@ function TagFriends({ setCurrentComp = () => {} }) {
                         {searchText ? "TÌM KIẾM" : "GỢI Ý"}
                     </span>
                     <div className="flex flex-col w-full mt-2">
-                        {context.friendsList.length > 0 &&
-                            context.friendsList.map((item) => (
-                                <FriendItem
-                                    key={item.id}
-                                    id={item.id}
-                                    name={item.name}
-                                    avt={item.avt}
-                                />
+                        {friendsList.length > 0 &&
+                            friendsList.map((item) => (
+                                <FriendItem key={item.id} data={item} />
                             ))}
+                        {loading &&
+                            Array(3)
+                                .fill(0)
+                                .map((item, index) => (
+                                    <div className="flex items-center w-full p-2 ml-2 ">
+                                        <div className="h-10 w-10">
+                                            <SkeletonLoading circle />
+                                        </div>
+                                        <div className="w-[150px] h-[25px] ml-2 rounded overflow-hidden">
+                                            <SkeletonLoading circle />
+                                        </div>
+                                    </div>
+                                ))}
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addMess } from "../../../redux/actions/openMessList";
+import { addConversations } from "../../../redux/actions/conversationsList";
 import { formatTimestamp, formatAvatar } from "../../../Hooks/useFormat";
 
 function MessItem({ data = {}, closeModal = () => {} }) {
@@ -10,16 +10,7 @@ function MessItem({ data = {}, closeModal = () => {} }) {
             className="w-full p-2 rounded-md cursor-pointer hover:bg-hover "
             onClick={(e) => {
                 closeModal();
-                dispatch(
-                    addMess({
-                        conversationsId: data.conversationsId,
-                        userId: user.userId,
-                        othersId: data.othersId,
-                        othersAvt: data.conversationsIdavatar,
-                        othersName: `${data.fName} ${data.lName}`,
-                        othersSx: data.sx,
-                    })
-                );
+                dispatch(addConversations(data.conversationsId, data.othersId));
             }}
         >
             <div className="flex h-full w-full ">

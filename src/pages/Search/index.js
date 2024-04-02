@@ -36,7 +36,7 @@ function Search({ children }) {
     return (
         <div className="flex w-full">
             <div className="flex flex-col lg:flex-row w-full">
-                <SubLayoutLeft name={"Kết quả tìm kiếm"}>
+                <SubLayoutLeft name={"Kết quả tìm kiếm"} des={text}>
                     <div className="w-full px-4 ">
                         <b className="block w-full h-[1px] bg-gray-300"></b>
                     </div>

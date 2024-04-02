@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser } from "../../../redux/actions/user";
-import { removeAll } from "../../../redux/actions/openMessList";
+import { closeAll } from "../../../redux/actions/conversationsList";
 import { formatAvatar } from "../../../Hooks/useFormat";
 import Item from "./Item";
 import SettingsAndPrivacy from "./SettingsAndPrivacy";
@@ -28,7 +28,7 @@ function User({ click = () => {} }) {
             DivRightRef.current &&
             setHeightDivRight(DivRightRef.current.offsetHeight);
     }, [list]);
-    console.log(noti);
+
     return (
         <div
             ref={DivLeftRef}
@@ -60,7 +60,7 @@ function User({ click = () => {} }) {
                                     onClick={click}
                                 >
                                     <img
-                                        className="w-9 h-9 rounded-full"
+                                        className="w-9 h-9 rounded-full border"
                                         src={formatAvatar(user.avatar, user.sx)}
                                         alt=""
                                     />
@@ -114,7 +114,7 @@ function User({ click = () => {} }) {
                                 localStorage.removeItem("accessToken");
                                 localStorage.removeItem("refreshToken");
                                 dispatch(deleteUser());
-                                dispatch(removeAll());
+                                dispatch(closeAll());
                                 click();
                             }}
                         >

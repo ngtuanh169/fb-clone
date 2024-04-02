@@ -1,19 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SubLayoutLeft from "../../Components/SubLayoutLeft";
 import SearchSubLayout from "../../Components/Modal/SearchSubLayout";
 import MainCard from "../../Components/MainCard";
 import Button from "../../Components/Button";
+import CreateGroup from "../../Components/Modal/CreateGroup";
 import GroupTool from "./GroupTool";
 import GroupList from "./GroupList";
-import CreateGroup from "../../Components/Modal/CreateGroup";
+import AllGroups from "./AllGroups";
+import YourGroups from "./YourGroups";
 import { BiPlus } from "react-icons/bi";
 function Groups() {
-    const toolList = [
-        { id: 1, name: "Nhóm của bạn" },
-        { id: 2, name: "Tất cả nhóm" },
+    const navList = [
+        { id: 1, name: "Nhóm của bạn", Comp: YourGroups },
+        { id: 2, name: "Tất cả nhóm", Comp: AllGroups },
     ];
-    const [isTool, setIsTool] = useState(toolList[0].id);
+    const [currentNav, setCurrentNav] = useState(navList[0]);
     const [showModal, setShowModal] = useState(false);
+    const [groupName, setGroupName] = useState("");
     return (
         <>
             {showModal && (
@@ -24,7 +27,11 @@ function Groups() {
                     <div className="">
                         <SubLayoutLeft name={"Nhóm"}>
                             <div className="">
-                                <SearchSubLayout nameInput="Tìm kiếm nhóm" />
+                                <SearchSubLayout
+                                    nameInput="Tìm kiếm nhóm"
+                                    text={groupName}
+                                    setText={setGroupName}
+                                />
                             </div>
                             <div className="w-full p-2">
                                 <Button
@@ -52,13 +59,15 @@ function Groups() {
                                     </div>
                                     <div className="">
                                         <GroupTool
-                                            isTool={isTool}
-                                            setIsTool={setIsTool}
-                                            toolList={toolList}
+                                            currentNav={currentNav}
+                                            setCurrentNav={setCurrentNav}
+                                            navList={navList}
                                         />
                                     </div>
                                     <div className="mt-4">
-                                        <GroupList />
+                                        <currentNav.Comp
+                                            groupName={groupName}
+                                        />
                                     </div>
                                 </div>
                             </MainCard>

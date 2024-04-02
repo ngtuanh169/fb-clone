@@ -1,33 +1,34 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import HoverInfoUser from "../../../../Components/Modal/HoverInfoUser";
-function FirendItem({ id, avt, name, des }) {
+import { ScreenSize } from "../../../../App";
+import { formatAvatar, formatNumberK } from "../../../../Hooks/useFormat";
+function FirendItem({ data = {} }) {
+    const context = useContext(ScreenSize);
     return (
         <div className=" flex items-center rounded-md shadow-sm border p-4">
             <div className="relative group">
-                <Link to={"/profile/friends"}>
+                <Link to={`/profile/${data.id}`}>
                     <img
-                        className=" w-20 h-20 rounded-lg hover:opacity-80"
-                        src={avt}
+                        className=" w-20 h-20 object-cover object-center rounded-lg hover:opacity-80"
+                        src={formatAvatar(data.userAvt, data.userSx)}
                         alt=""
                     />
                 </Link>
-                <div className=" absolute bottom-[80%] invisible z-[99] opacity-0 transition-all delay-150 ease-linear group-hover:visible group-hover:opacity-100">
-                    <HoverInfoUser
-                        avt={avt}
-                        name={name}
-                        address={des}
-                        numberFriends={2123}
-                        followers={12312}
-                    />
-                </div>
             </div>
             <div className="flex flex-col ml-4">
-                <Link to={"/profile/friends"}>
+                <Link to={`/profile/${data.id}`}>
                     <span className=" font-semibold hover:underline">
-                        {name}
+                        {data.userName}
                     </span>
                 </Link>
-                <span className=" text-[13px] text-gray-500">{des}</span>
+                {data.countFriends > 0 && (
+                    <span className=" text-[13px] text-gray-500">{`${formatNumberK(
+                        data.countFriends
+                    )} người bạn`}</span>
+                )}
+                {data.address && (
+                    <span className=" text-[13px] text-gray-500">{`Sống tại ${data.address}`}</span>
+                )}
             </div>
         </div>
     );

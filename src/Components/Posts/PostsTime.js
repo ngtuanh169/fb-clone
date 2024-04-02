@@ -1,98 +1,198 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
-import { formatTime } from "../../Hooks/useFormat";
+import { useState, useContext, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { formatAvatar, formatTime } from "../../Hooks/useFormat";
+import { useClickOutSide } from "../../Hooks/useClickOutSide";
 import Button from "../Button";
+import People from "../Modal/People";
+import ModalTool from "./Components/ModalTool";
 import { ValueContext } from "./index";
-import { BiDotsHorizontalRounded } from "react-icons/bi";
-import { MdClose } from "react-icons/md";
 import { GiWorld } from "react-icons/gi";
-import { HiLockClosed, HiUserGroup } from "react-icons/hi";
-import { BsFillCaretRightFill } from "react-icons/bs";
-function PostTime({ status = 1 }) {
-    const context = useContext(ValueContext);
-
+import {
+    HiLockClosed,
+    HiUserGroup,
+    HiOutlineDotsHorizontal,
+} from "react-icons/hi";
+import { BsDot } from "react-icons/bs";
+function PostTime({ hideIcon = false }) {
+    const divRef = useRef();
+    const { postsData, adminId, pagePhoto, pageProfile } =
+        useContext(ValueContext);
+    const { groupId } = useParams();
+    const [showModal, setShowModal] = useState(false);
+    const [showModalTool, setShowModalTool] = useState(false);
+    useClickOutSide(divRef, () => setShowModalTool(false));
     return (
-        <div className="flex justify-between p-2">
-            <div className="flex">
-                <img
-                    className="w-[40px] h-[40px] rounded-full"
-                    src={context.avatar}
-                    alt=""
+        <>
+            {showModal && postsData.tagFriends?.length > 0 && (
+                <People
+                    users={postsData.tagFriends}
+                    closeModal={() => setShowModal(false)}
                 />
-                <div className="flex flex-col ml-2 leading-[1]">
-                    <div className="flex items-center">
-                        <Link
-                            to={
-                                context.groupId
-                                    ? context.groupMember
-                                        ? `/group/${context.groupId}/user/${context.userId}`
-                                        : `/group/:groupId/post/2`
-                                    : `/profile/${context.userId}`
-                            }
-                        >
-                            <span className="text-[15px] font-semibold hover:underline">
-                                {context.name}
-                            </span>
-                        </Link>
-                        {context.groupName && (
-                            <>
-                                <BsFillCaretRightFill className="mx-1" />
-                                <Link
-                                    to={`/group/${context.groupId}`}
-                                    className="flex-1 text-[15px] font-semibold line-clamp-1 hover:underline"
-                                >
-                                    {context.groupName}
+            )}
+            <div className="flex justify-between w-full p-2">
+                <div className="flex">
+                    {postsData.groupId > 0 && !groupId ? (
+                        <div className=" relative">
+                            <Link to={`/group/${postsData.groupId}`}>
+                                <img
+                                    className="w-9 h-9 object-cover object-center rounded-md border"
+                                    src={postsData.groupBanner}
+                                    alt=""
+                                />
+                            </Link>
+                            <Link
+                                className="absolute right-[-4px] bottom-[-4px] w-[25px] h-[25px]"
+                                to={`/group/${postsData.groupId}/user/${postsData.userId}`}
+                            >
+                                <img
+                                    className=" w-full h-full object-cover object-center rounded-full border border-white"
+                                    src={formatAvatar(
+                                        postsData.userAvt,
+                                        postsData.userSx
+                                    )}
+                                    alt=""
+                                />
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className=" relative">
+                            <Link
+                                to={
+                                    groupId
+                                        ? `/group/${postsData.groupId}/user/${postsData.userId}`
+                                        : `/profile/${postsData.userId}`
+                                }
+                            >
+                                <img
+                                    className="w-[40px] h-[40px] rounded-full border"
+                                    src={formatAvatar(
+                                        postsData.userAvt,
+                                        postsData.userSx
+                                    )}
+                                    alt=""
+                                />
+                            </Link>
+                            {postsData.statusLogin && (
+                                <span
+                                    className=" absolute block bottom-[1px] right-[1px] w-[10px] h-[10px]
+                                 bg-green-500 rounded-full border-2 border-white"
+                                ></span>
+                            )}
+                        </div>
+                    )}
+
+                    <div className="flex flex-col ml-2 leading-[1]">
+                        <div className="flex items-center">
+                            {postsData.groupId > 0 && !groupId ? (
+                                <Link to={`/group/${postsData.groupId}`}>
+                                    <span className="text-[15px] font-semibold hover:underline">
+                                        {postsData.groupName}
+                                    </span>
                                 </Link>
-                            </>
-                        )}
-                    </div>
-                    <div className="flex items-center mt-1">
-                        {context.adGroup && (
-                            <span className="p-1 mr-2 rounded-md text-[13px] text-blue-500 bg-blue-100">
-                                Quản trị viên
+                            ) : (
+                                <>
+                                    <Link
+                                        to={
+                                            groupId
+                                                ? `/group/${postsData.groupId}/user/${postsData.userId}`
+                                                : `/profile/${postsData.userId}`
+                                        }
+                                    >
+                                        <span className="text-[15px] font-semibold hover:underline">
+                                            {postsData.userName}
+                                        </span>
+                                    </Link>
+                                    {postsData.tagFriends?.length > 0 && (
+                                        <>
+                                            <span className=" mx-1 font-normal text-[14px] text-gray-500">
+                                                cùng với
+                                            </span>
+                                            <span
+                                                className="text-[15px] font-semibold cursor-pointer"
+                                                onClick={() =>
+                                                    setShowModal(true)
+                                                }
+                                            >
+                                                {`${postsData.tagFriends.length} người khác`}
+                                            </span>
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                        <div className="flex items-center mt-1">
+                            {postsData.groupId > 0 && !groupId && (
+                                <>
+                                    <Link
+                                        to={`/group/${postsData.groupId}/user/${postsData.userId}`}
+                                    >
+                                        <span className="text-[13px] font-semibold text-gray-600 hover:underline">
+                                            {postsData.userName}
+                                        </span>
+                                    </Link>
+                                    <span className="text-[11px] text-gray-500">
+                                        <BsDot />
+                                    </span>
+                                </>
+                            )}
+                            {adminId == postsData.userId && (
+                                <>
+                                    <span className="p-1 rounded-md text-[13px] font-normal leading-[13px] text-[#0866ff] bg-[#ebf5ff]">
+                                        Quản trị viên
+                                    </span>
+                                    <span className="text-[11px] text-gray-500">
+                                        <BsDot />
+                                    </span>
+                                </>
+                            )}
+                            <span className=" text-xs">
+                                {formatTime(postsData.createdAt)}
                             </span>
-                        )}
-                        <span className=" text-xs">
-                            {formatTime(context.time)}
-                        </span>
-                        {!context.group && (
-                            <Button
-                                _className={
-                                    "flex justify-center items-center h-5 w-5 ml-2 rounded-full hover:bg-hover "
-                                }
-                            >
-                                {+status === 0 && (
-                                    <GiWorld className="  text-[14px] text-gray-500" />
-                                )}
-                                {+status === 1 && (
-                                    <HiLockClosed className="  text-[14px] text-gray-500" />
-                                )}
-                            </Button>
-                        )}
-                        {context.group && (
-                            <Button
-                                _className={
-                                    "flex justify-center items-center h-5 w-5 ml-2 rounded-full cursor-default "
-                                }
-                                hoverText={`Thành viên nhóm ${context.groupName}`}
-                            >
-                                <HiUserGroup className="text-[14px] text-gray-500" />
-                            </Button>
-                        )}
+                            <span className="text-[11px] text-gray-500">
+                                <BsDot />
+                            </span>
+                            {groupId ? (
+                                <HiUserGroup className=" text-[14px] text-gray-600 " />
+                            ) : (
+                                <span className="text-[14px] text-gray-500">
+                                    {postsData.status == 0 && <GiWorld />}
+                                    {postsData.status == 1 && <HiLockClosed />}
+                                </span>
+                            )}
+                            {postsData.group && (
+                                <Button
+                                    _className={
+                                        "flex justify-center items-center h-5 w-5 ml-2 rounded-full cursor-default "
+                                    }
+                                    hoverText={`Thành viên nhóm ${postsData.groupName}`}
+                                >
+                                    <HiUserGroup className="text-[14px] text-gray-500" />
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </div>
+
+                <div ref={divRef} className=" relative w-max h-max z-20">
+                    {!pagePhoto && !pageProfile && !hideIcon && (
+                        <Button
+                            _className={`flex items-center justify-center w-9 h-9 rounded-full hover:bg-gray-200`}
+                            onClick={() => setShowModalTool(!showModalTool)}
+                        >
+                            <HiOutlineDotsHorizontal className="text-[20px]" />
+                        </Button>
+                    )}
+                    {showModalTool && (
+                        <div className=" absolute top-[100%] right-0">
+                            <ModalTool
+                                closeModal={() => setShowModalTool(false)}
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
-            <div className="flex items-center">
-                {/* <Button _className="h-[36px] w-[36px] rounded-full text-[20px] text-gray-500 cursor-default ">
-                    <BiDotsHorizontalRounded className=" mx-auto" />
-                </Button> */}
-                {/* {!context.iconClose && !context.showModal && (
-                    <Button _className=" h-[36px] w-[36px] rounded-full text-2xl text-gray-500 hover:bg-hover">
-                        <MdClose className=" mx-auto" />
-                    </Button>
-                )} */}
-            </div>
-        </div>
+        </>
     );
 }
 

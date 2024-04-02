@@ -69,7 +69,8 @@ function HeaderNav() {
                         </NavItem>
                         {showLefNav && (
                             <div
-                                className=" fixed top-[56px] left-0 w-full h-screen px-2 bg-[#f0f2f5] scrollbar-thin "
+                                className=" fixed top-[56px] left-0 w-full h-screen px-2 bg-[#f0f2f5] 
+                                    scrollbar-thin scrollbar-thumb-gray-300 scrollbar-thumb-rounded-full"
                                 onClick={() => setShowNavLef(false)}
                             >
                                 <div className="h-max w-full mb-[50px] ">

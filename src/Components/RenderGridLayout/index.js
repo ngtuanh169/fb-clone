@@ -16,7 +16,7 @@ function RenderGridLayout({ fileList = [], onClick = () => {} }) {
     }
     return (
         <div
-            className={`grid ${gridColumns} gap-[2px] w-full h-full rounded-md `}
+            className={`grid ${gridColumns} gap-[2px] w-full h-full rounded-md`}
         >
             {fileList.length > 0 &&
                 fileList.map((item, index) => {
@@ -53,9 +53,9 @@ function RenderGridLayout({ fileList = [], onClick = () => {} }) {
                                         />
                                         <div
                                             className=" absolute top-0 left-0 flex items-center justify-center
-                                                 w-full h-full bg-matteBlack2 z-10 "
+                                                 w-full h-full bg-matteBlack2  "
                                         >
-                                            <BsPlayCircle className=" text-[50px] text-white z-30" />
+                                            <BsPlayCircle className=" text-[50px] text-white " />
                                         </div>
                                     </div>
                                 )}

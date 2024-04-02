@@ -3,7 +3,9 @@ import { ScreenSize } from "../../../../App";
 import { useSelector, useDispatch } from "react-redux";
 import { formatAvatar } from "../../../../Hooks/useFormat";
 import { useClickOutSide } from "../../../../Hooks/useClickOutSide";
+import { SocketContext } from "../../../../Socket";
 import conversationsApi from "../../../../api/conversationsApi";
+import notificationApi from "../../../../api/notificationApi";
 import {
     add_idList,
     delete_all,
@@ -18,6 +20,7 @@ function HeaderTool() {
     const user = useSelector((state) => state.user);
     const messNotification = useSelector((state) => state.messNotification);
     const dispatch = useDispatch();
+    const socketContext = useContext(SocketContext);
     const context = useContext(ScreenSize);
     const modalRef = useRef();
     const modalNotifyRef = useRef();
@@ -26,18 +29,23 @@ function HeaderTool() {
     const [showMess, setShowMess] = useState(false);
     const [showModalNotify, setShowModalNotify] = useState(false);
     const [showModalUser, setShowModalUser] = useState(false);
-    // const [notifyMess, setNotifyMess] = useState([]);
+    const [countNotification, setCountNotification] = useState(0);
 
     useClickOutSide(modalRef, () => setShowMess(false));
     useClickOutSide(modalNotifyRef, () => setShowModalNotify(false));
     useClickOutSide(modalUserRef, () => setShowModalUser(false));
     useEffect(() => {
-        if (showModalNotify) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "visible";
-        }
-    }, [showModalNotify]);
+        const handleOnMessage = (e) => {
+            const data = JSON.parse(e.data);
+            data.type === "notification" &&
+                setCountNotification((prev) => prev + 1);
+        };
+        socketContext &&
+            socketContext.addEventListener("message", handleOnMessage);
+        return () =>
+            socketContext &&
+            socketContext.removeEventListener("message", handleOnMessage);
+    }, [socketContext]);
     useEffect(() => {
         const getUnwatched = async () => {
             const res = await conversationsApi.unwatched({
@@ -48,23 +56,31 @@ function HeaderTool() {
         getUnwatched();
     }, []);
     useEffect(() => {
-        const updateUnwatched = async () => {
+        const updateWatched = async () => {
             const params = new FormData();
             params.append("userId", user.userId);
-            const res = await conversationsApi.updateUnwatched(params);
+            const res = await conversationsApi.updateWatched(params);
             console.log(res);
             if (res[0].status === "success") {
                 dispatch(delete_all());
             }
         };
-        showMess && messNotification.length > 0 && updateUnwatched();
+        showMess && messNotification.length > 0 && updateWatched();
     }, [showMess]);
     useEffect(() => {
-        if (showModalNotify) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "visible";
-        }
+        const countNotifyUnread = async () => {
+            try {
+                const res = await notificationApi.countNotifyUnread({
+                    userId: user.userId,
+                });
+                if (res.success) {
+                    setCountNotification(res.count);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        countNotifyUnread();
     }, []);
     return (
         <div className=" md:w-[180px] lg:w-[350px] relative px-4">
@@ -99,8 +115,11 @@ function HeaderTool() {
 
                 <ToolItem
                     _ref={modalNotifyRef}
-                    onClick={() => setShowModalNotify(!showModalNotify)}
-                    notiMumber={3}
+                    onClick={() => {
+                        !showModalNotify && setCountNotification(0);
+                        setShowModalNotify(!showModalNotify);
+                    }}
+                    notiMumber={countNotification}
                     backGroudColor={showModalNotify ? "bg-blue-100" : false}
                 >
                     <div className="flex justify-center items-center h-10 w-10 rounded-full">
@@ -122,7 +141,7 @@ function HeaderTool() {
                 <ToolItem>
                     <div
                         ref={modalUserRef}
-                        className="flex justify-center items-center h-10 w-10 rounded-full"
+                        className="flex justify-center items-center h-10 w-10 rounded-full border"
                     >
                         <img
                             className="h-full w-full object-cover object-center hover:opacity-90"

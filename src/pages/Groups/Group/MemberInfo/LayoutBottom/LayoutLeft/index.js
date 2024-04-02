@@ -1,9 +1,10 @@
 import Introduce from "./Introduce";
 import Image from "./Image";
-function LayoutLeft() {
+function LayoutLeft({ data = {} }) {
+    console.log(data);
     return (
         <div className=" flex flex-col">
-            <Introduce />
+            <Introduce data={data} />
             <Image />
         </div>
     );
