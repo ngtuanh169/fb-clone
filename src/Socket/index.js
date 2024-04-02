@@ -10,7 +10,7 @@ function SocketProvider({ children }) {
     useEffect(() => {
         const connect = (userId) => {
             const ws = new WebSocket(
-                `ws://facebook.tuannguyen.click:8080?userId=${userId}`
+                `wss://facebook.tuannguyen.click:8080?userId=${userId}`
             );
             setSocket(ws);
         };
