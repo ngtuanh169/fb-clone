@@ -9,7 +9,13 @@ function SocketProvider({ children }) {
     const [socket, setSocket] = useState(null);
     useEffect(() => {
         const connect = (userId) => {
+<<<<<<< HEAD
             const ws = new WebSocket(`ws://localhost:8080?userId=${userId}`);
+=======
+            const ws = new WebSocket(
+                `ws://localhost:8080?userId=${userId}`
+            );
+>>>>>>> c272bbe21b5b3a263889e70e7a232dd5d6203d0f
             setSocket(ws);
         };
         user?.userId && connect(user.userId);
