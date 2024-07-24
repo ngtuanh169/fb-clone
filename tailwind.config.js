@@ -24,6 +24,8 @@ module.exports = {
                     "url('https://static.xx.fbcdn.net/rsrc.php/v3/yg/r/dX5WoC_N0lP.png')",
                 urlIcons5:
                     "url('https://static.xx.fbcdn.net/rsrc.php/v3/yN/r/K_JV4KD8eC_.png')",
+                urlToolIcons:
+                    "url('https://res.cloudinary.com/dziswrfiq/image/upload/v1716546883/facebook_clone/icons/tools_icon_bsaplf.png')",
                 bgFileDetails:
                     "url('https://res.cloudinary.com/dziswrfiq/image/upload/v1695986309/facebook_clone/banner/a1_t3ujjs.jpg')",
             },
@@ -34,6 +36,7 @@ module.exports = {
                 szIcons3: "25px 1715px",
                 szIcons4: "30px 2190px",
                 szIcons5: "22px 312px",
+                szToolIcons: "auto",
             },
             backgroundPosition: {
                 //bg-navIcons
@@ -60,6 +63,11 @@ module.exports = {
                 //bg-icons5
                 joinGroup: "0px -168px",
                 joinedTheGroup: "0px -150px",
+                //tool icons
+                likeReels: "0px -697px",
+                noLikeReels: "0px -676px",
+                commentReels: "0px -529px",
+                shareReels: "0px -865px",
             },
             dropShadow: {
                 custom1: "0 2px 2px #6f6c6c",

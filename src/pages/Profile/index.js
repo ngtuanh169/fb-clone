@@ -12,7 +12,7 @@ import Photo from "./Component/Photo";
 import Friends from "./Component/Friends";
 import InputBox from "../../Components/InputBox";
 import Filter from "./Component/Filter";
-import avatar from "../../assets/images/avatar/avatar.jpg";
+
 function Profile() {
     const { postsId, userId } = useParams();
     const user = useSelector((state) => state.user);
@@ -27,6 +27,7 @@ function Profile() {
     const [lastId, setLastId] = useState(0);
     const [totalPage, setTotalPage] = useState(1);
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         const getPostsList = async () => {
             try {
@@ -47,7 +48,11 @@ function Profile() {
                 console.log(error);
             }
         };
-        userId && !loading && payload.page <= totalPage && getPostsList();
+        userId &&
+            !postsId &&
+            !loading &&
+            payload.page <= totalPage &&
+            getPostsList();
     }, [payload]);
 
     useEffect(() => {
@@ -83,57 +88,42 @@ function Profile() {
     }, [loading]);
     return (
         <div className="">
-            {postsId ? (
-                <div className="w-full max-w-[500px] sm:max-w-none sm:w-[500px] md:w-[600px] mt-4 mx-auto">
-                    <Posts
-                        userId={1}
-                        avatar={avatar}
-                        name={"Nguyễn Tú Anh"}
-                        time={1671894600425}
-                        pageProfile={true}
-                    />
-                </div>
-            ) : (
-                <>
-                    <ProdileHeader />
-                    <div className=" flex flex-col lg:flex-row w-full max-w-[500px] lg:w-[1000px] lg:max-w-none h-auto lg:px-0 mx-auto">
-                        <div className=" w-full lg:w-2/5 min-h-screen h-max ">
-                            <PersonalInfomation />
-                            <Photo />
-                            <Friends />
-                            <div className=""></div>
-                            <div className="mb-4 lg:mb-0">
-                                <span className="block text-[13px] text-gray-500 leading-[15px]">
-                                    Quyền riêng tư · Điều khoản · Quảng cáo ·
-                                    Lựa chọn quảng cáo · Cookie · Xem thêm ·
-                                    Meta © 2023
-                                </span>
-                            </div>
-                        </div>
-                        <div className=" w-full lg:w-3/5 lg:pl-4 ">
-                            {userId === user.userId && (
-                                <InputBox
-                                    postsList={postsList}
-                                    setPostList={setPostsList}
-                                />
-                            )}
-                            <Filter />
-                            {postsList.length > 0 &&
-                                postsList.map((item) => {
-                                    return <Posts key={item.id} data={item} />;
-                                })}
-                            {loading && <PostsLoading />}
-                            {!loading && postsList.length == 0 && (
-                                <div className="w-full text-center mb-4">
-                                    <span className="font-bold text-[20px] text-center text-gray-500">
-                                        Không có bài viết
-                                    </span>
-                                </div>
-                            )}
-                        </div>
+            <ProdileHeader />
+            <div className=" flex flex-col lg:flex-row w-full max-w-[500px] lg:w-[1000px] lg:max-w-none h-auto lg:px-0 mx-auto">
+                <div className=" w-full lg:w-2/5 min-h-screen h-max ">
+                    <PersonalInfomation />
+                    <Photo />
+                    <Friends />
+                    <div className=""></div>
+                    <div className="mb-4 lg:mb-0">
+                        <span className="block text-[13px] text-gray-500 leading-[15px]">
+                            Quyền riêng tư · Điều khoản · Quảng cáo · Lựa chọn
+                            quảng cáo · Cookie · Xem thêm · Meta © 2023
+                        </span>
                     </div>
-                </>
-            )}
+                </div>
+                <div className=" w-full lg:w-3/5 lg:pl-4 ">
+                    {userId === user.userId && (
+                        <InputBox
+                            postsList={postsList}
+                            setPostList={setPostsList}
+                        />
+                    )}
+                    <Filter />
+                    {postsList.length > 0 &&
+                        postsList.map((item) => {
+                            return <Posts key={item.id} data={item} />;
+                        })}
+                    {loading && <PostsLoading />}
+                    {!loading && postsList.length == 0 && (
+                        <div className="w-full text-center mb-4">
+                            <span className="font-bold text-[20px] text-center text-gray-500">
+                                Không có bài viết
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

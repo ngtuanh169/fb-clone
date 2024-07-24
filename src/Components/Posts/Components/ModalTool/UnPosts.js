@@ -20,24 +20,28 @@ function UnPosts({ closeModal = () => {} }) {
             params.append("groupId", groupId);
             const res = await postsApi.unposts(params);
             if (res.success) {
-                closeModal();
                 const newArr =
                     postsList.length > 0 &&
                     postsList.filter((item) => item.id !== postsData.id);
                 setPostsList(newArr);
+                closeModal();
             }
             setLoading(false);
         } catch (error) {
             console.log(error);
         }
     };
-
+    console.log(postsData);
     return (
         <div className="w-full">
             {showModal && (
                 <Confirm
                     title={"Gỡ bài viết"}
-                    text={`Bạn muốn gỡ bài viết này khỏi nhóm ${postsData.groupName} `}
+                    text={`Bạn muốn gỡ bài viết này  ${
+                        postsData.groupName
+                            ? `khỏi nhóm ${postsData.groupName}`
+                            : "?"
+                    } `}
                     confirm={unposts}
                     loading={loading}
                     closeModal={() => setShowModal(false)}

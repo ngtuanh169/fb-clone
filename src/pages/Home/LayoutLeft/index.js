@@ -7,6 +7,7 @@ import SkeletonLoading from "../../../Components/SkeletonLoading";
 import Button from "../../../Components/Button";
 import Navtem from "./NavItem";
 import { BiArrowToBottom } from "react-icons/bi";
+import img from "../../../assets/images/banner/banner.png";
 function LayoutLeft({ closeModal = () => {} }) {
     const user = useSelector((state) => state.user);
     const [payload, setPayload] = useState({ limit: 8, page: 1 });
@@ -83,8 +84,8 @@ function LayoutLeft({ closeModal = () => {} }) {
                                 >
                                     <img
                                         className="w-full h-full object-cover object-center rounded-lg"
-                                        src={item.banner}
-                                        alt="avatar"
+                                        src={item.banner ? item.banner : img}
+                                        alt="image"
                                     />
                                 </Navtem>
                             ))}

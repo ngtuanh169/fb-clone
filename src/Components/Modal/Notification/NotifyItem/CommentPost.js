@@ -28,7 +28,7 @@ function CommentPost({ data, closeModal = () => {}, newNoti }) {
                         {data.senderName}
                     </strong>
                     <span className="ml-1">{data.content}</span>
-                    {data.groupId ? (
+                    {data.groupId > 0 ? (
                         <>
                             <span className="ml-1">trong</span>
                             <strong className="ml-1 font-semibold">

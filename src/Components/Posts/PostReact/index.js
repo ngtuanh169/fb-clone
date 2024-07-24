@@ -22,7 +22,7 @@ function PostsReact() {
         },
     ];
     const divRef = useRef();
-    const { postsData, setPostsData, adminId, commentsList, setCommentsList } =
+    const { postsData, setPostsData, commentsList, setCommentsList } =
         useContext(ValueContext);
     const [optionId, setOptionId] = useState(options[0].id);
     const [showOptions, setShowOptions] = useState(false);
@@ -76,6 +76,7 @@ function PostsReact() {
             setFristId(0);
             setLastId(0);
             setCommentsList([]);
+            setTotalPage(1);
             setPayload({
                 ...payload,
                 page: 1,

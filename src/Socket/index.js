@@ -9,9 +9,7 @@ function SocketProvider({ children }) {
     const [socket, setSocket] = useState(null);
     useEffect(() => {
         const connect = (userId) => {
-            const ws = new WebSocket(
-                `wss://facebook.tuannguyen.click:8080?userId=${userId}`
-            );
+            const ws = new WebSocket(`ws://localhost:8080?userId=${userId}`);
             setSocket(ws);
         };
         user?.userId && connect(user.userId);
@@ -19,6 +17,7 @@ function SocketProvider({ children }) {
             socket && socket?.close();
         }
     }, [user?.userId]);
+    console.log(socket);
     useEffect(() => {
         const handleRealtime = () => {
             socket.onmessage = (e) => {

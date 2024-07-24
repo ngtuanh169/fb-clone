@@ -1,5 +1,4 @@
-import { useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useContext } from "react";
 import { ValueContext } from "../..";
 import Button from "../../../Button";
 import { BiHide } from "react-icons/bi";

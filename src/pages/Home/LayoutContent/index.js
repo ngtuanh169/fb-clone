@@ -3,10 +3,11 @@ import postsApi from "../../../api/postsApi";
 import Stories from "../Components/Stories";
 import InputBox from "../../../Components/InputBox";
 import Posts from "../../../Components/Posts";
+import Reels from "../../../Components/Reels";
 import PostsLoading from "../../../Components/PostsLoading";
 function LayoutContent() {
     const [payload, setPayload] = useState({
-        limit: 12,
+        limit: 4,
         page: 1,
         orderBy: "DESC",
     });
@@ -51,12 +52,24 @@ function LayoutContent() {
         return () =>
             !loading && window.removeEventListener("scroll", handleScroll);
     }, [loading]);
+
     return (
         <div className=" w-full max-w-[500px] sm:max-w-none sm:w-[500px] 2xl:w-[600px] min-h-screen ">
             <Stories />
             <InputBox postsList={postsList} setPostList={setPostsList} />
             {postsList.length > 0 &&
-                postsList.map((item) => <Posts key={item.id} data={item} />)}
+                postsList.map((item) => {
+                    if (item.isReels)
+                        return <Reels key={item.id} data={item} />;
+                    return (
+                        <Posts
+                            key={item.id}
+                            data={item}
+                            postsList={postsList}
+                            setPostsList={setPostsList}
+                        />
+                    );
+                })}
             {loading &&
                 Array(2)
                     .fill(0)

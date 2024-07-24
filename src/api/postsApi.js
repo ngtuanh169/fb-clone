@@ -21,6 +21,11 @@ const postsApi = {
         return axiosClient.get(url, { params });
     },
 
+    getPostsVideo: (params) => {
+        const url = "/posts/get_posts_video.php";
+        return axiosClient.get(url, { params });
+    },
+
     getPostsGroupByUserId: (params) => {
         const url = "/posts/get_posts_group_by_user_id.php";
         return axiosClient.get(url, { params });

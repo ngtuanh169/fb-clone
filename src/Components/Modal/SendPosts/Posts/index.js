@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import postsApi from "../../../../api/postsApi";
+import { uploadFile } from "../../../../cloudinary";
 import { PostsContext } from "../PostsProvider";
 import LoadingCircleLine from "../../../LoadingCircleLine";
 import Title from "./Title";
 import Content from "./Content";
 import Status from "./Status";
 import Button from "../../../Button";
-import { useParams } from "react-router-dom";
 function Posts({
     closeModal = () => {},
     addImg,
@@ -29,24 +30,45 @@ function Posts({
         }
         setError("");
     }, [text, fileList]);
+
+    // upload file lên cloudinary sử dụng trong hàm handleSubmit
+    const handleData = async (file) => {
+        const res = await uploadFile(file);
+        if (!res.url) return;
+        const data = {
+            public_id: res.public_id,
+            type: res.resource_type,
+            url: res.url,
+            duration: res.duration,
+            frameRate: res?.video ? res.video.dar : "0",
+        };
+        return data;
+    };
+
     const handleSubmit = async (text, fileList, taggedFriends) => {
         try {
-            console.log(fileList);
+            let data = [];
             const totalSize = fileList.reduce((total, item) => {
                 return total + item.file.size;
             }, 0);
-            console.log(totalSize);
+
             if (totalSize > 50000000) {
                 return setError("files không được vượt quá 70MB");
             }
             setLoading(true);
+            const promises = [];
+            for (const item of fileList) {
+                promises.push(handleData(item.file));
+            }
+            await Promise.all(promises)
+                .then((value) => (data = value))
+                .catch((error) => console.log(error));
+
             const params = new FormData();
             params.append("userId", user.userId);
             groupId && params.append("groupId", groupId);
             params.append("content", text);
-            if (fileList.length > 0) {
-                fileList.forEach((item) => params.append("files[]", item.file));
-            }
+            params.append("files", JSON.stringify(data));
             if (taggedFriends.length > 0) {
                 const tags = taggedFriends.map((item) => item.id);
                 params.append("tags", JSON.stringify(tags));

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { uploadFile } from "../../../../cloudinary";
 import messageApi from "../../../../api/messageApi";
 import conversationsApi from "../../../../api/conversationsApi";
 import {
@@ -23,58 +24,52 @@ function SendMessage({
     setMessageList = () => {},
     setNumber = () => {},
 }) {
-    const initValue = { images: [], text: "" };
+    const initValue = { files: [], text: "" };
     const socket = useContext(SocketContext);
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
     const inputRef = useRef();
-    const [showFull, setShowFull] = useState(false);
     const [formValues, setFormValues] = useState(initValue);
     const [callApi, setCallApi] = useState(false);
+    const [totalSize, setTotalSize] = useState(0);
 
     useEffect(() => {
         inputRef.current && inputRef.current.focus();
     }, [data.conversationsId]);
 
     useEffect(() => {
-        if (formValues.text || formValues.images.length > 0) {
-            setShowFull(true);
-        } else {
-            setShowFull(false);
-        }
-    }, [formValues]);
-
-    useEffect(() => {
         isFocus && updateWatchedMessage();
     }, [data?.messageList]);
 
+    const addFiles = (value) => {
+        if (!value) return;
+        const type = value.type.split("/")[0];
+        const id = new Date().getTime();
+        const url =
+            type === "image" || type === "video"
+                ? URL.createObjectURL(value)
+                : "";
+        url &&
+            setFormValues({
+                ...formValues,
+                files: [
+                    ...formValues.files,
+                    { id, url, file: value, type: value.type },
+                ],
+            });
+    };
+
     const changeValues = (name, value) => {
-        if (name === "file" && value) {
-            const type = value.type.split("/")[0];
-            const id = new Date().getTime();
-            const url =
-                type === "image" || type === "video"
-                    ? URL.createObjectURL(value)
-                    : "";
-            url &&
-                setFormValues({
-                    ...formValues,
-                    images: [
-                        ...formValues.images,
-                        { id, url, file: value, type: value.type },
-                    ],
-                });
-        }
+        if (name === "file" && value) addFiles(value);
         if (name === "text") {
             setFormValues({ ...formValues, [name]: value });
         }
     };
+
     const deleteImage = (data) => {
-        const newArray = formValues.images.filter(
-            (item) => item.id !== data.id
-        );
+        const newArray = formValues.files.filter((item) => item.id !== data.id);
         URL.revokeObjectURL(data.url);
-        setFormValues({ ...formValues, images: newArray });
+        setFormValues({ ...formValues, files: newArray });
     };
 
     const updateWatchedMessage = async () => {
@@ -90,17 +85,34 @@ function SendMessage({
             console.log(error);
         }
     };
+
+    // upload file lên cloudinary sử dụng trong hàm handleSubmit
+    const handleData = async (file) => {
+        const res = await uploadFile(file);
+        if (!res.url) return;
+        const data = {
+            public_id: res.public_id,
+            type: res.resource_type,
+            url: res.url,
+            duration: res.duration,
+            frameRate: res?.video ? res.video.dar : "0",
+        };
+        return data;
+    };
+
     useEffect(() => {
         const handleSubmit = async () => {
             try {
-                if (!formValues.text.trim()) return;
+                if (!formValues.text.trim() && formValues.files.length < 1)
+                    return;
+                let fileData = [];
                 const createdAt = getTimestamp();
                 const timeId = new Date().getTime();
                 const messageData = {
                     timeId,
                     conversationId: data.conversationsId,
                     message: {
-                        image: formValues.images,
+                        image: formValues.files,
                         text: formValues.text.trim(),
                     },
                     receiverId: data.othersId,
@@ -113,18 +125,26 @@ function SendMessage({
 
                 setFormValues(initValue);
 
+                if (formValues.files.length > 0) {
+                    const promises = [];
+                    for (const item of formValues.files) {
+                        promises.push(handleData(item.file));
+                    }
+                    await Promise.all(promises)
+                        .then((value) => (fileData = value))
+                        .catch((error) => console.log(error));
+                }
+
                 const params = new FormData();
                 params.append("senderId", user.userId);
                 params.append("receiverId", data.othersId);
                 params.append("conversationsId", data.conversationsId);
                 params.append("text", formValues.text);
+                params.append("files", JSON.stringify(fileData));
                 params.append("createdAt", createdAt);
-                if (formValues.images) {
-                    for (let i = 0; i < formValues.images.length; i++) {
-                        params.append("images[]", formValues.images[i].file);
-                    }
-                }
+
                 const res = await messageApi.addMessage(params);
+
                 if (!res.error) {
                     const formData = {
                         timeId,
@@ -133,6 +153,7 @@ function SendMessage({
                         receiverId: res.data.receiverId,
                         conversationsId: res.data.conversationId,
                         message: res.data.message,
+                        files: JSON.stringify(res.data.files),
                         createdAt: res.data.createdAt,
                     };
                     setMessageList([formData, ...messageList]);
@@ -143,6 +164,7 @@ function SendMessage({
                         receiverId: res.data.receiverId,
                         conversationsId: res.data.conversationId,
                         message: res.data.message,
+                        files: JSON.stringify(res.data.files),
                         createdAt: res.data.createdAt,
                     };
                     setNumber((prev) => prev + 1);
@@ -165,7 +187,7 @@ function SendMessage({
             >
                 <Button
                     _className={`${
-                        formValues.images.length > 0 || formValues.text
+                        formValues.files.length > 0 || formValues.text
                             ? "w-0 h-[38px]"
                             : " w-[22px] h-[38px]"
                     } mr-2 cursor-not-allowed overflow-hidden transition-all`}
@@ -201,10 +223,10 @@ function SendMessage({
             </div>
             <div className="flex flex-1 justify-between items-end">
                 <div className="flex flex-col justify-end w-full p-1 bg-gray-200 rounded-3xl">
-                    {formValues.images.length > 0 && (
+                    {formValues.files.length > 0 && (
                         <div className="flex w-[200px] p-2 pb-3 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-thumb-rounded-full">
                             <div className="flex w-max ">
-                                {formValues.images.map((item, index) => {
+                                {formValues.files.map((item, index) => {
                                     const type = item.type.split("/")[0];
                                     return (
                                         <div

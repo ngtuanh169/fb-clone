@@ -18,6 +18,7 @@ import { BsDot } from "react-icons/bs";
 import { FaLock } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import { BiPlus } from "react-icons/bi";
+import img from "../../../../assets/images/banner/banner.png";
 function LayoutTop() {
     const user = useSelector((state) => state.user);
     const socketContext = useContext(SocketContext);
@@ -79,8 +80,12 @@ function LayoutTop() {
                                 <>
                                     <img
                                         className="w-full h-full object-cover  "
-                                        src={groupData.banner}
-                                        alt=""
+                                        src={
+                                            groupData.banner
+                                                ? groupData.banner
+                                                : img
+                                        }
+                                        alt="image"
                                     />
                                     <div className=" absolute bottom-0 left-0 flex items-center w-full h-[42px] bg-blue-800">
                                         <span className="px-3 tex-[14px] text-white font-medium line-clamp-1">

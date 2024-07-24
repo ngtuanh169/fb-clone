@@ -13,18 +13,18 @@ function AddFiles({
     setCurrentComp = () => {},
     loading = false,
 }) {
-    const context = useContext(PostsContext);
+    const { fileList, setFileList, addFile } = useContext(PostsContext);
     const contextSize = useContext(ScreenSize);
     return (
         <div className=" relative w-full h-[250px] p-2 border rounded-md">
-            {context.fileList.length > 0 ? (
+            {fileList.length > 0 ? (
                 <div className=" relative flex flex-col w-full h-full">
                     {!loading && (
                         <>
                             <div className="absolute top-2 left-2 flex w-full z-30">
                                 <div className=" mr-2 ">
                                     <Button
-                                        _className="flex items-center w-max p-2 font-medium rounded-md bg-white cursor-pointer"
+                                        _className="flex items-center w-max p-2 font-medium rounded-md bg-white cursor-pointer shadow-md hover:bg-gray-100"
                                         onClick={() =>
                                             setCurrentComp({ Comp: EditFiles })
                                         }
@@ -39,8 +39,17 @@ function AddFiles({
                                 </div>
                                 <div className=" mr-2 ">
                                     <label
-                                        className="flex items-center w-max p-2 font-medium rounded-md bg-white cursor-pointer"
-                                        htmlFor="addFile"
+                                        className={`flex items-center w-max p-2 font-medium rounded-md shadow-md bg-white select-none 
+                                        ${
+                                            fileList.length < 3
+                                                ? "cursor-pointer hover:bg-gray-100"
+                                                : ""
+                                        }`}
+                                        htmlFor={
+                                            fileList.length < 3
+                                                ? "addFile"
+                                                : "none"
+                                        }
                                     >
                                         <AiOutlinePlusCircle />
                                         <span className=" ml-1">
@@ -51,7 +60,7 @@ function AddFiles({
                                         className="w-0 h-0"
                                         id="addFile"
                                         type="file"
-                                        onChange={context.addFile}
+                                        onChange={addFile}
                                     />
                                 </div>
                             </div>
@@ -60,14 +69,14 @@ function AddFiles({
                                     _className={
                                         "flex items-center justify-center h-8 w-8 font-medium bg-white rounded-full"
                                     }
-                                    onClick={() => context.setFileList([])}
+                                    onClick={() => setFileList([])}
                                 >
                                     <MdClose className=" text-gray-400 text-[22px]" />
                                 </Button>
                             </div>
                         </>
                     )}
-                    <RenderGridLayout fileList={context.fileList} />
+                    <RenderGridLayout fileList={fileList} />
                 </div>
             ) : (
                 <>
@@ -86,7 +95,7 @@ function AddFiles({
                         className="h-[0] overflow-hidden"
                         type="file"
                         id="file"
-                        onChange={context.addFile}
+                        onChange={addFile}
                     />
                     <span
                         className=" absolute top-3 right-3 flex items-center justify-center 

@@ -6,7 +6,6 @@ import { useClickOutSide } from "../../../../../Hooks/useClickOutSide";
 import { GroupContext } from "../../GroupProvider";
 import groupApi from "../../../../../api/groupApi";
 import SkeletonLoading from "../../../../../Components/SkeletonLoading";
-import LoadingCircleLine from "../../../../../Components/LoadingCircleLine";
 import AddMembers from "../../Components/AddMembers";
 import Button from "../../../../../Components/Button";
 import Confirm from "../../../../../Components/Modal/Confirm";
@@ -16,6 +15,7 @@ import { BsFillCaretDownFill } from "react-icons/bs";
 import { FaLock } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { MdHome } from "react-icons/md";
+import img from "../../../../../assets/images/banner/banner.png";
 function LayoutTop() {
     const { groupId } = useParams();
     const user = useSelector((state) => state.user);
@@ -69,8 +69,8 @@ function LayoutTop() {
                         ) : (
                             <img
                                 className="h-12 w-12 object-cover object-center rounded-md border border-gray-400"
-                                src={groupData.banner}
-                                alt=""
+                                src={groupData.banner ? groupData.banner : img}
+                                alt="image"
                             />
                         )}
                     </div>

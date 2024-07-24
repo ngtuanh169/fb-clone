@@ -8,6 +8,7 @@ import { ImEarth } from "react-icons/im";
 import { FaLock } from "react-icons/fa";
 import { BsDot } from "react-icons/bs";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import img from "../../../../assets/images/banner/banner.png";
 function GroupList() {
     const { groupId } = useParams();
     const parentRef = useRef();
@@ -117,8 +118,8 @@ function GroupList() {
                                 <div className="w-full h-[90px]">
                                     <img
                                         className="w-full h-full object-cover object-center"
-                                        src={item.banner}
-                                        alt=""
+                                        src={item.banner ? item.banner : img}
+                                        alt="image"
                                     />
                                 </div>
                                 <div className="flex flex-col justify-between w-full p-2">

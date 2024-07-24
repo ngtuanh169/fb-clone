@@ -49,6 +49,7 @@ function File({ files = [] }) {
         }
         setIndexSl(0);
     };
+    console.log(fileList[indexSl]);
     return (
         <div
             className={` w-full h-full bg-black z-50 ${
@@ -71,7 +72,7 @@ function File({ files = [] }) {
                         <BsFacebook className=" text-[45px] text-blue-600 hover:text-blue-700" />
                     </Button>
                 </div>
-                {fileList[indexSl].type === "image" && (
+                {fileList[indexSl]?.type === "image" && (
                     <Tools
                         zoomed={zoomed}
                         handleClickZoomIn={handleClickZoomIn}
@@ -93,16 +94,15 @@ function File({ files = [] }) {
                     </div>
                 )}
                 <div className="grow h-full">
-                    {fileList[indexSl].type === "image" && (
+                    {fileList[indexSl]?.type === "image" && (
                         <img
                             style={{ transform: `scale(${zoomed})` }}
                             className="w-full h-full object-contain object-center transition-transform z-20"
                             src={fileList[indexSl].url}
                             alt=""
-                            onClick={(e) => console.log([e.target])}
                         />
                     )}
-                    {fileList[indexSl].type === "video" && (
+                    {fileList[indexSl]?.type === "video" && (
                         <Video videoUrl={fileList[indexSl].url} />
                     )}
                 </div>

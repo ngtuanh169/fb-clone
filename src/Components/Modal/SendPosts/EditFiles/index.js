@@ -7,16 +7,16 @@ import FileItem from "./FileItem";
 function EditFiles({ setCurrentComp = () => {}, setClientWidth = () => {} }) {
     let gridColums = "";
     const divRef = useRef();
-    const context = useContext(PostsContext);
-    if (context.fileList.length > 2 && context.fileList.length < 5) {
+    const { fileList } = useContext(PostsContext);
+    if (fileList.length > 2 && fileList.length < 5) {
         gridColums = "md:grid-cols-2";
     }
-    if (context.fileList.length > 4) {
+    if (fileList.length > 4) {
         gridColums = "md:grid-cols-3";
     }
     useEffect(() => {
         divRef.current && setClientWidth(divRef.current.clientWidth);
-    }, [context.fileList]);
+    }, [fileList]);
     return (
         <div ref={divRef} className="flex flex-col w-full sm:w-max">
             <div className=" relative flex items-center justify-center w-full h-[60px]">
@@ -36,8 +36,8 @@ function EditFiles({ setCurrentComp = () => {}, setClientWidth = () => {} }) {
                 className={`a grid ${gridColums} grid-cols-1 gap-2 w-[370px] sm:w-max max-h-[450px] p-2 bg-slate-200 
                     scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-full`}
             >
-                {context.fileList.length > 0 ? (
-                    context.fileList.map((item) => (
+                {fileList.length > 0 ? (
+                    fileList.map((item) => (
                         <FileItem
                             key={item.id}
                             fileId={item.id}
@@ -52,14 +52,17 @@ function EditFiles({ setCurrentComp = () => {}, setClientWidth = () => {} }) {
             <div className=" flex justify-end items-center w-full h-[60px] px-2">
                 <div className="flex">
                     <label
-                        htmlFor="addFile"
-                        className={
-                            "flex items-center p-2 font-medium text-blue-500 rounded-md cursor-pointer hover:bg-hover"
-                        }
+                        htmlFor={fileList.length < 3 ? "addFile" : ""}
+                        className={`flex items-center p-2 font-medium text-blue-500 rounded-md select-none ${
+                            fileList.length < 3
+                                ? "hover:bg-hover cursor-pointer"
+                                : ""
+                        } `}
                     >
                         <BsImages />
                         <span className="ml-2 ">Thêm ảnh/video</span>
                     </label>
+
                     <input
                         className="h-0 w-0 outline-none"
                         type="file"

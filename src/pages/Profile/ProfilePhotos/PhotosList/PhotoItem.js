@@ -9,13 +9,16 @@ function PhotoItem({ data }) {
     return (
         <div
             ref={imgRef}
-            style={{ height: `${clientWidth}px` }}
+            style={{
+                height: `${clientWidth}px`,
+                boxShadow: "0px 0px 5px 1px #ccc",
+            }}
             className="rounded-md overflow-hidden"
         >
-            <Link to={"/profile/photos"}>
+            <Link to={`/photo/${data.postsId}/${data.id}`}>
                 <img
-                    className={` h-full w-max hover:opacity-90`}
-                    src={data.photo}
+                    className={`h-full w-full object-cover object-center hover:opacity-90`}
+                    src={data.url}
                     alt=""
                 />
             </Link>

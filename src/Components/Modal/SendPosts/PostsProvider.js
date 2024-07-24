@@ -38,7 +38,6 @@ function PostsProvider({ children }) {
         fileList[fileId].file = file;
         setFriendsList([...fileList]);
     };
-
     const deleteFile = (id) => {
         if (!id) {
             return;

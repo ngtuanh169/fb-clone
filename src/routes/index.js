@@ -14,11 +14,12 @@ import PostsSearch from "../pages/Search/PostsSearch";
 import GroupsSearch from "../pages/Search/GroupsSearch";
 import PagesSearch from "../pages/Search/PagesSearch";
 import Profile from "../pages/Profile";
+import PostsId from "../pages/Profile/Posts";
 import ProfileInformation from "../pages/Profile/ProfileInformation";
 import ProfileFriends from "../pages/Profile/ProfileFriends";
 import ProfilePhotos from "../pages/Profile/ProfilePhotos";
 import ProfileVideos from "../pages/Profile/ProfileVideos";
-
+import Test from "../pages/Test";
 const publicRoutes = [
     { path: "/login", component: Login, layout: null },
     { path: "/register", component: Register, layout: null },
@@ -42,10 +43,11 @@ const privateRoutes = [
     { path: "/search/groups/:text", component: GroupsSearch },
     { path: "/search/pages/:text", component: PagesSearch },
     { path: "/profile/:userId", component: Profile },
-    { path: "/profile/:userId/posts/:postsId", component: Profile },
+    { path: "/profile/:userId/posts/:postsId", component: PostsId },
     { path: "/profile/:userId/info", component: ProfileInformation },
     { path: "/profile/:userId/friends", component: ProfileFriends },
     { path: "/profile/:userId/photos", component: ProfilePhotos },
     { path: "/profile/:userId/videos", component: ProfileVideos },
+    { path: "/test", component: Test, layout: null },
 ];
 export { publicRoutes, privateRoutes };

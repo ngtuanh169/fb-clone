@@ -43,7 +43,7 @@ function LayoutRight() {
             navigate(`/group/${groupData.id}/introduce`);
         }
     }, [groupData?.id]);
-    console.log(loading);
+
     return (
         <div className="w-full">
             <div className="flex flex-col">

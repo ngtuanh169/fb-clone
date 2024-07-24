@@ -12,7 +12,7 @@ import Button from "../../../Button";
 import { AiFillLike } from "react-icons/ai";
 function CommentItem({ data = {} }) {
     const { groupId } = useParams();
-    const { groupData, adminId } = useContext(ValueContext);
+    const { adminId } = useContext(ValueContext);
     const [liked, setLiked] = useState(data.liked);
     const [countLikes, setCountLikes] = useState(data.countLikes);
     const [loading, setLoading] = useState(false);

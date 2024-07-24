@@ -28,8 +28,6 @@ function Posts({
     const [commentsList, setCommentsList] = useState([]);
     const [hidePosts, setHidePosts] = useState(false);
     const valueContext = {
-        postsList,
-        setPostsList,
         postsData,
         setHidePosts,
         setPostsData,
@@ -42,6 +40,8 @@ function Posts({
         pageProfile,
         showModal,
         setShowModal,
+        postsList,
+        setPostsList,
     };
     useEffect(() => {
         setCommentsList([]);
@@ -119,7 +119,7 @@ function Posts({
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div
-                            className="flex flex-col w-full h-[680px] max-h-[80vh] md:max-h-[95vh]  
+                            className="flex flex-col w-full h-[680px] max-h-[80vh] md:max-h-[95vh]
                             rounded-lg bg-white shadow-lg shadow-gray-300 overflow-hidden"
                         >
                             <div
@@ -139,11 +139,11 @@ function Posts({
                                 </div>
                             </div>
                             <div
-                                className="w-full flex flex-col flex-1 
-                            scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-full"
+                                className="w-full flex flex-col flex-1 overflow-x-hidden
+                                    scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-full"
                             >
                                 <div className="px-2 pt-2">
-                                    <PostTime hideIcon={true} />
+                                    <PostTime />
                                 </div>
                                 <PostsContent />
                                 <div className="px-2 ">

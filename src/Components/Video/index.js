@@ -5,7 +5,7 @@ import { BsFillPlayFill, BsFillPauseFill } from "react-icons/bs";
 
 export const VideoContext = createContext();
 
-function Video({ videoUrl = "", type = "", showControls = true }) {
+function Video({ videoUrl = "", showControls = true, maxHeight = false }) {
     const videoRef = useRef();
     const [play, setPlay] = useState(false);
     const [replay, setReplay] = useState(false);
@@ -24,7 +24,6 @@ function Video({ videoUrl = "", type = "", showControls = true }) {
 
     useEffect(() => {
         play ? videoRef.current.play() : videoRef.current.pause();
-        console.log(videoRef.current.currentTime);
     }, [play]);
 
     useEffect(() => {
@@ -109,7 +108,9 @@ function Video({ videoUrl = "", type = "", showControls = true }) {
                     <video
                         ref={videoRef}
                         controls={false}
-                        className=" w-full h-full bg-gradient-to-b from-black via-gray-700 to-gray-500 object-contain cursor-pointer"
+                        className={`w-full h-full ${
+                            !fullScreen && maxHeight ? "max-h-[500px]" : ""
+                        } bg-black object-contain object-center cursor-pointer`}
                         src={videoUrl}
                         loop={replay}
                         onClick={() => {

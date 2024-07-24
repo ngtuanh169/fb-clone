@@ -12,11 +12,11 @@ function ChangeProfilePicture({
 }) {
     const validates = [
         { name: "file", rules: { isFlies: video ? "video" : "picture" } },
-        { name: "des", rules: { isRequired: true } },
     ];
+    const [loading, setLoading] = useState(false);
     const [formValue, setFormValue] = useState({
         file: "",
-        des: "",
+        text: "",
         fileUrl: "",
     });
     const changeFile = (file) => {
@@ -24,7 +24,6 @@ function ChangeProfilePicture({
     };
     useEffect(() => {
         if (formValue.file[0]) {
-            console.log(formValue.fileUrl);
             formValue.fileUrl && URL.revokeObjectURL(formValue.fileUrl);
             const url = URL.createObjectURL(formValue.file[0]);
             setFormValue({ ...formValue, fileUrl: url });
@@ -33,8 +32,9 @@ function ChangeProfilePicture({
             formValue.fileUrl && URL.revokeObjectURL(formValue.fileUrl);
     }, [formValue.file]);
 
-    const handleSubmit = () => {
-        console.log("thanh cong");
+    const handleSubmit = async () => {
+        const res = await handleChange(formValue.file[0], formValue.text);
+        console.log(res);
     };
     const { invalid, errors, removeError, formSubmit } = useForm(
         validates,
@@ -107,32 +107,32 @@ function ChangeProfilePicture({
                             <div className="p-2">
                                 <div className="">
                                     <label
-                                        htmlFor="des"
+                                        htmlFor="text"
                                         className=" font-medium"
                                     >
                                         Mô tả
                                     </label>
                                     <textarea
                                         className="w-full p-2 border outline-none rounded-md focus:border-blue-500"
-                                        name="des"
-                                        id="des"
+                                        name="text"
+                                        id="text"
                                         rows="4"
                                         placeholder="Nội dung bài đăng..."
-                                        value={formValue.des}
+                                        value={formValue.text}
                                         onChange={(e) => {
                                             setFormValue({
                                                 ...formValue,
-                                                des: e.target.value,
+                                                text: e.target.value,
                                             });
-                                            removeError("des");
+                                            removeError("text");
                                         }}
                                         onBlur={(e) =>
-                                            invalid("des", e.target.value)
+                                            invalid("text", e.target.value)
                                         }
                                     ></textarea>
-                                    {errors.des && (
+                                    {errors.text && (
                                         <p className="text-[12px] text-red-500">
-                                            {errors.des}
+                                            {errors.text}
                                         </p>
                                     )}
                                 </div>

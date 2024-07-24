@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { formatAvatar, formatTime } from "../../Hooks/useFormat";
@@ -14,14 +14,21 @@ import {
     HiOutlineDotsHorizontal,
 } from "react-icons/hi";
 import { BsDot } from "react-icons/bs";
-function PostTime({ hideIcon = false }) {
+import img from "../../assets/images/banner/banner.png";
+function PostTime() {
+    const user = useSelector((state) => state.user);
     const divRef = useRef();
-    const { postsData, adminId, pagePhoto, pageProfile } =
-        useContext(ValueContext);
+    const { postsData, adminId } = useContext(ValueContext);
     const { groupId } = useParams();
+    const [showIcon, setShowIcon] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showModalTool, setShowModalTool] = useState(false);
     useClickOutSide(divRef, () => setShowModalTool(false));
+    useEffect(() => {
+        if (postsData.userId === user.userId || user.userId === adminId) {
+            setShowIcon(true);
+        }
+    }, []);
     return (
         <>
             {showModal && postsData.tagFriends?.length > 0 && (
@@ -37,8 +44,12 @@ function PostTime({ hideIcon = false }) {
                             <Link to={`/group/${postsData.groupId}`}>
                                 <img
                                     className="w-9 h-9 object-cover object-center rounded-md border"
-                                    src={postsData.groupBanner}
-                                    alt=""
+                                    src={
+                                        postsData.groupBanner
+                                            ? postsData.groupBanner
+                                            : img
+                                    }
+                                    alt="image"
                                 />
                             </Link>
                             <Link
@@ -175,7 +186,7 @@ function PostTime({ hideIcon = false }) {
                 </div>
 
                 <div ref={divRef} className=" relative w-max h-max z-20">
-                    {!pagePhoto && !pageProfile && !hideIcon && (
+                    {showIcon && (
                         <Button
                             _className={`flex items-center justify-center w-9 h-9 rounded-full hover:bg-gray-200`}
                             onClick={() => setShowModalTool(!showModalTool)}

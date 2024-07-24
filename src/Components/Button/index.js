@@ -4,6 +4,7 @@ function Button({
     href,
     to,
     _className,
+    style = {},
     hoverText,
     classHoverText = "",
     hoverBottom = false,
@@ -13,7 +14,7 @@ function Button({
 }) {
     let Comp = "button";
     const _props = {};
-    const styles = {};
+    const styles = { ...style };
     let classNames = "";
     if (to) {
         Comp = Link;

@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { formatBanner } from "../../../../Hooks/useFormat";
 import { ScreenSize } from "../../../../App";
+import userApi from "../../../../api/userApi";
 import SkeletonLoading from "../../../../Components/SkeletonLoading";
 import ChangeProfilePicture from "../../../../Components/Modal/ChangeProfilePicture";
 import { AiFillCamera } from "react-icons/ai";
@@ -12,6 +13,7 @@ function HeaderTop({ isLoading, userData = {} }) {
     const context = useContext(ScreenSize);
     const user = useSelector((state) => state.user);
     const [showModalBanner, setShowModalBanner] = useState(false);
+
     return (
         <>
             {showModalBanner && (

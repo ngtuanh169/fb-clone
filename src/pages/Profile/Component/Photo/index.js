@@ -1,14 +1,38 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import userApi from "../../../../api/userApi";
 import MainCard from "../../../../Components/MainCard";
-import img from "../../../../assets/images/avatar/avatar.jpg";
+import LoadingCircleLine from "../../../../Components/LoadingCircleLine";
 function Photo() {
     const { userId } = useParams();
     const imgRef = useRef();
     const [widthDiv, setWidthDiv] = useState(0);
-    useEffect(() => {
-        setWidthDiv(imgRef.current.clientWidth);
+    const [payload, setPayload] = useState({
+        limit: 9,
+        page: 1,
+        type: "image",
     });
+    const [photoList, setPhotoList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        const getPhotoList = async () => {
+            try {
+                setLoading(true);
+                const res = await userApi.getFiles(payload);
+                if (res.success && res?.data) {
+                    setPhotoList([...photoList, ...res.data]);
+                }
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getPhotoList();
+    }, []);
+    useEffect(() => {
+        imgRef.current && setWidthDiv(imgRef.current.clientWidth);
+    });
+
     return (
         <MainCard>
             <div className="p-3">
@@ -23,24 +47,34 @@ function Photo() {
                         <span>Xem tất cả ảnh</span>
                     </Link>
                 </div>
-                <div className=" grid grid-cols-3 gap-1 mt-4 rounded-lg overflow-hidden">
-                    {Array(9)
-                        .fill(0)
-                        .map((item, index) => (
+                <div className=" grid grid-cols-3 gap-2 mt-4 rounded-xl overflow-hidden ">
+                    {photoList.length > 0 &&
+                        photoList.map((item) => (
                             <div
-                                key={index}
+                                key={item.id}
                                 ref={imgRef}
-                                style={{ height: `${widthDiv}px` }}
-                                className=" overflow-hidden"
+                                style={{
+                                    height: `${widthDiv}px`,
+                                }}
+                                className="w-full h-full "
                             >
-                                <img
-                                    className=" w-full h-full cursor-pointer hover:opacity-90"
-                                    src={img}
-                                    alt=""
-                                />
+                                <Link to={`/photo/${item.postsId}/${item.id}`}>
+                                    <img
+                                        className=" w-full h-full object-cover object-center cursor-pointer hover:opacity-90"
+                                        src={item.url}
+                                        alt=""
+                                    />
+                                </Link>
                             </div>
                         ))}
                 </div>
+                {loading && (
+                    <div className="flex justify-center w-full p-2">
+                        <div className="w-5 h-5">
+                            <LoadingCircleLine />
+                        </div>
+                    </div>
+                )}
             </div>
         </MainCard>
     );

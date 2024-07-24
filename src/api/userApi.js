@@ -21,6 +21,14 @@ const userApi = {
         const url = "/user/searchUser.php";
         return axiosClient.get(url, { params });
     },
+    changeAvatar: (params) => {
+        const url = "/user/change_avatar.php";
+        return axiosClient.post(url, params);
+    },
+    getFiles: (params) => {
+        const url = "/user/get_files.php";
+        return axiosClient.get(url, { params });
+    },
 };
 
 export default userApi;

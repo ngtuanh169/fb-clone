@@ -3,37 +3,15 @@ import { useParams } from "react-router-dom";
 import ProdileHeader from "../Component/ProfileHeader";
 import MainCard from "../../../Components/MainCard";
 import Button from "../../../Components/Button";
-// import FriendsListTool from "../ProfileFriends/FriendsListTool";
-// import FriendsListNav from "../ProfileFriends/FriendsListNav";
-// import FriendsList from "../ProfileFriends/FriendsList";
 import ProfileFriends from "../ProfileFriends";
-import PhotosNav from "../ProfilePhotos/PhotosNav";
-import PhotosList from "../ProfilePhotos/PhotosList";
 import VideosNav from "../ProfileVideos/VideosNav";
 import VideosList from "../ProfileVideos/VideosList";
-import avt from "../../../assets/images/avatar/avatar.jpg";
+import ProfilePhotos from "../ProfilePhotos";
+import ProfileVideos from "../ProfileVideos";
 import Item from "./Item";
 import profileIntroductionApi from "../../../api/profileIntroductionApi";
 function ProfileInformation() {
     const { userId } = useParams();
-
-    const photoList = [
-        { id: 1, photo: avt },
-        { id: 2, photo: avt },
-        { id: 3, photo: avt },
-        { id: 4, photo: avt },
-        { id: 5, photo: avt },
-        { id: 6, photo: avt },
-        { id: 7, photo: avt },
-    ];
-
-    const videosList = [
-        { id: 1, img: avt, time: "2:02" },
-        { id: 2, img: avt, time: "2:02" },
-        { id: 3, img: avt, time: "2:02" },
-        { id: 4, img: avt, time: "2:02" },
-        { id: 5, img: avt, time: "2:02" },
-    ];
     const [introductionList, setIntroductionList] = useState([]);
     const [currentNav, setCurrentNav] = useState(0);
     useEffect(() => {
@@ -107,44 +85,10 @@ function ProfileInformation() {
             </div>
             <ProfileFriends pageInfo={true} />
             <div className="w-full px-2 lg:px-0 lg:w-[1000px] mx-auto">
-                <MainCard>
-                    <div className="flex flex-col w-full p-2">
-                        <PhotosNav />
-                        <PhotosList data={photoList} />
-                        <div className="w-full h-10 px-2">
-                            <Button
-                                to={`/profile/${userId}/photos`}
-                                _className={
-                                    "w-full h-full flex items-center justify-center rounded-md bg-gray-200 hover:bg-gray-300"
-                                }
-                            >
-                                <span className=" font-semibold">
-                                    Xem tất cả
-                                </span>
-                            </Button>
-                        </div>
-                    </div>
-                </MainCard>
+                <ProfilePhotos header={false} />
             </div>
             <div className="w-full px-2 lg:px-0 lg:w-[1000px] mx-auto">
-                <MainCard>
-                    <div className="flex flex-col w-full p-2">
-                        <VideosNav />
-                        <VideosList data={videosList} />
-                        <div className="w-full h-10 px-2">
-                            <Button
-                                to={`/profile/${userId}/videos`}
-                                _className={
-                                    "w-full h-full flex items-center justify-center rounded-md bg-gray-200 hover:bg-gray-300"
-                                }
-                            >
-                                <span className=" font-semibold">
-                                    Xem tất cả
-                                </span>
-                            </Button>
-                        </div>
-                    </div>
-                </MainCard>
+                <ProfileVideos header={false} />
             </div>
         </div>
     );

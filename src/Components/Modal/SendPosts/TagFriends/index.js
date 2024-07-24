@@ -114,7 +114,10 @@ function TagFriends({ setCurrentComp = () => {} }) {
                             Array(3)
                                 .fill(0)
                                 .map((item, index) => (
-                                    <div className="flex items-center w-full p-2 ml-2 ">
+                                    <div
+                                        key={index}
+                                        className="flex items-center w-full p-2 ml-2 "
+                                    >
                                         <div className="h-10 w-10">
                                             <SkeletonLoading circle />
                                         </div>

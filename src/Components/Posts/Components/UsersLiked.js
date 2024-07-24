@@ -82,6 +82,7 @@ function UsersLiked({ closeModal = () => {} }) {
             console.log(error);
         }
     };
+
     return (
         <Modal closeModal={closeModal}>
             <div className="w-full sm:w-[540px] m-auto px-2">

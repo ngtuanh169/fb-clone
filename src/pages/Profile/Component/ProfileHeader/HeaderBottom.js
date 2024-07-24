@@ -5,6 +5,7 @@ import { addConversations } from "../../../../redux/actions/conversationsList";
 import { formatAvatar, formatNumberK } from "../../../../Hooks/useFormat";
 import conversationsApi from "../../../../api/conversationsApi";
 import friendsApi from "../../../../api/friendsApi";
+import userApi from "../../../../api/userApi";
 import SkeletonLoading from "../../../../Components/SkeletonLoading";
 import Button from "../../../../Components/Button";
 import ChangeProfilePicture from "../../../../Components/Modal/ChangeProfilePicture";
@@ -84,11 +85,21 @@ function HeaderBottom({ isLoading, userData = {} }) {
         }
     };
 
+    const changeAvatar = async (avatar = "", text) => {
+        if (!avatar) return;
+        const params = new FormData();
+        params.append("avatar", avatar);
+        params.append("text", text);
+        const res = await userApi.changeAvatar(params);
+        return res;
+    };
+
     return (
         <>
             {showModalAvatar && (
                 <ChangeProfilePicture
                     title="Cập nhập ảnh đại diện"
+                    handleChange={changeAvatar}
                     closeModal={() => setShowModalAvatar(false)}
                 />
             )}

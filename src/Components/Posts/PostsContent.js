@@ -1,28 +1,42 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import { ValueContext } from "./";
 import Video from "../Video";
-import { formatAvatar } from "../../Hooks/useFormat";
-import img from "../../assets/images/avatar/avatar.jpg";
+import RenderGridLayout from "../RenderGridLayout";
 function PostsContent() {
     const { postsData, pagePhoto } = useContext(ValueContext);
+    console.log(postsData.files?.length);
     return (
         <>
             <div className=" w-full p-2 pt-0">
-                <span className="block text-[14px] lg:text-[15px] min-h-[50px] px-2">
+                <span className="block text-[14px] lg:text-[15px] px-2">
                     {postsData.content}
                 </span>
             </div>
             {!pagePhoto && (
-                <div className="w-full border border-gray-300 ">
-                    <Link to={`/photo/${postsData.id}/3`}>
-                        {/* <Video /> */}
-                        <img
-                            className="w-full max-h-[300px] object-cover"
-                            src={img}
-                            alt=""
-                        />
-                    </Link>
+                <div
+                    className={`w-full ${
+                        postsData.files?.length > 0
+                            ? "border border-gray-300"
+                            : ""
+                    } `}
+                >
+                    {postsData.files?.length === 1 &&
+                    (postsData.isVideo || postsData.isReels) ? (
+                        <div className="w-full ">
+                            <Video
+                                videoUrl={postsData.files[0].url}
+                                duration={postsData.files[0].duration}
+                                maxHeight={true}
+                            />
+                        </div>
+                    ) : (
+                        <div className="w-full">
+                            <RenderGridLayout
+                                fileList={postsData.files}
+                                postsId={postsData.id}
+                            />
+                        </div>
+                    )}
                 </div>
             )}
         </>
